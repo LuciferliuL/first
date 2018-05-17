@@ -8,5 +8,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="@types/react" level="application" />
+    <orderEntry type="library" name="@types/react-addons-create-fragment" level="application" />
+    <orderEntry type="library" name="@types/react-addons-css-transition-group" level="application" />
+    <orderEntry type="library" name="@types/react-body-classname" level="application" />
   </component>
 </module>

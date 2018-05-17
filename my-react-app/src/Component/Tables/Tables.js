@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import {Link, Route} from 'react-router-dom';
+import Action from '../Action/Action';
 
 class Tables extends Component {
     render() {
         return (
             <div>
-                12321312312321
+               234
             </div>
         );
     }
