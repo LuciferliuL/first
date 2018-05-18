@@ -4,6 +4,10 @@ import { Link, Route } from 'react-router-dom'
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import './Login.css'
 const FormItem = Form.Item;
+const widthform = {
+    width:400,
+    margin:'auto'
+}
 class Logins extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
@@ -23,33 +27,25 @@ class Logins extends Component {
                         <img src={logo} className="App-logo" alt="logo" />
                         <h1 className="App-title">Welcome to React</h1>
                     </header>
-                    <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form onSubmit={this.handleSubmit} className="login-form" style={widthform}>
                         <FormItem>
                             {getFieldDecorator('userName', {
-                                rules: [{ required: true, message: 'Please input your username!' }],
+                                rules: [{ required: true, message: '请输入用户名!' }],
                             })(
                                 <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
                             )}
                         </FormItem>
                         <FormItem>
                             {getFieldDecorator('password', {
-                                rules: [{ required: true, message: 'Please input your Password!' }],
+                                rules: [{ required: true, message: '请输入密码!' }],
                             })(
                                 <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
                             )}
                         </FormItem>
                         <FormItem>
-                            {getFieldDecorator('remember', {
-                                valuePropName: 'checked',
-                                initialValue: true,
-                            })(
-                                <Checkbox>Remember me</Checkbox>
-                            )}
-                            <a className="login-form-forgot" href="">Forgot password</a>
                             <Button type="primary" htmlType="submit" className="login-form-button">
-                                Log in
+                                登入
                             </Button>
-                            Or <a href="">register now!</a>
                         </FormItem>
                     </Form>
                 </div>

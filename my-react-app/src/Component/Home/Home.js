@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import {Link, Route} from 'react-router-dom'
+import { Link, Route } from 'react-router-dom'
 import Action from '../Action/Action';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -55,13 +55,13 @@ class Home extends React.Component {
         </Sider>
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }} />
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
+          <Content style={{ margin: '0 10px' }}>
+            <Breadcrumb style={{ margin: '10px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb>
-            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-             <Route path='/Home/Action' component={Action}></Route>
+            <div style={{ padding: 20, background: '#fff', minHeight: 560 }}>
+              <Route path='/Home/Action' component={Action}></Route>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
