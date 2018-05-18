@@ -6,6 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Login from './Component/Login/Login';
 import Home from './Component/Home/Home';
+import './Math/Config'
 
 
 ReactDOM.render(

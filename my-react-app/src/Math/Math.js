@@ -1,4 +1,6 @@
 import 'isomorphic-fetch'
+import { notification } from 'antd'
+
 function getTime() {
     var myDate = new Date()
     var mytime
@@ -81,3 +83,22 @@ function getFetch(URL, Callback) {
 }
 
 export { getFetch }
+
+/**
+ * 
+ * @param {检测PK} PK 
+ * @param {回调} Callback 
+ */
+function Alert(PK,Callback) {
+    if(PK === 0){
+        notification.open({
+            message: '错误提示',
+            description: '请选择一个节点',
+          });
+    }else{
+        Callback()
+    }
+
+}
+
+export { Alert }

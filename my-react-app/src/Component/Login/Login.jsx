@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import logo from '../../logo.svg'
-import { Link, Route } from 'react-router-dom'
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 import './Login.css'
 const FormItem = Form.Item;
 const widthform = {

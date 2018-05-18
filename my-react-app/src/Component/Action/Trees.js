@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import { Tree, Input, Spin } from 'antd';
+import React from 'react';
+import { Tree, Spin } from 'antd';
 import { TreeMathFloat } from './TreesMath'
 import { API } from '../../Math/APIconfig'
 
 const TreeNode = Tree.TreeNode;
-const Search = Input.Search;
 
 class Trees extends React.Component {
     state = {
