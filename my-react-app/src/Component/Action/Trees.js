@@ -40,6 +40,29 @@ class Trees extends React.Component {
                 })
             })
     }
+    componentWillReceiveProps(next,pre){
+        // console.log(next)
+        if(next.Refresh){
+            fetch(API.Trees, { method: "GET" })
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                this.setState({
+                    treeData: TreeMathFloat(res, 4),
+                    fullscreen: false,
+                    loading: false
+                })
+                this.props.RefreshChange()
+            })
+            .catch((resolve) => {
+                console.log(resolve)
+                this.setState({
+                    loading: false
+                })
+            })
+        }
+    }
     renderTreeNodes = (data) => {
         return data.map((item) => {
             if (item.children) {

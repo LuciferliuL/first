@@ -2,8 +2,8 @@ import React from 'react'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { Link, Route } from 'react-router-dom'
 import Action from '../Action/Action';
-
-const { Header, Content, Footer, Sider } = Layout;
+import Windows from '../Windows/Windows'
+const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class Home extends React.Component {
@@ -37,7 +37,7 @@ class Home extends React.Component {
               title={<span><Icon type="user" /><span>User</span></span>}
             >
               <Menu.Item key="3"><Link to='/Home/Action'>Action</Link></Menu.Item>
-              <Menu.Item key="4">Bill</Menu.Item>
+              <Menu.Item key="4"><Link to='/Home/Windows'>WindowsAction</Link></Menu.Item>
               <Menu.Item key="5">Alex</Menu.Item>
             </SubMenu>
             <SubMenu
@@ -54,7 +54,6 @@ class Home extends React.Component {
           </Menu>
         </Sider>
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
           <Content style={{ margin: '0 10px' }}>
             <Breadcrumb style={{ margin: '10px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>
@@ -62,6 +61,7 @@ class Home extends React.Component {
             </Breadcrumb>
             <div style={{ padding: 20, background: '#fff', minHeight: 560 }}>
               <Route path='/Home/Action' component={Action}></Route>
+              <Route path='/Home/Windows' component={Windows}></Route>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

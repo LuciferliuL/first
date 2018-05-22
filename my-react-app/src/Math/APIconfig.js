@@ -1,6 +1,6 @@
 const APIconfig = {
-    Server: '10.3.2.22:50002',
-    XX: '10.2.128.94:9016'
+    XX: '10.3.2.22:50002',
+    Server: '10.2.128.94:9016'
 }
 
 const API = {
@@ -58,4 +58,11 @@ const ActionAPI = (PK) => (
 )
 
 
-export { API, LoginAPI, ActionAPI }
+const WindowsAPI = (Search='') => (
+    {
+        Searchs:'http:/\/'+ APIconfig.Server +'/api/ActionInitial/GetListActionList?BranchId=STD&strQuery='+Search
+    }
+)
+
+
+export { API, LoginAPI, ActionAPI, WindowsAPI }

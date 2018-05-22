@@ -4,7 +4,7 @@ import { Row, Col, Card, Button } from 'antd'
 import Forms from './Forms'
 import { getFetch, Alert } from '../../Math/Math'
 import { ActionAPI } from '../../Math/APIconfig'
-import Dialog from '../Dialog/Dialog'
+import Dialog from './Dialog/Dialog'
 const ButtonGroup = Button.Group
 class Action extends Component {
     state = {
@@ -43,7 +43,7 @@ class Action extends Component {
             WorkFlowState: '',
             ParentLevelString: 0
         },//用来清空对象
-        selectedKeys: [],//PK
+        selectedKeys: [],
         selectedObj: {
             Action: '',
             ActionInfo: null,
@@ -80,20 +80,9 @@ class Action extends Component {
             ParentLevelString: 0
         },
         visible: false,
-        keyChange: 0,//传入key区分
         ParentLevelString: 0,
-        PK: 0
-    }
-    //监控修改
-    handleFormChange = (changedFields) => {
-        let key = null, value = null
-        for (var k in changedFields) {
-            key = changedFields[k].name
-            value = changedFields[k].value
-        }
-        this.setState({
-            selectedObj: Object.assign(this.state.selectedObj, { [key]: value })
-        });
+        PK: 0,//PK
+        Refresh: false
     }
     //选择以后渲染
     Selected(keys) {
@@ -115,7 +104,7 @@ class Action extends Component {
             this.setState({
                 visible: true,
                 selectedObj: this.state.clearObj,
-                keyChange: 1
+                PK: 0
             });
         } else if (key === 'addLevel') {//parentLevelString 为父的 LevelString
             Alert(this.state.PK, () => {
@@ -126,7 +115,6 @@ class Action extends Component {
                 this.setState({
                     visible: true,
                     selectedObj: clear,
-                    keyChange: 1
                 }, () => {
                     console.log(this.state.selectedObj)
                 });
@@ -135,30 +123,39 @@ class Action extends Component {
             Alert(this.state.PK, () => {
                 this.setState({
                     visible: true,
-                    keyChange: 1
                 });
             })
 
         } else if (key === 'Delete') {
             Alert(this.state.selectedKeys, () => {
-                console.log(1)
+                console.log(this.state.selectedKeys)
             })
         } else if (key === 'Refresh') {
-
+            this.setState({
+                Refresh: true
+            })
         }
+    }
+    RefreshChange = () => {
+        this.setState({
+            Refresh: false
+        })
     }
     //显示隐藏弹出页
     hideModal = () => {
         this.setState({
-            visible: false,
-            PK: 0,
-            selectedObj: this.state.clearObj
-        },()=>{
-            console.log(this.state.selectedObj)
+            selectedObj: this.state.clearObj,
+            visible: false
         });
     }
+    DialogSubmit = (e) => {
+        console.log(e)
+        this.setState({
+            Refresh: true
+        })
+    }
     render() {
-        const { selectedObj, selectedKeys, visible, keyChange } = this.state;
+        const { selectedObj, selectedKeys, visible, Refresh } = this.state;
         return (
             <div>
                 <Row>
@@ -170,16 +167,25 @@ class Action extends Component {
                             <Button onClick={this.Add.bind(this, 'Delete')}>删除</Button>
                             <Button onClick={this.Add.bind(this, 'Refresh')}>刷新</Button>
                         </ButtonGroup>
-                        <Trees Selected={this.Selected.bind(this)} selectedKeys={selectedKeys}></Trees>
+                        <Trees
+                            Selected={this.Selected.bind(this)}
+                            selectedKeys={selectedKeys}
+                            Refresh={Refresh}
+                            RefreshChange={this.RefreshChange.bind(this)}
+                        ></Trees>
                     </Col>
                     <Col span={12}>
                         <Card>
-                            <Forms selectedObj={selectedObj} onChange={this.handleFormChange}></Forms>
+                            <Forms selectedObj={selectedObj}></Forms>
                         </Card>
                     </Col>
-                    <Dialog selectedObj={selectedObj} visible={visible} keyChange={keyChange} hideModal={this.hideModal.bind(this)}></Dialog>
+                    <Dialog
+                        selectedObj={selectedObj}
+                        visible={visible}
+                        hideModal={this.hideModal.bind(this)}
+                        DialogSubmit={this.DialogSubmit.bind(this)}
+                    ></Dialog>
                 </Row>
-
             </div>
         );
     }
