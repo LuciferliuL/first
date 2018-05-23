@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Trees from './Trees'
-import { Row, Col, Card, Button } from 'antd'
+import { Row, Col, Card, Button, notification } from 'antd'
 import Forms from './Forms'
-import { getFetch, Alert } from '../../Math/Math'
+import { getFetch, Alert, getTime } from '../../Math/Math'
 import { ActionAPI } from '../../Math/APIconfig'
 import Dialog from './Dialog/Dialog'
+
 const ButtonGroup = Button.Group
 class Action extends Component {
     state = {
@@ -24,7 +25,7 @@ class Action extends Component {
             FrameType: 0,
             GuidString: null,
             ImageKey: null,
-            LastModifyTime: '',
+            LastModifyTime: getTime(),
             LastUpdater: null,
             LevelString: null,
             LineID: -1,
@@ -101,6 +102,8 @@ class Action extends Component {
     //增删改查
     Add(key) {
         if (key === 'addRoot') {//parentLevelString 为0
+            let clear = this.state.clearObj;
+            clear.CreateTime = getTime()
             this.setState({
                 visible: true,
                 selectedObj: this.state.clearObj,
@@ -112,20 +115,21 @@ class Action extends Component {
                 let clear = this.state.clearObj;
                 clear.OriginalGuidString = this.state.PK
                 clear.ParentLevelString = this.state.ParentLevelString
+                clear.CreateTime = getTime()
                 this.setState({
                     visible: true,
                     selectedObj: clear,
-                }, () => {
-                    console.log(this.state.selectedObj)
                 });
             })
         } else if (key === 'Edit') {
+            let clear = this.state.selectedObj;
+            clear.LastModifyTime = getTime()
             Alert(this.state.PK, () => {
                 this.setState({
                     visible: true,
+                    selectedObj: clear
                 });
             })
-
         } else if (key === 'Delete') {
             Alert(this.state.selectedKeys, () => {
                 console.log(this.state.selectedKeys)
@@ -139,6 +143,10 @@ class Action extends Component {
     RefreshChange = () => {
         this.setState({
             Refresh: false
+        })
+        notification.success({
+            message:'刷新成功',
+            description:'树结构已刷新'
         })
     }
     //显示隐藏弹出页

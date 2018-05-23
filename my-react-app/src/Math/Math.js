@@ -102,3 +102,13 @@ function Alert(PK,Callback) {
 }
 
 export { Alert }
+
+function Errors(v){
+    notification.error({
+        message:'错误提示',
+        description:v + '为必填项'
+    })
+}
+
+export {Errors}
+

@@ -6,3 +6,4 @@ notification.config({
     bottom: 50,
     duration: 3,
   });
+

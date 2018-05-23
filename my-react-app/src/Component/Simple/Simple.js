@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
-import { WindowsAPI } from '../../Math/APIconfig'
-import { getFetch, getTime, Errors } from '../../Math/Math'
+import { SimpleAPI } from '../../Math/APIconfig'
+import { getFetch, getTime } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
 import { Collapse, Modal, notification } from 'antd'
-import WindowsAction from '../Windows/WindowsAction'
-import WindowsEdit from '../Windows/WindowsEdit'
+import SimpleAction from './SimpleAction'
+import SimpleEdit from './SimpleEdit'
 const Panel = Collapse.Panel
-const E = ['Text','InitialAssemblyRef','Initial']
-class Windows extends Component {
+
+class Simple extends Component {
     state = {
         Data: [],
         columns: [{
@@ -16,20 +16,20 @@ class Windows extends Component {
             dataIndex: 'PK',
             key: 'PK',
         }, {
-            title: 'Action',
-            dataIndex: 'Action',
+            title: 'DQueryCaption',
+            dataIndex: 'DQueryCaption',
             // key: 'PK',
         }, {
-            title: 'ActionType',
-            dataIndex: 'ActionType',
+            title: 'BillTypeCode',
+            dataIndex: 'BillTypeCode',
             // key: 'PK',
         }, {
             title: 'Author',
             dataIndex: 'Author',
             // key: 'PK',
         }, {
-            title: 'Notes',
-            dataIndex: 'Notes',
+            title: 'BranchID',
+            dataIndex: 'BranchID',
             // key: 'PK',
         }],
         ActiveKey: ['1'],
@@ -67,7 +67,7 @@ class Windows extends Component {
         clearTable:false
     }
     componentDidMount() {
-        getFetch(WindowsAPI().Searchs, (res) => {
+        getFetch(SimpleAPI().Searchs, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
@@ -75,7 +75,7 @@ class Windows extends Component {
         })
     }
     GetData = (SearchValue) => {
-        getFetch(WindowsAPI(SearchValue).Searchs, (res) => {
+        getFetch(SimpleAPI(SearchValue).Searchs, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
@@ -99,7 +99,7 @@ class Windows extends Component {
     TableEmitData = (TableValue) => {
         this.setState({
             TableValue: JSON.parse(JSON.stringify(TableValue))
-        })
+        },()=>(console.log(this.state.TableValue)))
     }
     AddAction = (name) => {
         if (name === 'Add') {
@@ -138,20 +138,13 @@ class Windows extends Component {
         }
     }
     handleOk = () => {
-        let D = this.state.TableValue
-        let counts = 0
-        E.map((v)=>(
-            D[v]===''?Errors(v):counts++
-        ))
-        if(counts === E.length){
-            console.log(this.state.TableValue)
-            //TODO   发送请求
-            this.setState({
-                visible: false,
-                TableValue: JSON.parse(JSON.stringify(this.state.clearObj)),
-                clearTable:false
-            })
-        }     
+        console.log(this.state.TableValue)
+        //TODO   发送请求
+        this.setState({
+            visible: false,
+            TableValue: JSON.parse(JSON.stringify(this.state.clearObj)),
+            clearTable:false
+        })
     }
     handleCancel = () => {
         this.setState({
@@ -219,9 +212,9 @@ class Windows extends Component {
                         ></Tables>
                     </Panel>
                     <Panel header='基本信息' key='2' showArrow={false}>
-                        <WindowsAction
+                        <SimpleAction
                             TableValue={TableValue}
-                        ></WindowsAction>
+                        ></SimpleAction>
                     </Panel>
                 </Collapse>
                 <Modal
@@ -231,15 +224,15 @@ class Windows extends Component {
                     onCancel={this.handleCancel}
                     width={1440}
                 >
-                    <WindowsEdit
+                    <SimpleEdit
                         TableValue={TableValue}
                         handleChange={this.handleChange.bind(this)}
-                    ></WindowsEdit>
+                    ></SimpleEdit>
                 </Modal>
             </div>
         );
     }
 }
 
-export default Windows;
+export default Simple;
 

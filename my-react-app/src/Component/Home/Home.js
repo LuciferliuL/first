@@ -3,6 +3,7 @@ import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { Link, Route } from 'react-router-dom'
 import Action from '../Action/Action';
 import Windows from '../Windows/Windows'
+import Simple from '../Simple/Simple';
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -38,7 +39,7 @@ class Home extends React.Component {
             >
               <Menu.Item key="3"><Link to='/Home/Action'>Action</Link></Menu.Item>
               <Menu.Item key="4"><Link to='/Home/Windows'>WindowsAction</Link></Menu.Item>
-              <Menu.Item key="5">Alex</Menu.Item>
+              <Menu.Item key="5"><Link to='/Home/Simple'>SimpleAction</Link></Menu.Item>
             </SubMenu>
             <SubMenu
               key="sub2"
@@ -62,6 +63,7 @@ class Home extends React.Component {
             <div style={{ padding: 20, background: '#fff', minHeight: 560 }}>
               <Route path='/Home/Action' component={Action}></Route>
               <Route path='/Home/Windows' component={Windows}></Route>
+              <Route path='/Home/Simple' component={Simple}></Route>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

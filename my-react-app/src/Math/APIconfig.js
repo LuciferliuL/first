@@ -57,12 +57,17 @@ const ActionAPI = (PK) => (
  }*/
 )
 
-
 const WindowsAPI = (Search='') => (
     {
         Searchs:'http:/\/'+ APIconfig.Server +'/api/ActionInitial/GetListActionList?BranchId=STD&strQuery='+Search
     }
 )
 
+const SimpleAPI = (Search='') => (
+    {
+        Searchs:'http:/\/'+ APIconfig.Server +'/api/QueryExtend/GetQuerySimpleList?branchID=STD&strQuery='+Search
+    }
+)
 
-export { API, LoginAPI, ActionAPI, WindowsAPI }
+
+export { API, LoginAPI, ActionAPI, WindowsAPI, SimpleAPI }
