@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table } from 'antd'
+import { Table} from 'antd'
 
 
 /**
@@ -12,8 +12,17 @@ class Tables extends Component {
         selectedRowKeys: []
     }
     onSelectChange = (selectedRowKeys,selectedRowValue) => {
-        console.log('selectedRowKeys changed: ', selectedRowValue);
+        // console.log('selectedRowKeys changed: ', selectedRowValue);
+        this.setState({ selectedRowKeys });
         this.props.TableEmitData(selectedRowValue[0])
+    }
+    componentWillReceiveProps(next){
+        // console.log(next)
+        if(next.clearTable){
+            this.setState({
+                selectedRowKeys:[]
+            })
+        }
     }
     render() {
         const {selectedRowKeys } = this.state;
@@ -22,7 +31,7 @@ class Tables extends Component {
             onChange: this.onSelectChange,
             type:'radio'
         };
-        const { Data, columns } = this.props
+        const { Data, columns} = this.props
         return (
             <div>
                 <Table

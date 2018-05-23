@@ -8,6 +8,12 @@ const InputSearch = Input.Search
  */
 
 class TablesBtn extends Component {
+    shouldComponentUpdate(){
+        return false
+    }
+    AddAction =(name)=>{
+        this.props.AddAction(name)
+    }
     render() {
         return (
             <div>
@@ -18,9 +24,9 @@ class TablesBtn extends Component {
                     style={{ width: 200 }}
                 />
                 <ButtonGroup>
-                    <Button type="primary">增加</Button>
-                    <Button type="primary">修改</Button>
-                    <Button type='danger'>删除</Button>
+                    <Button type="primary" onClick={this.AddAction.bind(this,'Add')}>增加</Button>
+                    <Button type="primary" onClick={this.AddAction.bind(this,'Edit')}>修改</Button>
+                    <Button type='danger' onClick={this.AddAction.bind(this,'Delet')}>删除</Button>
                 </ButtonGroup>
             </div>
         );

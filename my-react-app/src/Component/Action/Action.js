@@ -108,7 +108,7 @@ class Action extends Component {
             });
         } else if (key === 'addLevel') {//parentLevelString 为父的 LevelString
             Alert(this.state.PK, () => {
-                console.log(this.state.selectedObj)
+                // console.log(this.state.selectedObj)
                 let clear = this.state.clearObj;
                 clear.OriginalGuidString = this.state.PK
                 clear.ParentLevelString = this.state.ParentLevelString
