@@ -35,41 +35,99 @@ class Simple extends Component {
         ActiveKey: ['1'],
         visible: false,
         clearObj: {
-            Action: '',
-            ActionType: '',
             Author: '',
+            BillTypeCode: '',
             BranchID: "STD",
             CreateTime: '',
-            DeleteFlag: 0,
+            DQueryCaption: '',
+            DQueryMasterAssembly: '',
+            DQueryMasterFullName: '',
+            DQueryParamAssembly: '',
+            DQueryParamFullName: '',
+            DQuerySlaveAssembly: null,
+            DQuerySlaveFullName: null,
+            DeleteFlag: '',
             FK: -1,
             GuidString: null,
-            Initial: '',
-            InitialAssemblyRef: '',
-            IsSingle: true,
             LastModifyTime: getTime(),
             LastUpdater: null,
-            LineID: -1,
+            LayoutMode: '',
+            LineID: 9991,
             Module: '',
-            Note: "",
-            Notes: '',
-            OriginalGuidString: 0,
+            Note: null,
+            OriginalGuidString: null,
             PK: -1,
-            ParamString: '',
-            Shortcuts: null,
-            SoftSystemCode: "GOS",
+            QueryConfig: null,
+            QueryExtend: [{
+                BillTypeCode: '',
+                BranchID: "STD",
+                CreateTime: getTime(),
+                DQueryCaption: '',
+                DQueryName: '',
+                DQuerySql: [{
+                    Author: '',
+                    BranchID: "STD",
+                    CreateTime: '',
+                    DeleteFlag: 0,
+                    FK: -1,
+                    GuidString: null,
+                    LastModifyTime: getTime(),
+                    LastUpdater: null,
+                    LineID: -1,
+                    Module: null,
+                    Note: null,
+                    OriginalGuidString: null,
+                    PK: -1,
+                    QueryDataRightCode: null,
+                    ScriptType: null,
+                    SoftSystemCode: "GOS",
+                    SqlName: '',
+                    SqlScripe: '',
+                    TableDisplayerGuid: null,
+                    Tag: null,
+                    Version: 5,
+                    VersionNum: 4,
+                    WorkFlowGuid: "",
+                    WorkFlowState: "",
+                }],
+                DataSource: '',
+                DeleteFlag: 0,
+                FK: 0,
+                GuidString: null,
+                IsPaging: '',
+                IsUseCacheServer: '',
+                LastModifyTime: getTime(),
+                LineID: 0,
+                Note: null,
+                OriginalGuidString: null,
+                PK: -1,
+                QuerySqlGuid: null,
+                SoftSystemCode: "GOS",
+                SolrBranch: null,
+                SolrScript: null,
+                SolrScriptGuid: null,
+                Tag: null,
+                Version: 1,
+                WorkFlowGuid: "",
+                WorkFlowState: "",
+            }],
+            Settings: { "ShowOrgSelect": "true", "ParamsCheck": "true", "AllowOrgMultiSelect": "true", "IsLinkOnOrgSelect": "true", "SQLRebuilding": "true", "AllowView": "true", "AllowEdit": "true", "AllowDelete": "true", "AllowReset": "true", "AllowPrint": "true", "PrintAll": "true", "AllowWorkFlowQuery": "true", "AllowReverseState": "true", "AllowExport": "true" },
+            SoftSystemCode: 'GOS',
             Tag: null,
-            Text: '',
-            Version: 1,
+            Version: 2,
+            VersionNum: 4,
             WorkFlowGuid: "",
-            WorkFlowState: ""
+            WorkFlowState: "",
         },
         TableValue: {},
-        clearTable:false
+        clearTable: false,
     }
     componentDidMount() {
+        let clear = JSON.parse(JSON.stringify(this.state.clearObj))
         getFetch(Searchs().SimpleAPI, (res) => {
             this.setState({
                 Data: res,
+                TableValue: clear
             })
         })
     }
@@ -96,11 +154,12 @@ class Simple extends Component {
         })
     }
     TableEmitData = (TableValue) => {
-        getFetch(ActionAPI(TableValue.PK).Simple,(res)=>{
+        getFetch(ActionAPI(TableValue.PK).Simple, (res) => {
+            console.log(res)
             this.setState({
                 TableValue: JSON.parse(JSON.stringify(res))
             })
-        })      
+        })
     }
     AddAction = (name) => {
         if (name === 'Add') {
@@ -109,7 +168,7 @@ class Simple extends Component {
             this.setState({
                 TableValue: clear,
                 visible: true,
-                clearTable:true
+                clearTable: true,
             })
         } else if (name === 'Edit') {
             if (this.state.TableValue.PK === undefined) {
@@ -123,7 +182,7 @@ class Simple extends Component {
                 this.setState({
                     TableValue: clear,
                     visible: true,
-                    clearTable:true
+                    clearTable: true
                 })
                 return
             }
@@ -140,52 +199,26 @@ class Simple extends Component {
     }
     handleOk = () => {
         console.log(this.state.TableValue)
+        let clear = JSON.parse(JSON.stringify(this.state.clearObj))
         //TODO   发送请求
         this.setState({
             visible: false,
-            TableValue: JSON.parse(JSON.stringify(this.state.clearObj)),
-            clearTable:false
+            TableValue: clear,
+            clearTable: false
         })
     }
     handleCancel = () => {
+        let clear = JSON.parse(JSON.stringify(this.state.clearObj))
         this.setState({
             visible: false,
-            TableValue: JSON.parse(JSON.stringify(this.state.clearObj)),
-            clearTable:false
+            TableValue: clear,
+            clearTable: false
         })
     }
     handleChange = (key, value) => {
-        if (key === 'ActionType') {          
-            if (value === '自定义的InitialAction'){
-                let Table = this.state.TableValue
-                Table.InitialAssemblyRef = 'JZT.GOS.Equipment.Win'
-                Table.Initial = 'JZT.GOS.Equipment.Win.WorkFlow.LendingGoodsAuditForm'
-                this.setState({
-                    TableValue:Table
-                })
-            }else if(value === '编辑单据EditBill'){
-                let Table = this.state.TableValue
-                Table.InitialAssemblyRef = 'JZT.UI'
-                Table.Initial = 'JZT.GOS.Win.InitAction.EditBillFormByBillCodeInitial'
-                this.setState({
-                    TableValue:Table
-                })
-            }else{
-                let Table = this.state.TableValue
-                Table.InitialAssemblyRef = 'JZT.UI'
-                Table.Initial = 'JZT.UI.Query.QueryExtendForm'
-                this.setState({
-                    TableValue:Table
-                })
-            }
-            this.setState({
-                TableValue: Object.assign(this.state.TableValue, { [key]: value })
-            })
-        } else {
-            this.setState({
-                TableValue: Object.assign(this.state.TableValue, { [key]: value })
-            })
-        }
+        this.setState({
+            TableValue: Object.assign(this.state.TableValue, { [key]: value })
+        })
     }
 
 
@@ -204,7 +237,7 @@ class Simple extends Component {
                     accordion
                     activeKey={ActiveKey}
                 >
-                    <Panel header='表单' key="1" showArrow={false}>
+                    <Panel header='表单' key="1" showArrow={true}>
                         <Tables
                             Data={Data}
                             columns={columns}
@@ -212,7 +245,7 @@ class Simple extends Component {
                             clearTable={clearTable}
                         ></Tables>
                     </Panel>
-                    <Panel header='基本信息' key='2' showArrow={false}>
+                    <Panel header='基本信息' key='2' showArrow={true}>
                         <SimpleAction
                             TableValue={TableValue}
                         ></SimpleAction>

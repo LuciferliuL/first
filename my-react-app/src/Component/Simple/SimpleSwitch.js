@@ -27,14 +27,21 @@ class SimpleSwitch extends Component {
         console.log(Name + '---' + e)
     }
     render() {
-        const {disableds}=this.props
+        const {disableds, Settings}=this.props
+        for(let key in Settings){
+            if(Settings[key] === 'true'){
+                Settings[key] = true
+            }else{
+                Settings[key] = false
+            }
+        }
         const Menu = []
         MenuAdmin.map((v, index) => (
             // console.log(v)
             Menu.push(
                 <FormItem label={v.Name} {...formItemLayout} key={index}>
                     <Switch
-                        defaultChecked
+                        defaultChecked={Settings[v.Code]}
                         onChange={this.Change.bind(this,v.Code)}
                         checkedChildren='true'
                         uncheckedchildren='false'
@@ -52,7 +59,7 @@ class SimpleSwitch extends Component {
                     <Panel header="功能控制" key="1">
                         <FormItem label='分公司勾选联动' {...formItemLayout}>
                             <Switch
-                                defaultChecked
+                                defaultChecked={Settings.IsLinkOnOrgSelect}
                                 onChange={this.Change.bind(this, 'IsLinkOnOrgSelect')}
                                 checkedChildren='true'
                                 uncheckedchildren='false'
@@ -61,7 +68,7 @@ class SimpleSwitch extends Component {
                         </FormItem>
                         <FormItem label='分公司允许多选' {...formItemLayout}>
                             <Switch
-                                defaultChecked
+                                defaultChecked={Settings.AllowOrgMultiSelect}
                                 onChange={this.Change.bind(this, 'AllowOrgMultiSelect')}
                                 checkedChildren='true'
                                 uncheckedchildren='false'
@@ -72,7 +79,7 @@ class SimpleSwitch extends Component {
                     <Panel header="系统控制" key="2">
                         <FormItem label='查询前参数检查' {...formItemLayout}>
                             <Switch
-                                defaultChecked
+                                defaultChecked={Settings.ParamsCheck}
                                 onChange={this.Change.bind(this, 'ParamsCheck')}
                                 checkedChildren='true'
                                 uncheckedchildren='false'
@@ -81,7 +88,7 @@ class SimpleSwitch extends Component {
                         </FormItem>
                         <FormItem label='允许SQL自动重构' {...formItemLayout}>
                             <Switch
-                                defaultChecked
+                                defaultChecked={Settings.SQLRebuilding}
                                 onChange={this.Change.bind(this, 'SQLRebuilding')}
                                 checkedChildren='true'
                                 uncheckedchildren='false'
