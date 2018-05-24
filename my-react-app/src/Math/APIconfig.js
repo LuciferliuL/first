@@ -18,7 +18,8 @@ const LoginAPI = (name, pass) => (
 const ActionAPI = (PK) => (
     //菜单 点击获取数据
     {
-        Action: 'http:/\/' + APIconfig.Server + '/api/Menu/GetMenuInfoForPK?pk=' + PK
+        Action: 'http:/\/' + APIconfig.Server + '/api/Menu/GetMenuInfoForPK?pk=' + PK,
+        Simple: 'http:/\/' + APIconfig.Server + '/api/QueryExtend/GetInfoForPk?PK=' + PK
     }
     /* {
      Action: '',
@@ -57,17 +58,13 @@ const ActionAPI = (PK) => (
  }*/
 )
 
-const WindowsAPI = (Search='') => (
+const Searchs = (Search = '') => (
     {
-        Searchs:'http:/\/'+ APIconfig.Server +'/api/ActionInitial/GetListActionList?BranchId=STD&strQuery='+Search
-    }
-)
-
-const SimpleAPI = (Search='') => (
-    {
-        Searchs:'http:/\/'+ APIconfig.Server +'/api/QueryExtend/GetQuerySimpleList?branchID=STD&strQuery='+Search
+        WindowsAPI: 'http:/\/' + APIconfig.Server + '/api/ActionInitial/GetListActionList?BranchId=STD&strQuery=' + Search,
+        SimpleAPI: 'http:/\/' + APIconfig.Server + '/api/QueryExtend/GetQuerySimpleList?branchID=STD&strQuery=' + Search
     }
 )
 
 
-export { API, LoginAPI, ActionAPI, WindowsAPI, SimpleAPI }
+
+export { API, LoginAPI, ActionAPI, Searchs }

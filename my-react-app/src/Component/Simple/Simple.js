@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
-import { SimpleAPI } from '../../Math/APIconfig'
+import { Searchs, ActionAPI } from '../../Math/APIconfig'
 import { getFetch, getTime } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
 import { Collapse, Modal, notification } from 'antd'
@@ -67,15 +67,14 @@ class Simple extends Component {
         clearTable:false
     }
     componentDidMount() {
-        getFetch(SimpleAPI().Searchs, (res) => {
-            // console.log(res)
+        getFetch(Searchs().SimpleAPI, (res) => {
             this.setState({
                 Data: res,
             })
         })
     }
     GetData = (SearchValue) => {
-        getFetch(SimpleAPI(SearchValue).Searchs, (res) => {
+        getFetch(Searchs(SearchValue).SimpleAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
@@ -97,9 +96,11 @@ class Simple extends Component {
         })
     }
     TableEmitData = (TableValue) => {
-        this.setState({
-            TableValue: JSON.parse(JSON.stringify(TableValue))
-        },()=>(console.log(this.state.TableValue)))
+        getFetch(ActionAPI(TableValue.PK).Simple,(res)=>{
+            this.setState({
+                TableValue: JSON.parse(JSON.stringify(res))
+            })
+        })      
     }
     AddAction = (name) => {
         if (name === 'Add') {

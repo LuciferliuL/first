@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
-import { WindowsAPI } from '../../Math/APIconfig'
+import { Searchs } from '../../Math/APIconfig'
 import { getFetch, getTime, Errors } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
 import { Collapse, Modal, notification } from 'antd'
@@ -67,7 +67,7 @@ class Windows extends Component {
         clearTable:false
     }
     componentDidMount() {
-        getFetch(WindowsAPI().Searchs, (res) => {
+        getFetch(Searchs().WindowsAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
@@ -75,7 +75,7 @@ class Windows extends Component {
         })
     }
     GetData = (SearchValue) => {
-        getFetch(WindowsAPI(SearchValue).Searchs, (res) => {
+        getFetch(Searchs(SearchValue).WindowsAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,

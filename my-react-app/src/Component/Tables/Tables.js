@@ -12,7 +12,7 @@ class Tables extends Component {
         selectedRowKeys: []
     }
     onSelectChange = (selectedRowKeys,selectedRowValue) => {
-        // console.log('selectedRowKeys changed: ', selectedRowValue);
+        // console.log(selectedRowValue);
         this.setState({ selectedRowKeys });
         this.props.TableEmitData(selectedRowValue[0])
     }
