@@ -15,7 +15,7 @@ class SimpleAction extends Component {
         Settings: {}
     }
     componentWillReceiveProps(next){
-        console.log(next)
+        // console.log(next)
         if(next.TableValue.DQueryMasterFullName === ''){
             this.setState({
                 QueryExtend:JSON.parse(JSON.stringify(next.TableValue.QueryExtend)),

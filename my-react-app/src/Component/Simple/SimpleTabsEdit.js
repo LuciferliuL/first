@@ -11,15 +11,19 @@ class SimpleTabs extends React.Component {
         const { QueryExtend } = this.props
         const panes = []
         QueryExtend.map((v, index) => {
-            panes.push(
-                {
-                    title:
-                        `${v.DQueryCaption}`,
-                    content: <SimpleFlag QueryExtend={v} key={index} disableds={true}></SimpleFlag>,
-                    key: `${index}`,
-                    closable: false
-                }
-            )
+            if (v.DQueryCaption === '') {
+                return true
+            } else {
+                return panes.push(
+                    {
+                        title:
+                            `${v.DQueryCaption}`,
+                        content: <SimpleFlag QueryExtend={v} key={index} disableds={true}></SimpleFlag>,
+                        key: `${index}`,
+                        closable: false
+                    }
+                )
+            }
         })
         console.log(panes)
         if (QueryExtend[0].DQueryCaption === '') {
@@ -142,26 +146,35 @@ class SimpleTabs extends React.Component {
             };
         }
     }
-    componentWillReceiveProps(next) {
-        let panes = []
-        next.QueryExtend.map((v, index) => {
-            panes.push(
-                {
-                    title:
-                        `${v.DQueryCaption}`,
-                    content: <SimpleFlag
-                        QueryExtend={v}
-                        key={index}
-                        disableds={true}
-                    ></SimpleFlag>,
-                    key: `${index}`,
-                    closable: false
-                }
-            )
-        })
-        this.setState({
-            panes
-        })
+    // componentWillReceiveProps(next) {
+    //     let panes = []
+    //     next.QueryExtend.map((v, index) => {
+    //         if (v.DQueryCaption === '') {
+    //             return true
+    //         } else {
+    //             return panes.push(
+    //                 {
+    //                     title:
+    //                         `${v.DQueryCaption}`,
+    //                     content: <SimpleFlag
+    //                         QueryExtend={v}
+    //                         key={index}
+    //                         disableds={true}
+    //                         handleChange={this.handleChange.bind(this)}
+    //                     ></SimpleFlag>,
+    //                     key: `${index}`,
+    //                     closable: false
+    //                 }
+    //             )
+    //         }
+    //     })
+    //     this.setState({
+    //         panes
+    //     })
+    // }
+    handleChange = (key, e) => {
+        console.log(key +'-----'+e)
+        this.props.handleChange(key, e)
     }
     onChange = (activeKey) => {//切换面板的回调
         this.setState({ activeKey });
@@ -178,6 +191,7 @@ class SimpleTabs extends React.Component {
                 QueryExtend={this.state.QueryExtend_}
                 key={panes.length}
                 disableds={false}
+                handleChange={this.handleChange.bind(this)}
             ></SimpleFlag>,
             key: `${activeKey}`,
             closable: true

@@ -1,25 +1,25 @@
 const APIconfig = {
-    Server: '10.3.2.22:50002',
-    XX: '10.2.128.94:9016'
+    Server: 'http://10.3.2.22:50002',
+    XX: 'http://10.2.128.94:9016'
 }
 
 const API = {
     //树结构
-    Trees: 'http://' + APIconfig.Server + '/api/Menu/GetMenuByCatalog?catalog=GOS',
+    Trees: APIconfig.Server + '/api/Menu/GetMenuByCatalog?catalog=GOS',
 }
 
 const LoginAPI = (name, pass) => (
     //登入页面
     {
-        Login: 'http:/\/' + APIconfig.Server + '/api/UserLogin/UserLogin?UserName=' + name + '&' + 'PassWord=' + pass,
+        Login: APIconfig.Server + '/api/UserLogin/UserLogin?UserName=' + name + '&PassWord=' + pass,
     }
 )
 
 const ActionAPI = (PK) => (
     //菜单 点击获取数据
     {
-        Action: 'http:/\/' + APIconfig.Server + '/api/Menu/GetMenuInfoForPK?pk=' + PK,
-        Simple: 'http:/\/' + APIconfig.Server + '/api/QueryExtend/GetInfoForPk?PK=' + PK
+        Action: APIconfig.Server + '/api/Menu/GetMenuInfoForPK?pk=' + PK,
+        Simple: APIconfig.Server + '/api/QueryExtend/GetInfoForPk?PK=' + PK
     }
     /* {
      Action: '',
@@ -60,11 +60,10 @@ const ActionAPI = (PK) => (
 
 const Searchs = (Search = '') => (
     {
-        WindowsAPI: 'http:/\/' + APIconfig.Server + '/api/ActionInitial/GetListActionList?BranchId=STD&strQuery=' + Search,
-        SimpleAPI: 'http:/\/' + APIconfig.Server + '/api/QueryExtend/GetQuerySimpleList?branchID=STD&strQuery=' + Search
+        WindowsAPI: APIconfig.Server + '/api/ActionInitial/GetListActionList?BranchId=STD&strQuery=' + Search,
+        SimpleAPI: APIconfig.Server + '/api/QueryExtend/GetQuerySimpleList?branchID=STD&strQuery=' + Search
     }
 )
-
 
 
 export { API, LoginAPI, ActionAPI, Searchs }
