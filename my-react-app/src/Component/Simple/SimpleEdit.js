@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Input, Form, Row, Col, Select } from 'antd'
 import Selects from '../Tables/Selects'
-import SimpleSwitch from './SimpleSwitch'
-import SimpleTabs from './SimpleTabs'
+import SimpleSwitchEdit from './SimpleSwitchEdit'
+import SimpleTabsEdit from './SimpleTabsEdit'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -13,38 +13,44 @@ const formItemLayout = {
 
 class SimpleEdit extends Component {
     state = {
-        QueryExtend: {},
-        Settings: {}
-    }
-    componentWillReceiveProps(next) {
-        // console.log(next)
-        this.setState({
-            QueryExtend: JSON.parse(JSON.stringify(next.TableValue.QueryExtend)),
-            Settings: next.TableValue.Settings
-        })
+        QueryExtend: [],
+        Settings: {},
+        TableValueADD: {}
     }
     componentWillMount() {
         const { TableValue } = this.props
-        // console.log(TableValue)
-        if (TableValue.QueryExtend !== undefined) {
-            this.setState({
-                QueryExtend: JSON.parse(JSON.stringify(TableValue.QueryExtend)),
-                Settings: TableValue.Settings
-            })
-        }
+        this.setState({
+            QueryExtend: JSON.parse(JSON.stringify(TableValue.QueryExtend)),
+            Settings: JSON.parse(TableValue.Settings),
+            TableValueADD: JSON.parse(JSON.stringify(TableValue))
+        })
     }
-    handleChange = (key, e) => {
+    handleChange = (key, e) => {//第一层的修改
         let value = e.target.value
-        // console.log(key + '-----' + value)
-        this.props.handleChange(key,value)
+        console.log(key + '-----' + value)
+        this.setState({
+            TableValueADD: Object.assign(this.state.TableValueADD, { [key]: value })
+        })
     }
-    SelectChange = (key, value) => {
+    SelectChange = (key, value) => {//侧边选择的修改
         console.log(key + '=====' + value)
-        this.props.handleChange(key,value)
+        this.setState({
+            Settings:Object.assign(this.state.Settings,{[key]:value})
+        })
+    }
+    ModuleChange = (key, value) => {//模块及流的修改
+        console.log(key + '-----' + value)
+        this.setState({
+            TableValueADD: Object.assign(this.state.TableValueADD, { [key]: value })
+        })
+    }
+    TabsChange = (data) => {//增加框的修改
+        this.setState({
+            QueryExtend: data
+        })
     }
     render() {
-        const { TableValue } = this.props
-        // console.log(TableValue)
+        const { TableValueADD } = this.state
         return (
             <Form>
                 <Row gutter={24}>
@@ -52,41 +58,53 @@ class SimpleEdit extends Component {
                         <Row gutter={24}>
                             <Col span={12}>
                                 <FormItem label="查询表示" {...formItemLayout}>
-                                    <Input value={TableValue.BillTypeCode} onChange={this.handleChange.bind(this, 'BillTypeCode')}></Input>
+                                    <Input value={TableValueADD.BillTypeCode}
+                                        onChange={this.handleChange.bind(this, 'BillTypeCode')}></Input>
                                 </FormItem>
                                 <FormItem label="条件控制程序集" {...formItemLayout}>
-                                    <Input value={TableValue.DQueryParamAssembly} onChange={this.handleChange.bind(this, 'DQueryParamAssembly')}></Input>
+                                    <Input value={TableValueADD.DQueryParamAssembly}
+                                        onChange={this.handleChange.bind(this, 'DQueryParamAssembly')}></Input>
                                 </FormItem>
                                 <FormItem label="主控件程序集" {...formItemLayout}>
-                                    <Input value={TableValue.DQueryMasterAssembly} onChange={this.handleChange.bind(this, 'DQueryMasterAssembly')}></Input>
+                                    <Input value={TableValueADD.DQueryMasterAssembly}
+                                        onChange={this.handleChange.bind(this, 'DQueryMasterAssembly')}></Input>
                                 </FormItem>
                                 <FormItem label="从控件程序集" {...formItemLayout}>
-                                    <Input value={TableValue.DQuerySlaveAssembly} onChange={this.handleChange.bind(this, 'DQuerySlaveAssembly')}></Input>
+                                    <Input value={TableValueADD.DQuerySlaveAssembly}
+                                        onChange={this.handleChange.bind(this, 'DQuerySlaveAssembly')}></Input>
                                 </FormItem>
                                 <FormItem label="所属模块" {...formItemLayout}>
-                                    <Selects SelectKey='Module' disables={false} defaultValue={TableValue.Module} handleChange={this.SelectChange.bind(this)}></Selects>
+                                    <Selects SelectKey='Module' disables={false}
+                                        defaultValue={TableValueADD.Module}
+                                        handleChange={this.ModuleChange.bind(this)}></Selects>
                                 </FormItem>
                                 <FormItem label="作者" {...formItemLayout}>
-                                    <Input value={TableValue.Author} onChange={this.handleChange.bind(this, 'Author')}></Input>
+                                    <Input value={TableValueADD.Author}
+                                        onChange={this.handleChange.bind(this, 'Author')}></Input>
                                 </FormItem>
                             </Col>
                             <Col span={12}>
                                 <FormItem label="窗口名称" {...formItemLayout}>
-                                    <Input value={TableValue.DQueryCaption} onChange={this.handleChange.bind(this, 'DQueryCaption')}></Input>
+                                    <Input value={TableValueADD.DQueryCaption}
+                                        onChange={this.handleChange.bind(this, 'DQueryCaption')}></Input>
                                 </FormItem>
                                 <FormItem label="条件控制命名" {...formItemLayout}>
-                                    <Input value={TableValue.DQueryParamFullName} onChange={this.handleChange.bind(this, 'DQueryParamFullName')}></Input>
+                                    <Input value={TableValueADD.DQueryParamFullName}
+                                        onChange={this.handleChange.bind(this, 'DQueryParamFullName')}></Input>
                                 </FormItem>
                                 <FormItem label="主控件命名" {...formItemLayout}>
-                                    <Input value={TableValue.DQueryMasterFullName} onChange={this.handleChange.bind(this, 'DQueryMasterFullName')}></Input>
+                                    <Input value={TableValueADD.DQueryMasterFullName}
+                                        onChange={this.handleChange.bind(this, 'DQueryMasterFullName')}></Input>
                                 </FormItem>
                                 <FormItem label="从控件命名" {...formItemLayout}>
-                                    <Input value={TableValue.DQuerySlaveFullName} onChange={this.handleChange.bind(this, 'DQuerySlaveFullName')}></Input>
+                                    <Input value={TableValueADD.DQuerySlaveFullName}
+                                        onChange={this.handleChange.bind(this, 'DQuerySlaveFullName')}></Input>
                                 </FormItem>
                                 <FormItem label="窗口布局" {...formItemLayout}>
-                                    <Select defaultValue={TableValue.LayoutMode}>
-                                        <Option value={1}>流式布局</Option>
-                                        <Option value={0}>固定布局</Option>
+                                    <Select defaultValue={TableValueADD.LayoutMode}
+                                        onChange={this.ModuleChange.bind(this, 'LayoutMode')}>
+                                        <Option value="fluidLayout">流式布局</Option>
+                                        <Option value="fixedLayout">固定布局</Option>
                                     </Select>
                                 </FormItem>
                                 <FormItem label="打开设计" {...formItemLayout}>
@@ -97,15 +115,19 @@ class SimpleEdit extends Component {
                                 </FormItem>
                             </Col>
                         </Row>
-                        <SimpleTabs
+                        <SimpleTabsEdit
                             disableds={false}
                             QueryExtend={this.state.QueryExtend}
-                            handleChange={this.SelectChange.bind(this)}></SimpleTabs>
+                            count={this.props.count}
+                            TabsChange={this.TabsChange.bind(this)}
+                        ></SimpleTabsEdit>
                     </Col>
                     <Col span={6}>
-                        <SimpleSwitch
+                        <SimpleSwitchEdit
                             disableds={false}
-                            Settings={this.state.Settings}></SimpleSwitch>
+                            Settings={this.state.Settings}
+                            SelectChange={this.SelectChange.bind(this)}
+                        ></SimpleSwitchEdit>
                     </Col>
                 </Row>
             </Form>

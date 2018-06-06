@@ -18,38 +18,87 @@ const MenuAdmin = [
     { Name: '允许查看', Code: 'AllowView' },
     { Name: '允许查分公司数据', Code: 'ShowOrgSelect' }
 ]
-
-class SimpleSwitch extends Component {
+const ServerAdmin = [
+    { Name: '查询前参数检查', Code: 'ParamsCheck' },
+    { Name: '允许SQL自动重构', Code: 'SQLRebuilding' }
+]
+const FunAdmin = [
+    { Name: '分公司勾选联动', Code: 'IsLinkOnOrgSelect' },
+    { Name: '分公司允许多选', Code: 'AllowOrgMultiSelect' }
+]
+let Menu = []
+let Servers = []
+let Fun = []
+class SimpleSwitchEdit extends Component {
     callback = (key) => {
         console.log(key);
     }
-    Change = (Name, e) => {
-        console.log(Name + '---' + e)
+    SelectChange = (key,value)=>{
+        // console.log(key +'-----'+ value)
+        this.props.SelectChange(key,value)
     }
-    render() {
-        const {disableds, Settings}=this.props
-        for(let key in Settings){
-            if(Settings[key] === 'true'){
+    componentWillMount() {
+        const { disableds, Settings } = this.props
+        console.log(Settings)//如果是修改  需要JSON转换 TODO
+        for (let key in Settings) {
+            if (Settings[key] === 'true') {
                 Settings[key] = true
-            }else{
+            } else {
                 Settings[key] = false
             }
         }
-        const Menu = []
-        MenuAdmin.map((v, index) => (
-            // console.log(v)
-            Menu.push(
-                <FormItem label={v.Name} {...formItemLayout} key={index}>
+        MenuAdmin.map((v, index) => {
+            let Randoms = Math.random()
+            return Menu.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${(index+1)*Randoms}Menu`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
-                        onChange={this.Change.bind(this,v.Code)}
                         checkedChildren='true'
                         uncheckedchildren='false'
                         disabled={disableds}
+                        onChange={this.SelectChange.bind(this,v.Code)}
                     />
                 </FormItem>
             )
-        ))
+        }
+            // console.log(v)
+            
+        )
+
+        ServerAdmin.map((v, index) => {
+            let Randoms = Math.random()
+            // console.log(v)
+            return Servers.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${(index+1)*Randoms}Ser`}>
+                    <Switch
+                        defaultChecked={Settings[v.Code]}
+                        checkedChildren='true'
+                        uncheckedchildren='false'
+                        disabled={disableds}
+                        onChange={this.SelectChange.bind(this,v.Code)}
+                    />
+                </FormItem>
+            )
+        })
+
+        FunAdmin.map((v, index) => {
+
+            let Randoms = Math.random()
+            // console.log(v)
+            Fun.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${(index+1)*Randoms}Fun`}>
+                    <Switch
+                        defaultChecked={Settings[v.Code]}
+                        checkedChildren='true'
+                        uncheckedchildren='false'
+                        disabled={disableds}
+                        onChange={this.SelectChange.bind(this,v.Code)}
+                    />
+                </FormItem>
+            )
+        })
+    }
+    render() {
         return (
             <div>
                 <Collapse
@@ -57,44 +106,10 @@ class SimpleSwitch extends Component {
                     onChange={this.callback.bind(this)}
                     bordered={false}>
                     <Panel header="功能控制" key="1">
-                        <FormItem label='分公司勾选联动' {...formItemLayout}>
-                            <Switch
-                                defaultChecked={Settings.IsLinkOnOrgSelect}
-                                onChange={this.Change.bind(this, 'IsLinkOnOrgSelect')}
-                                checkedChildren='true'
-                                uncheckedchildren='false'
-                                disabled={disableds}
-                            />
-                        </FormItem>
-                        <FormItem label='分公司允许多选' {...formItemLayout}>
-                            <Switch
-                                defaultChecked={Settings.AllowOrgMultiSelect}
-                                onChange={this.Change.bind(this, 'AllowOrgMultiSelect')}
-                                checkedChildren='true'
-                                uncheckedchildren='false'
-                                disabled={disableds}
-                            />
-                        </FormItem>
+                        {Fun}
                     </Panel>
                     <Panel header="系统控制" key="2">
-                        <FormItem label='查询前参数检查' {...formItemLayout}>
-                            <Switch
-                                defaultChecked={Settings.ParamsCheck}
-                                onChange={this.Change.bind(this, 'ParamsCheck')}
-                                checkedChildren='true'
-                                uncheckedchildren='false'
-                                disabled={disableds}
-                            />
-                        </FormItem>
-                        <FormItem label='允许SQL自动重构' {...formItemLayout}>
-                            <Switch
-                                defaultChecked={Settings.SQLRebuilding}
-                                onChange={this.Change.bind(this, 'SQLRebuilding')}
-                                checkedChildren='true'
-                                uncheckedchildren='false'
-                                disabled={disableds}
-                            />
-                        </FormItem>
+                        {Servers}
                     </Panel>
                     <Panel header="菜单控制" key="3">
                         {Menu}
@@ -105,4 +120,4 @@ class SimpleSwitch extends Component {
     }
 }
 
-export default SimpleSwitch;
+export default SimpleSwitchEdit;

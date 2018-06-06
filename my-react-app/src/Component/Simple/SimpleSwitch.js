@@ -31,7 +31,7 @@ let Servers = []
 let Fun = []
 class SimpleSwitch extends Component {
     callback = (key) => {
-        console.log(key);
+        // console.log(key);
     }
     componentWillMount() {
         const { disableds, Settings } = this.props
@@ -42,10 +42,12 @@ class SimpleSwitch extends Component {
                 Settings[key] = false
             }
         }
-        MenuAdmin.map((v, index) => (
+        MenuAdmin.map((v, index) => {
+            index++
+             let Randoms = Math.random()
             // console.log(v)
-            Menu.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index}Menu`}>
+            return Menu.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${index*Randoms}Menu`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
@@ -54,12 +56,14 @@ class SimpleSwitch extends Component {
                     />
                 </FormItem>
             )
-        ))
+        })
 
-        ServerAdmin.map((v, index) => (
+        ServerAdmin.map((v, index) => {
+            index++
+            let Randoms = Math.random()
             // console.log(v)
-            Servers.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index}Ser`}>
+            return Servers.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${index*Randoms}Ser`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
@@ -68,12 +72,14 @@ class SimpleSwitch extends Component {
                     />
                 </FormItem>
             )
-        ))
+        })
 
-        FunAdmin.map((v, index) => (
+        FunAdmin.map((v, index) => {
+            index++
+            let Randoms = Math.random()
             // console.log(v)
-            Fun.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index}Fun`}>
+            return Fun.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${index*Randoms}Fun`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
@@ -82,7 +88,7 @@ class SimpleSwitch extends Component {
                     />
                 </FormItem>
             )
-        ))
+        })
     }
     componentWillReceiveProps(next) {
         // console.log(next)
@@ -98,10 +104,12 @@ class SimpleSwitch extends Component {
                 Settings[key] = false
             }
         }
-        MenuAdmin.map((v, index) => (
+        MenuAdmin.map((v, index) => {
+            index++
+            let Randoms = Math.random()
             // console.log(v)
-            Menu.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index}Menu`}>
+            return Menu.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${index*(Randoms+1)}Menus`}>
                     <Switch
                         checked={Settings[v.Code]}
                         checkedChildren='true'
@@ -110,12 +118,14 @@ class SimpleSwitch extends Component {
                     />
                 </FormItem>
             )
-        ))
+        })
 
-        ServerAdmin.map((v, index) => (
+        ServerAdmin.map((v, index) => {
+            index++
             // console.log(v)
-            Servers.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index}Ser`}>
+            let Randoms = Math.random()
+            return Servers.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${index*(Randoms+1)}Sers`}>
                     <Switch
                         checked={Settings[v.Code]}
                         checkedChildren='true'
@@ -124,12 +134,14 @@ class SimpleSwitch extends Component {
                     />
                 </FormItem>
             )
-        ))
+        })
 
-        FunAdmin.map((v, index) => (
+        FunAdmin.map((v, index) => {
+            let Randoms = Math.random()
+            index++
             // console.log(v)
-            Fun.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index}Fun`}>
+            return Fun.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${index*(Randoms+1)}Funs`}>
                     <Switch
                         checked={Settings[v.Code]}
                         checkedChildren='true'
@@ -138,7 +150,7 @@ class SimpleSwitch extends Component {
                     />
                 </FormItem>
             )
-        ))
+        })
     }
     render() {
         return (

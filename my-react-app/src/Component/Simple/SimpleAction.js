@@ -14,37 +14,23 @@ class SimpleAction extends Component {
         QueryExtend: {},
         Settings: {}
     }
-    componentWillReceiveProps(next){
-        // console.log(next)
-        if(next.TableValue.DQueryMasterFullName === ''){
-            this.setState({
-                QueryExtend:JSON.parse(JSON.stringify(next.TableValue.QueryExtend)),
-                Settings : next.TableValue.Settings
-            })
-        }else{
-            this.setState({
-                QueryExtend:JSON.parse(JSON.stringify(next.TableValue.QueryExtend)),
-                Settings : JSON.parse(JSON.parse(JSON.stringify(next.TableValue.Settings)))
-            })
-        }     
+    componentWillReceiveProps(next) {
+        // console.log(next)  
+        this.setState({
+            QueryExtend: JSON.parse(JSON.stringify(next.TableValue.QueryExtend)),
+            Settings: JSON.parse(JSON.parse(JSON.stringify(next.TableValue.Settings)))
+        })
     }
-    componentWillMount(){
-        const {TableValue} = this.props
-        console.log(TableValue)
-        if(TableValue.DQueryMasterFullName === ''){
-            this.setState({
-                QueryExtend:JSON.parse(JSON.stringify(TableValue.QueryExtend)),
-                Settings : TableValue.Settings
-            })
-        }else{
-            this.setState({
-                QueryExtend:JSON.parse(JSON.stringify(TableValue.QueryExtend)),
-                Settings : JSON.parse(JSON.parse(JSON.stringify(TableValue.Settings)))
-            })
-        } 
+    componentWillMount() {
+        const { TableValue } = this.props
+        // console.log(TableValue)
+        this.setState({
+            QueryExtend: JSON.parse(JSON.stringify(TableValue.QueryExtend)),
+            Settings: JSON.parse(JSON.parse(JSON.stringify(TableValue.Settings)))
+        })
     }
     render() {
-        const { TableValue } = this.props      
+        const { TableValue } = this.props
         return (
             <Form>
                 <Row gutter={24}>
@@ -97,7 +83,7 @@ class SimpleAction extends Component {
                                 </FormItem>
                             </Col>
                         </Row>
-                        <SimpleTabs QueryExtend={this.state.QueryExtend}></SimpleTabs>
+                        <SimpleTabs QueryExtend={this.state.QueryExtend} disableds={true}></SimpleTabs>
                     </Col>
                     <Col span={6}>
                         <SimpleSwitch disableds={true} Settings={this.state.Settings}></SimpleSwitch>

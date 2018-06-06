@@ -111,7 +111,7 @@ class Simple extends Component {
                 WorkFlowGuid: "",
                 WorkFlowState: "",
             }],
-            Settings: { "ShowOrgSelect": "true", "ParamsCheck": "true", "AllowOrgMultiSelect": "true", "IsLinkOnOrgSelect": "true", "SQLRebuilding": "true", "AllowView": "true", "AllowEdit": "true", "AllowDelete": "true", "AllowReset": "true", "AllowPrint": "true", "PrintAll": "true", "AllowWorkFlowQuery": "true", "AllowReverseState": "true", "AllowExport": "true" },
+            Settings:' { "ShowOrgSelect": "true", "ParamsCheck": "true", "AllowOrgMultiSelect": "true", "IsLinkOnOrgSelect": "true", "SQLRebuilding": "true", "AllowView": "true", "AllowEdit": "true", "AllowDelete": "true", "AllowReset": "true", "AllowPrint": "true", "PrintAll": "true", "AllowWorkFlowQuery": "true", "AllowReverseState": "true", "AllowExport": "true" }',
             SoftSystemCode: 'GOS',
             Tag: null,
             Version: 2,
@@ -171,7 +171,8 @@ class Simple extends Component {
                 clearTable: true,
             })
         } else if (name === 'Edit') {
-            if (this.state.TableValue.PK === undefined) {
+            console.log(this.state.TableValue.PK)
+            if (this.state.TableValue.PK === -1) {
                 notification.warning({
                     message: '错误提示',
                     description: '请选择一个节点',
@@ -182,7 +183,7 @@ class Simple extends Component {
                 this.setState({
                     TableValue: clear,
                     visible: true,
-                    clearTable: true
+                    clearTable: true,
                 })
                 return
             }
@@ -198,13 +199,12 @@ class Simple extends Component {
         }
     }
     handleOk = () => {
-        console.log(this.state.TableValue)
         let clear = JSON.parse(JSON.stringify(this.state.clearObj))
         //TODO   发送请求
         this.setState({
             visible: false,
             TableValue: clear,
-            clearTable: false
+            clearTable: false,
         })
     }
     handleCancel = () => {
@@ -212,15 +212,18 @@ class Simple extends Component {
         this.setState({
             visible: false,
             TableValue: clear,
-            clearTable: false
+            clearTable: false,
         })
     }
-    handleChange = (key, value) => {
+    handleChange = (key, value) => {//第一层
+        console.log(key,value)
         this.setState({
             TableValue: Object.assign(this.state.TableValue, { [key]: value })
         })
     }
-
+    handleSwitch = (Obj) => {//侧边
+        console.log(Obj)
+    }
 
     render() {
         const { Data, columns, ActiveKey, TableValue, visible, clearTable } = this.state
@@ -247,6 +250,7 @@ class Simple extends Component {
                     </Panel>
                     <Panel header='基本信息' key='2' showArrow={true}>
                         <SimpleAction
+                            key={Math.random()}
                             TableValue={TableValue}
                         ></SimpleAction>
                     </Panel>
@@ -257,10 +261,12 @@ class Simple extends Component {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     width={1440}
+                    key={Math.random()}
                 >
                     <SimpleEdit
                         TableValue={TableValue}
                         handleChange={this.handleChange.bind(this)}
+                        handleSwitch={this.handleSwitch.bind(this)}
                     ></SimpleEdit>
                 </Modal>
             </div>
