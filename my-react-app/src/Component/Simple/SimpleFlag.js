@@ -10,46 +10,30 @@ const formItemLayout = {
     wrapperCol: { span: 20 },
 };
 const Widths = { width: 100 + '%' }
+let IsPaging = true
+let IsUseCacheServer = true
+
 class SimpleFlag extends Component {
     state = {
         IsPaging: true,
-        IsUseCacheServer:true,
+        IsUseCacheServer: true,
         Query: []
     }
-    componentWillMount(){
-        const {QueryExtend} = this.props
+    componentWillMount() {
+        const { QueryExtend } = this.props
         console.log(QueryExtend)
-        if (QueryExtend.IsPaging === 1) {
-            return
-        } else {
+        if (QueryExtend.IsPaging !== 1) {
             this.setState({
                 IsPaging: false
             })
         }
-        if(QueryExtend.IsUseCacheServer === 1){
-            return
-        }else{
+        if (QueryExtend.IsUseCacheServer !== 1) {
             this.setState({
-                IsUseCacheServer:false
+                IsUseCacheServer: false
             })
-        }
+        } 
     }
-    componentWillReceiveProps(next) {
-        if (next.QueryExtend.IsPaging === 1) {
-            return
-        } else {
-            this.setState({
-                IsPaging: false
-            })
-        }
-        if(next.QueryExtend.IsUseCacheServer === 1){
-            return
-        }else{
-            this.setState({
-                IsUseCacheServer:false
-            })
-        }
-    }
+  
     ChangeSelect = (key, value) => {
         // console.log(value)
         this.props.handleChange(key, value, this.props.datasource)
@@ -65,9 +49,9 @@ class SimpleFlag extends Component {
     render() {
         const { disableds, QueryExtend, datasource } = this.props
         console.log(disableds)
-        // console.log(datasource)
+        console.log(this.state.IsPaging + '---' + this.state.IsUseCacheServer)
         if (!disableds) {
-            const {Data} = this.props
+            const { Data } = this.props
             return (
                 <div>
                     <FormItem label="页签名称" {...formItemLayout}>
@@ -128,6 +112,7 @@ class SimpleFlag extends Component {
                 </div>
             );
         } else {
+            console.log(1)
             return (
                 <div>
                     <FormItem label="页签名称" {...formItemLayout}>
