@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs } from 'antd';
 import SimpleFlag from './SimpleFlag'
-import { getTime } from '../../Math/Math'
+// import { getTime } from '../../Math/Math'
 const TabPane = Tabs.TabPane;
 
 class SimpleTabs extends React.Component {
@@ -35,26 +35,26 @@ class SimpleTabs extends React.Component {
             };
         }
     }
-    componentWillReceiveProps(next) {
-        let panes = []
-        next.QueryExtend.map((v, index) => {
-            return panes.push(
-                {
-                    title:
-                        `${v.DQueryCaption}`,
-                    content: <SimpleFlag
-                        QueryExtend={v}
-                        key={index}
-                        disableds={true}
-                    ></SimpleFlag>,
-                    key: `${index}`
-                }
-            )
-        })
-        this.setState({
-            panes
-        })
-    }
+    // componentWillReceiveProps(next) {
+    //     let panes = []
+    //     next.QueryExtend.map((v, index) => {
+    //         return panes.push(
+    //             {
+    //                 title:
+    //                     `${v.DQueryCaption}`,
+    //                 content: <SimpleFlag
+    //                     QueryExtend={v}
+    //                     key={index}
+    //                     disableds={true}
+    //                 ></SimpleFlag>,
+    //                 key: `${index}`
+    //             }
+    //         )
+    //     })
+    //     this.setState({
+    //         panes
+    //     })
+    // }
     onChange = (activeKey) => {//切换面板的回调
         this.setState({ activeKey });
     }

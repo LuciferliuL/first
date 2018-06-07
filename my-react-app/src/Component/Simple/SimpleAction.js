@@ -14,13 +14,6 @@ class SimpleAction extends Component {
         QueryExtend: {},
         Settings: {}
     }
-    componentWillReceiveProps(next) {
-        // console.log(next)  
-        this.setState({
-            QueryExtend: JSON.parse(JSON.stringify(next.TableValue.QueryExtend)),
-            Settings: JSON.parse(JSON.parse(JSON.stringify(next.TableValue.Settings)))
-        })
-    }
     componentWillMount() {
         const { TableValue } = this.props
         // console.log(TableValue)
@@ -28,6 +21,9 @@ class SimpleAction extends Component {
             QueryExtend: JSON.parse(JSON.stringify(TableValue.QueryExtend)),
             Settings: JSON.parse(JSON.parse(JSON.stringify(TableValue.Settings)))
         })
+    }
+    componentWillUnmount(){
+        this.setState({})
     }
     render() {
         const { TableValue } = this.props

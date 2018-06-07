@@ -26,15 +26,25 @@ const FunAdmin = [
     { Name: '分公司勾选联动', Code: 'IsLinkOnOrgSelect' },
     { Name: '分公司允许多选', Code: 'AllowOrgMultiSelect' }
 ]
-let Menu = []
-let Servers = []
-let Fun = []
+
 class SimpleSwitch extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            Menu :[],
+            Servers :[],
+            Fun :[]
+        }
+
+    }
     callback = (key) => {
         // console.log(key);
     }
     componentWillMount() {
         const { disableds, Settings } = this.props
+        let Menu = []
+        let Servers = []
+        let Fun = []
         for (let key in Settings) {
             if (Settings[key] === 'true') {
                 Settings[key] = true
@@ -44,10 +54,10 @@ class SimpleSwitch extends Component {
         }
         MenuAdmin.map((v, index) => {
             index++
-             let Randoms = Math.random()
+            let Randoms = Math.random()
             // console.log(v)
             return Menu.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index*Randoms}Menu`}>
+                <FormItem label={v.Name} {...formItemLayout} key={`${index * Randoms}Menu`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
@@ -63,7 +73,7 @@ class SimpleSwitch extends Component {
             let Randoms = Math.random()
             // console.log(v)
             return Servers.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index*Randoms}Ser`}>
+                <FormItem label={v.Name} {...formItemLayout} key={`${index * Randoms}Ser`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
@@ -79,7 +89,7 @@ class SimpleSwitch extends Component {
             let Randoms = Math.random()
             // console.log(v)
             return Fun.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index*Randoms}Fun`}>
+                <FormItem label={v.Name} {...formItemLayout} key={`${index * Randoms}Fun`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
@@ -89,69 +99,75 @@ class SimpleSwitch extends Component {
                 </FormItem>
             )
         })
-    }
-    componentWillReceiveProps(next) {
-        // console.log(next)
-        Fun=[]
-        Servers=[]
-        Menu=[]
-        const Settings = next.Settings
-        const disableds = next.disableds
-        for (let key in Settings) {
-            if (Settings[key] === 'true') {
-                Settings[key] = true
-            } else {
-                Settings[key] = false
-            }
-        }
-        MenuAdmin.map((v, index) => {
-            index++
-            let Randoms = Math.random()
-            // console.log(v)
-            return Menu.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index*(Randoms+1)}Menus`}>
-                    <Switch
-                        checked={Settings[v.Code]}
-                        checkedChildren='true'
-                        uncheckedchildren='false'
-                        disabled={disableds}
-                    />
-                </FormItem>
-            )
-        })
 
-        ServerAdmin.map((v, index) => {
-            index++
-            // console.log(v)
-            let Randoms = Math.random()
-            return Servers.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index*(Randoms+1)}Sers`}>
-                    <Switch
-                        checked={Settings[v.Code]}
-                        checkedChildren='true'
-                        uncheckedchildren='false'
-                        disabled={disableds}
-                    />
-                </FormItem>
-            )
-        })
-
-        FunAdmin.map((v, index) => {
-            let Randoms = Math.random()
-            index++
-            // console.log(v)
-            return Fun.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${index*(Randoms+1)}Funs`}>
-                    <Switch
-                        checked={Settings[v.Code]}
-                        checkedChildren='true'
-                        uncheckedchildren='false'
-                        disabled={disableds}
-                    />
-                </FormItem>
-            )
+        this.setState({
+            Menu: Menu,
+            Fun: Fun,
+            Servers: Servers
         })
     }
+    // componentWillReceiveProps(next) {
+    //     // console.log(next)
+    //     Fun = []
+    //     Servers = []
+    //     Menu = []
+    //     const Settings = next.Settings
+    //     const disableds = next.disableds
+    //     for (let key in Settings) {
+    //         if (Settings[key] === 'true') {
+    //             Settings[key] = true
+    //         } else {
+    //             Settings[key] = false
+    //         }
+    //     }
+    //     MenuAdmin.map((v, index) => {
+    //         index++
+    //         let Randoms = Math.random()
+    //         // console.log(v)
+    //         return Menu.push(
+    //             <FormItem label={v.Name} {...formItemLayout} key={`${index * (Randoms + 1)}Menus`}>
+    //                 <Switch
+    //                     checked={Settings[v.Code]}
+    //                     checkedChildren='true'
+    //                     uncheckedchildren='false'
+    //                     disabled={disableds}
+    //                 />
+    //             </FormItem>
+    //         )
+    //     })
+
+    //     ServerAdmin.map((v, index) => {
+    //         index++
+    //         // console.log(v)
+    //         let Randoms = Math.random()
+    //         return Servers.push(
+    //             <FormItem label={v.Name} {...formItemLayout} key={`${index * (Randoms + 1)}Sers`}>
+    //                 <Switch
+    //                     checked={Settings[v.Code]}
+    //                     checkedChildren='true'
+    //                     uncheckedchildren='false'
+    //                     disabled={disableds}
+    //                 />
+    //             </FormItem>
+    //         )
+    //     })
+
+    //     FunAdmin.map((v, index) => {
+    //         let Randoms = Math.random()
+    //         index++
+    //         // console.log(v)
+    //         return Fun.push(
+    //             <FormItem label={v.Name} {...formItemLayout} key={`${index * (Randoms + 1)}Funs`}>
+    //                 <Switch
+    //                     checked={Settings[v.Code]}
+    //                     checkedChildren='true'
+    //                     uncheckedchildren='false'
+    //                     disabled={disableds}
+    //                 />
+    //             </FormItem>
+    //         )
+    //     })
+    // }
     render() {
         return (
             <div>
@@ -160,13 +176,13 @@ class SimpleSwitch extends Component {
                     onChange={this.callback.bind(this)}
                     bordered={false}>
                     <Panel header="功能控制" key="1">
-                        {Fun}
+                        {this.state.Fun}
                     </Panel>
                     <Panel header="系统控制" key="2">
-                        {Servers}
+                        {this.state.Servers}
                     </Panel>
                     <Panel header="菜单控制" key="3">
-                        {Menu}
+                        {this.state.Menu}
                     </Panel>
                 </Collapse>
             </div>
