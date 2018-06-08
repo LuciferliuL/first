@@ -15,7 +15,8 @@ class SimpleFlag extends Component {
     state = {
         IsPaging: true,
         IsUseCacheServer: true,
-        QueryExtend: {}
+        QueryExtendstate: {},
+        DQuerySql:{}
     }
     componentWillMount() {
         const { QueryExtend } = this.props
@@ -31,7 +32,8 @@ class SimpleFlag extends Component {
             })
         } 
         this.setState({
-            QueryExtend:QueryExtend
+            QueryExtendstate:QueryExtend,
+            DQuerySql:QueryExtend.DQuerySql
         })
     }
   
@@ -45,7 +47,16 @@ class SimpleFlag extends Component {
     }
     handleChange = (key, e) => {
         let value = e.target.value
-        this.props.handleChange(key, value, this.props.datasource)
+        // this.props.handleChange(key, value, this.props.datasource)
+        this.setState({
+            QueryExtendstate:Object.assign(this.state.QueryExtendstate,{[key]:value})
+        })
+    }
+    handleSql = (key, e) => {
+        let value = e.target.value
+        this.setState({
+            DQuerySql:Object.assign(this.state.DQuerySql,{[key]:value})
+        })
     }
     render() {
         const { disableds, QueryExtend, datasource } = this.props
@@ -109,7 +120,7 @@ class SimpleFlag extends Component {
                             rows={10}
                             disabled={disableds}
                             value={QueryExtendstate.DQuerySql.SqlScripe}
-                            onChange={this.handleChange.bind(this, 'SqlScripe')}></TextArea>
+                            onChange={this.handleSql.bind(this, 'SqlScripe')}></TextArea>
                     </FormItem>
                 </div>
             );

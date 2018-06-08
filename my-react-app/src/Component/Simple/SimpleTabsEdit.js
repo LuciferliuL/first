@@ -261,7 +261,7 @@ class SimpleTabs extends React.Component {
         Data[dataSource - 1][key] = e
         this.setState({
             Data: Data
-        })
+        },()=>{console.log(this.state.Data)})
     }
     onChange = (activeKey) => {//切换面板的回调
         this.setState({ activeKey });
