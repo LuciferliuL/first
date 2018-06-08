@@ -15,11 +15,11 @@ class SimpleFlag extends Component {
     state = {
         IsPaging: true,
         IsUseCacheServer: true,
-        Query: []
+        QueryExtend: {}
     }
     componentWillMount() {
         const { QueryExtend } = this.props
-        // console.log(QueryExtend)
+        console.log(QueryExtend)
         if (QueryExtend.IsPaging !== 1) {
             this.setState({
                 IsPaging: false
@@ -30,6 +30,9 @@ class SimpleFlag extends Component {
                 IsUseCacheServer: false
             })
         } 
+        this.setState({
+            QueryExtend:QueryExtend
+        })
     }
   
     ChangeSelect = (key, value) => {
@@ -49,17 +52,18 @@ class SimpleFlag extends Component {
         // console.log(disableds)
         // console.log(this.state.IsPaging + '---' + this.state.IsUseCacheServer)
         if (!disableds) {
-            const { Data } = this.props
+            const {QueryExtendstate} = this.state
+            console.log(QueryExtendstate)
             return (
                 <div>
                     <FormItem label="页签名称" {...formItemLayout}>
-                        <Input value={Data.DQueryCaption} disabled={disableds} onChange={this.handleChange.bind(this, 'DQueryCaption')}></Input>
+                        <Input value={QueryExtendstate.DQueryCaption} disabled={disableds} onChange={this.handleChange.bind(this, 'DQueryCaption')}></Input>
                     </FormItem>
                     <FormItem label="SQL名" {...formItemLayout}>
                         <InputGroup>
                             <Row>
                                 <Col span={14}>
-                                    <Input value={Data.DQueryName} disabled={disableds} onChange={this.handleChange.bind(this, 'DQueryName')} />
+                                    <Input value={QueryExtendstate.DQueryName} disabled={disableds} onChange={this.handleChange.bind(this, 'DQueryName')} />
                                 </Col>
                                 <Col span={10}>
                                     <Button type='primary' disabled={disableds}>123</Button>
@@ -72,7 +76,7 @@ class SimpleFlag extends Component {
                             <Row gutter={24}>
                                 <Col span={12}>
                                     <Select
-                                        value={Data.DataSource}
+                                        value={QueryExtendstate.DataSource}
                                         onChange={this.ChangeSelect.bind(this, 'DataSource')}
                                         style={Widths}
                                         disabled={disableds}>
@@ -90,7 +94,7 @@ class SimpleFlag extends Component {
                                         disabled={disableds}
                                     />
                                     是否使用缓存服务器 <Switch
-                                        defaultChecked
+                                        defaultChecked={this.state.IsUseCacheServer}
                                         onChange={this.onChange.bind(this, 'IsUseCacheServer')}
                                         checkedChildren='true'
                                         uncheckedchildren='false'
@@ -104,7 +108,7 @@ class SimpleFlag extends Component {
                         <TextArea
                             rows={10}
                             disabled={disableds}
-                            value={Data.DQuerySql.SqlScripe}
+                            value={QueryExtendstate.DQuerySql.SqlScripe}
                             onChange={this.handleChange.bind(this, 'SqlScripe')}></TextArea>
                     </FormItem>
                 </div>

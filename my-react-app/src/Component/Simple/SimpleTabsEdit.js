@@ -63,12 +63,12 @@ class SimpleTabs extends React.Component {
                         WorkFlowGuid: "",
                         WorkFlowState: "",
                     }],
-                    DataSource: '',
+                    DataSource: 1,
                     DeleteFlag: 0,
                     FK: 0,
                     GuidString: null,
-                    IsPaging: '',
-                    IsUseCacheServer: '',
+                    IsPaging: 0,
+                    IsUseCacheServer: 1,
                     LastModifyTime: getTime(),
                     LineID: 0,
                     Note: null,
@@ -116,12 +116,12 @@ class SimpleTabs extends React.Component {
                         WorkFlowGuid: "",
                         WorkFlowState: "",
                     }],
-                    DataSource: '',
+                    DataSource: 1,
                     DeleteFlag: 0,
                     FK: 0,
                     GuidString: null,
-                    IsPaging: '',
-                    IsUseCacheServer: '',
+                    IsPaging: 0,
+                    IsUseCacheServer: 1,
                     LastModifyTime: getTime(),
                     LineID: 0,
                     Note: null,
@@ -172,12 +172,12 @@ class SimpleTabs extends React.Component {
                     WorkFlowGuid: "",
                     WorkFlowState: "",
                 }],
-                DataSource: '',
+                DataSource: 1,
                 DeleteFlag: 0,
                 FK: 0,
                 GuidString: null,
-                IsPaging: '',
-                IsUseCacheServer: '',
+                IsPaging: 0,
+                IsUseCacheServer: 1,
                 LastModifyTime: getTime(),
                 LineID: 0,
                 Note: null,
@@ -230,12 +230,12 @@ class SimpleTabs extends React.Component {
                         WorkFlowGuid: "",
                         WorkFlowState: "",
                     }],
-                    DataSource: '',
+                    DataSource: 1,
                     DeleteFlag: 0,
                     FK: 0,
                     GuidString: null,
-                    IsPaging: '',
-                    IsUseCacheServer: '',
+                    IsPaging: 0,
+                    IsUseCacheServer: 1,
                     LastModifyTime: getTime(),
                     LineID: 0,
                     Note: null,
@@ -275,7 +275,7 @@ class SimpleTabs extends React.Component {
         panes.push({
             title: `${activeKey}`,
             content: <SimpleFlag
-                Data={this.state.Data[this.newTabIndex - 1]}
+                QueryExtend={this.state.Data[this.newTabIndex - 1]}
                 key={panes.length}
                 disableds={false}
                 datasource={this.newTabIndex}
@@ -286,6 +286,7 @@ class SimpleTabs extends React.Component {
         });
         let oldData = JSON.parse(JSON.stringify(this.state.Data))
         oldData.push(this.state.QueryExtend_)
+        console.log(oldData)
         this.setState({ panes, activeKey, Data: oldData });
     }
     remove = (targetKey) => {//移除

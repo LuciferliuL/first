@@ -27,7 +27,7 @@ class SimpleEdit extends Component {
     }
     handleChange = (key, e) => {//第一层的修改
         let value = e.target.value
-        console.log(key + '-----' + value)
+        // console.log(key + '-----' + value)
         this.setState({
             TableValueADD: Object.assign(this.state.TableValueADD, { [key]: value })
         })
@@ -118,7 +118,6 @@ class SimpleEdit extends Component {
                         <SimpleTabsEdit
                             disableds={false}
                             QueryExtend={this.state.QueryExtend}
-                            count={this.props.count}
                             TabsChange={this.TabsChange.bind(this)}
                         ></SimpleTabsEdit>
                     </Col>
