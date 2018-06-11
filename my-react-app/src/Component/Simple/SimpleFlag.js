@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Col, Button, Row, Switch } from 'antd'
+import { Form, Input, Select, Col, Button, Row, Switch, Icon, Modal } from 'antd'
+import  SimpleBtn from './SimpleBtn'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -16,7 +17,7 @@ class SimpleFlag extends Component {
         IsPaging: true,
         IsUseCacheServer: true,
         QueryExtendstate: {},
-        DQuerySql:{}
+        DQuerySql: {}
     }
     componentWillMount() {
         const { QueryExtend } = this.props
@@ -30,13 +31,13 @@ class SimpleFlag extends Component {
             this.setState({
                 IsUseCacheServer: false
             })
-        } 
+        }
         this.setState({
-            QueryExtendstate:QueryExtend,
-            DQuerySql:QueryExtend.DQuerySql
+            QueryExtendstate: QueryExtend,
+            DQuerySql: QueryExtend.DQuerySql
         })
     }
-  
+
     ChangeSelect = (key, value) => {
         // console.log(value)
         this.props.handleChange(key, value, this.props.datasource)
@@ -49,21 +50,24 @@ class SimpleFlag extends Component {
         let value = e.target.value
         // this.props.handleChange(key, value, this.props.datasource)
         this.setState({
-            QueryExtendstate:Object.assign(this.state.QueryExtendstate,{[key]:value})
+            QueryExtendstate: Object.assign(this.state.QueryExtendstate, { [key]: value })
         })
     }
     handleSql = (key, e) => {
         let value = e.target.value
         this.setState({
-            DQuerySql:Object.assign(this.state.DQuerySql,{[key]:value})
+            DQuerySql: Object.assign(this.state.DQuerySql, { [key]: value })
         })
+    }
+    handleBook = (value) => {
+        console.log(value)
     }
     render() {
         const { disableds, QueryExtend, datasource } = this.props
         // console.log(disableds)
         // console.log(this.state.IsPaging + '---' + this.state.IsUseCacheServer)
         if (!disableds) {
-            const {QueryExtendstate} = this.state
+            const { QueryExtendstate, DQuerySql } = this.state
             console.log(QueryExtendstate)
             return (
                 <div>
@@ -77,7 +81,7 @@ class SimpleFlag extends Component {
                                     <Input value={QueryExtendstate.DQueryName} disabled={disableds} onChange={this.handleChange.bind(this, 'DQueryName')} />
                                 </Col>
                                 <Col span={10}>
-                                    <Button type='primary' disabled={disableds}>123</Button>
+                                    <SimpleBtn handleBook={this.handleBook.bind(this)}></SimpleBtn>
                                 </Col>
                             </Row>
                         </InputGroup>
@@ -119,7 +123,7 @@ class SimpleFlag extends Component {
                         <TextArea
                             rows={10}
                             disabled={disableds}
-                            value={QueryExtendstate.DQuerySql.SqlScripe}
+                            value={DQuerySql.SqlScripe}
                             onChange={this.handleSql.bind(this, 'SqlScripe')}></TextArea>
                     </FormItem>
                 </div>
@@ -134,7 +138,7 @@ class SimpleFlag extends Component {
                         <InputGroup>
                             <Row>
                                 <Col span={14}>
-                                    <Input value={QueryExtend.DQueryName} disabled={disableds}  />
+                                    <Input value={QueryExtend.DQueryName} disabled={disableds} />
                                 </Col>
                                 <Col span={10}>
                                     <Button type='primary' disabled={disableds}>123</Button>
@@ -177,7 +181,7 @@ class SimpleFlag extends Component {
                             rows={10}
                             disabled={disableds}
                             value={QueryExtend.DQuerySql.SqlScripe}
-                           ></TextArea>
+                        ></TextArea>
                     </FormItem>
                 </div>
             );

@@ -37,7 +37,7 @@ class SimpleTabs extends React.Component {
                     CreateTime: getTime(),
                     DQueryCaption: '',
                     DQueryName: '',
-                    DQuerySql: [{
+                    DQuerySql: {
                         Author: '',
                         BranchID: "STD",
                         CreateTime: '',
@@ -62,7 +62,7 @@ class SimpleTabs extends React.Component {
                         VersionNum: 4,
                         WorkFlowGuid: "",
                         WorkFlowState: "",
-                    }],
+                    },
                     DataSource: 1,
                     DeleteFlag: 0,
                     FK: 0,
