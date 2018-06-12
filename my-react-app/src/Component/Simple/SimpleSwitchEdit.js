@@ -26,16 +26,20 @@ const FunAdmin = [
     { Name: '分公司勾选联动', Code: 'IsLinkOnOrgSelect' },
     { Name: '分公司允许多选', Code: 'AllowOrgMultiSelect' }
 ]
-let Menu = []
-let Servers = []
-let Fun = []
+
 class SimpleSwitchEdit extends Component {
+    constructor(props) {
+        super(props)
+        this.Menu = [],
+            this.Servers = [],
+            this.Fun = []
+    }
     callback = (key) => {
         console.log(key);
     }
-    SelectChange = (key,value)=>{
+    SelectChange = (key, value) => {
         // console.log(key +'-----'+ value)
-        this.props.SelectChange(key,value)
+        this.props.SelectChange(key, value)
     }
     componentWillMount() {
         const { disableds, Settings } = this.props
@@ -49,33 +53,33 @@ class SimpleSwitchEdit extends Component {
         }
         MenuAdmin.map((v, index) => {
             let Randoms = Math.random()
-            return Menu.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${(index+1)*Randoms}Menu`}>
+            return this.Menu.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${(index + 1) * Randoms}Menu`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
                         uncheckedchildren='false'
                         disabled={disableds}
-                        onChange={this.SelectChange.bind(this,v.Code)}
+                        onChange={this.SelectChange.bind(this, v.Code)}
                     />
                 </FormItem>
             )
         }
             // console.log(v)
-            
+
         )
 
         ServerAdmin.map((v, index) => {
             let Randoms = Math.random()
             // console.log(v)
-            return Servers.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${(index+1)*Randoms}Ser`}>
+            return this.Servers.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${(index + 1) * Randoms}Ser`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
                         uncheckedchildren='false'
                         disabled={disableds}
-                        onChange={this.SelectChange.bind(this,v.Code)}
+                        onChange={this.SelectChange.bind(this, v.Code)}
                     />
                 </FormItem>
             )
@@ -85,14 +89,14 @@ class SimpleSwitchEdit extends Component {
 
             let Randoms = Math.random()
             // console.log(v)
-            Fun.push(
-                <FormItem label={v.Name} {...formItemLayout} key={`${(index+1)*Randoms}Fun`}>
+            return this.Fun.push(
+                <FormItem label={v.Name} {...formItemLayout} key={`${(index + 1) * Randoms}Fun`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
                         checkedChildren='true'
                         uncheckedchildren='false'
                         disabled={disableds}
-                        onChange={this.SelectChange.bind(this,v.Code)}
+                        onChange={this.SelectChange.bind(this, v.Code)}
                     />
                 </FormItem>
             )
@@ -106,13 +110,13 @@ class SimpleSwitchEdit extends Component {
                     onChange={this.callback.bind(this)}
                     bordered={false}>
                     <Panel header="功能控制" key="1">
-                        {Fun}
+                        {this.Fun}
                     </Panel>
                     <Panel header="系统控制" key="2">
-                        {Servers}
+                        {this.Servers}
                     </Panel>
                     <Panel header="菜单控制" key="3">
-                        {Menu}
+                        {this.Menu}
                     </Panel>
                 </Collapse>
             </div>

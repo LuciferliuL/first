@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Col, Button, Row, Switch, Icon, Modal } from 'antd'
-import  SimpleBtn from './SimpleBtn'
+import { Form, Input, Select, Col, Button, Row, Switch } from 'antd'
+import SimpleBtn from './SimpleBtn'
 
 const FormItem = Form.Item
 const Option = Select.Option
@@ -21,7 +21,8 @@ class SimpleFlag extends Component {
     }
     componentWillMount() {
         const { QueryExtend } = this.props
-        console.log(QueryExtend)
+        let QueryExtends = JSON.parse(JSON.stringify(QueryExtend))
+        // console.log(QueryExtend)
         if (QueryExtend.IsPaging !== 1) {
             this.setState({
                 IsPaging: false
@@ -33,18 +34,29 @@ class SimpleFlag extends Component {
             })
         }
         this.setState({
-            QueryExtendstate: QueryExtend,
-            DQuerySql: QueryExtend.DQuerySql
+            QueryExtendstate: QueryExtends,
+            DQuerySql: QueryExtends.DQuerySql
         })
     }
-
-    ChangeSelect = (key, value) => {
-        // console.log(value)
-        this.props.handleChange(key, value, this.props.datasource)
+    componentWillUnmount() {
+        // console.log(this.state.QueryExtendstate)
+        if (this.props.disableds) {
+            return
+        } else {
+            this.props.handleDate(this.state.QueryExtendstate)
+        }
     }
-    onChange(key, checked) {
-        // console.log(`switch to ${checked}`);
-        this.props.handleChange(key, checked, this.props.datasource)
+    onChange(key, value) {
+        if (key === 'IsPaging' || key === 'IsUseCacheServer') {
+            if (value) {
+                value = 1
+            } else {
+                value = 0
+            }
+        }
+        this.setState({
+            QueryExtendstate: Object.assign(this.state.QueryExtendstate, { [key]: value })
+        })
     }
     handleChange = (key, e) => {
         let value = e.target.value
@@ -54,21 +66,37 @@ class SimpleFlag extends Component {
         })
     }
     handleSql = (key, e) => {
+        
         let value = e.target.value
-        this.setState({
-            DQuerySql: Object.assign(this.state.DQuerySql, { [key]: value })
-        })
+        // console.log(key + '----' + value)
+        if (key === 'SqlName') {
+            this.setState({
+                DQuerySql: Object.assign(this.state.DQuerySql, { [key]: value }),
+                QueryExtendstate: Object.assign(this.state.QueryExtendstate, { ['DQueryName']: value })
+            })
+        } else {
+            this.setState({
+                DQuerySql: Object.assign(this.state.DQuerySql, { [key]: value })
+            })
+        }
+
     }
     handleBook = (value) => {
-        console.log(value)
+        // console.log(value)
+        let QueryExtendstate = this.state.QueryExtendstate
+        QueryExtendstate.DQueryName = value.SqlName
+        QueryExtendstate.DQuerySql = value
+        this.setState({
+            DQuerySql: value,
+            QueryExtendstate: QueryExtendstate
+        })
     }
     render() {
-        const { disableds, QueryExtend, datasource } = this.props
+        const { disableds, QueryExtend } = this.props
         // console.log(disableds)
-        // console.log(this.state.IsPaging + '---' + this.state.IsUseCacheServer)
         if (!disableds) {
             const { QueryExtendstate, DQuerySql } = this.state
-            console.log(QueryExtendstate)
+            // console.log(QueryExtendstate)
             return (
                 <div>
                     <FormItem label="页签名称" {...formItemLayout}>
@@ -78,7 +106,7 @@ class SimpleFlag extends Component {
                         <InputGroup>
                             <Row>
                                 <Col span={14}>
-                                    <Input value={QueryExtendstate.DQueryName} disabled={disableds} onChange={this.handleChange.bind(this, 'DQueryName')} />
+                                    <Input value={DQuerySql.SqlName} disabled={disableds} onChange={this.handleSql.bind(this, 'SqlName')} />
                                 </Col>
                                 <Col span={10}>
                                     <SimpleBtn handleBook={this.handleBook.bind(this)}></SimpleBtn>
@@ -92,7 +120,7 @@ class SimpleFlag extends Component {
                                 <Col span={12}>
                                     <Select
                                         value={QueryExtendstate.DataSource}
-                                        onChange={this.ChangeSelect.bind(this, 'DataSource')}
+                                        onChange={this.onChange.bind(this, 'DataSource')}
                                         style={Widths}
                                         disabled={disableds}>
                                         <Option value={0}>集中服务器</Option>

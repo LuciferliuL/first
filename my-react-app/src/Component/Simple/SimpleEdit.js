@@ -12,10 +12,14 @@ const formItemLayout = {
 };
 
 class SimpleEdit extends Component {
-    state = {
-        QueryExtend: [],
-        Settings: {},
-        TableValueADD: {}
+    constructor(props) {
+        super(props)
+        this.count = 0
+        this.state = {
+            QueryExtend: [],
+            Settings: {},
+            TableValueADD: {}
+        }
     }
     componentWillMount() {
         const { TableValue } = this.props
@@ -25,30 +29,48 @@ class SimpleEdit extends Component {
             TableValueADD: JSON.parse(JSON.stringify(TableValue))
         })
     }
+    componentWillUnmount() {
+        this.setState({})
+    }
+
     handleChange = (key, e) => {//第一层的修改
         let value = e.target.value
         // console.log(key + '-----' + value)
         this.setState({
             TableValueADD: Object.assign(this.state.TableValueADD, { [key]: value })
+        }, () => {
+            console.log(this.state.TableValueADD)
         })
     }
     SelectChange = (key, value) => {//侧边选择的修改
-        console.log(key + '=====' + value)
+        // console.log(key + '=====' + value)
         this.setState({
-            Settings:Object.assign(this.state.Settings,{[key]:value})
+            Settings: Object.assign(this.state.Settings, { [key]: value })
         })
     }
     ModuleChange = (key, value) => {//模块及流的修改
         console.log(key + '-----' + value)
         this.setState({
             TableValueADD: Object.assign(this.state.TableValueADD, { [key]: value })
+        }, () => {
+            console.log(this.state.TableValueADD)
         })
     }
-    TabsChange = (data) => {//增加框的修改
-        this.setState({
-            QueryExtend: data
-        })
+    TabsChange = (data, length) => {//增加框的修改
+        console.log(data)
+        let TableValueADD = this.state.TableValueADD
+        TableValueADD.QueryExtend = data
+        TableValueADD.Settings = JSON.stringify(this.state.Settings)
+        // console.log(TableValueADD)
+        this.count++
+        // console.log(length)
+        // console.log(this.count)
+        if (this.count === length) {
+            this.props.isOK(TableValueADD)
+        }
+
     }
+
     render() {
         const { TableValueADD } = this.state
         return (

@@ -9,118 +9,122 @@ import SimpleEdit from './SimpleEdit'
 const Panel = Collapse.Panel
 
 class Simple extends Component {
-    state = {
-        Data: [],
-        columns: [{
-            title: 'PK',
-            dataIndex: 'PK',
-            key: 'PK',
-        }, {
-            title: 'DQueryCaption',
-            dataIndex: 'DQueryCaption',
-            // key: 'PK',
-        }, {
-            title: 'BillTypeCode',
-            dataIndex: 'BillTypeCode',
-            // key: 'PK',
-        }, {
-            title: 'Author',
-            dataIndex: 'Author',
-            // key: 'PK',
-        }, {
-            title: 'BranchID',
-            dataIndex: 'BranchID',
-            // key: 'PK',
-        }],
-        ActiveKey: ['1'],
-        visible: false,
-        clearObj: {
-            Author: '',
-            BillTypeCode: '',
-            BranchID: "STD",
-            CreateTime: '',
-            DQueryCaption: '',
-            DQueryMasterAssembly: '',
-            DQueryMasterFullName: '',
-            DQueryParamAssembly: '',
-            DQueryParamFullName: '',
-            DQuerySlaveAssembly: null,
-            DQuerySlaveFullName: null,
-            DeleteFlag: '',
-            FK: -1,
-            GuidString: null,
-            LastModifyTime: getTime(),
-            LastUpdater: null,
-            LayoutMode: '',
-            LineID: 9991,
-            Module: '',
-            Note: null,
-            OriginalGuidString: null,
-            PK: -1,
-            QueryConfig: null,
-            QueryExtend: [{
+    constructor(props) {
+        super(props)
+        this.Collapse = 0
+        this.state = {
+            Data: [],
+            columns: [{
+                title: 'PK',
+                dataIndex: 'PK',
+                key: 'PK',
+            }, {
+                title: 'DQueryCaption',
+                dataIndex: 'DQueryCaption',
+                // key: 'PK',
+            }, {
+                title: 'BillTypeCode',
+                dataIndex: 'BillTypeCode',
+                // key: 'PK',
+            }, {
+                title: 'Author',
+                dataIndex: 'Author',
+                // key: 'PK',
+            }, {
+                title: 'BranchID',
+                dataIndex: 'BranchID',
+                // key: 'PK',
+            }],
+            ActiveKey: ['1'],
+            visible: false,
+            clearObj: {
+                Author: '',
                 BillTypeCode: '',
                 BranchID: "STD",
-                CreateTime: getTime(),
+                CreateTime: '',
                 DQueryCaption: '',
-                DQueryName: '',
-                DQuerySql: {
-                    Author: '',
-                    BranchID: "STD",
-                    CreateTime: '',
-                    DeleteFlag: 0,
-                    FK: -1,
-                    GuidString: null,
-                    LastModifyTime: getTime(),
-                    LastUpdater: null,
-                    LineID: -1,
-                    Module: null,
-                    Note: null,
-                    OriginalGuidString: null,
-                    PK: -1,
-                    QueryDataRightCode: null,
-                    ScriptType: null,
-                    SoftSystemCode: "GOS",
-                    SqlName: '',
-                    SqlScripe: '',
-                    TableDisplayerGuid: null,
-                    Tag: null,
-                    Version: 5,
-                    VersionNum: 4,
-                    WorkFlowGuid: "",
-                    WorkFlowState: "",
-                },
-                DataSource: 1,
-                DeleteFlag: 0,
-                FK: 0,
+                DQueryMasterAssembly: '',
+                DQueryMasterFullName: '',
+                DQueryParamAssembly: '',
+                DQueryParamFullName: '',
+                DQuerySlaveAssembly: null,
+                DQuerySlaveFullName: null,
+                DeleteFlag: '',
+                FK: -1,
                 GuidString: null,
-                IsPaging: 1,
-                IsUseCacheServer: 1,
                 LastModifyTime: getTime(),
-                LineID: 0,
+                LastUpdater: null,
+                LayoutMode: '',
+                LineID: 9991,
+                Module: '',
                 Note: null,
                 OriginalGuidString: null,
                 PK: -1,
-                QuerySqlGuid: null,
-                SoftSystemCode: "GOS",
-                SolrBranch: null,
-                SolrScript: null,
-                SolrScriptGuid: null,
+                QueryConfig: null,
+                QueryExtend: [{
+                    BillTypeCode: '',
+                    BranchID: "STD",
+                    CreateTime: getTime(),
+                    DQueryCaption: '',
+                    DQueryName: '',
+                    DQuerySql: {
+                        Author: '',
+                        BranchID: "STD",
+                        CreateTime: '',
+                        DeleteFlag: 0,
+                        FK: -1,
+                        GuidString: null,
+                        LastModifyTime: getTime(),
+                        LastUpdater: null,
+                        LineID: -1,
+                        Module: null,
+                        Note: null,
+                        OriginalGuidString: null,
+                        PK: -1,
+                        QueryDataRightCode: null,
+                        ScriptType: null,
+                        SoftSystemCode: "GOS",
+                        SqlName: '',
+                        SqlScripe: '',
+                        TableDisplayerGuid: null,
+                        Tag: null,
+                        Version: 5,
+                        VersionNum: 4,
+                        WorkFlowGuid: "",
+                        WorkFlowState: "",
+                    },
+                    DataSource: 1,
+                    DeleteFlag: 0,
+                    FK: 0,
+                    GuidString: null,
+                    IsPaging: 1,
+                    IsUseCacheServer: 1,
+                    LastModifyTime: getTime(),
+                    LineID: 0,
+                    Note: null,
+                    OriginalGuidString: null,
+                    PK: -1,
+                    QuerySqlGuid: null,
+                    SoftSystemCode: "GOS",
+                    SolrBranch: null,
+                    SolrScript: null,
+                    SolrScriptGuid: null,
+                    Tag: null,
+                    Version: 1,
+                    WorkFlowGuid: "",
+                    WorkFlowState: "",
+                }],
+                Settings: ' { "ShowOrgSelect": "true", "ParamsCheck": "true", "AllowOrgMultiSelect": "true", "IsLinkOnOrgSelect": "true", "SQLRebuilding": "true", "AllowView": "true", "AllowEdit": "true", "AllowDelete": "true", "AllowReset": "true", "AllowPrint": "true", "PrintAll": "true", "AllowWorkFlowQuery": "true", "AllowReverseState": "true", "AllowExport": "true" }',
+                SoftSystemCode: 'GOS',
                 Tag: null,
-                Version: 1,
+                Version: 2,
+                VersionNum: 4,
                 WorkFlowGuid: "",
                 WorkFlowState: "",
-            }],
-            Settings:' { "ShowOrgSelect": "true", "ParamsCheck": "true", "AllowOrgMultiSelect": "true", "IsLinkOnOrgSelect": "true", "SQLRebuilding": "true", "AllowView": "true", "AllowEdit": "true", "AllowDelete": "true", "AllowReset": "true", "AllowPrint": "true", "PrintAll": "true", "AllowWorkFlowQuery": "true", "AllowReverseState": "true", "AllowExport": "true" }',
-            SoftSystemCode: 'GOS',
-            Tag: null,
-            Version: 2,
-            VersionNum: 4,
-            WorkFlowGuid: "",
-            WorkFlowState: "",
-        },
-        TableValue: {},
-        clearTable: false,
+            },
+            TableValue: {},
+            clearTable: false,
+        }
     }
     componentDidMount() {
         let clear = JSON.parse(JSON.stringify(this.state.clearObj))
@@ -199,8 +203,8 @@ class Simple extends Component {
         }
     }
     handleOk = () => {
+        // console.log(this.state.TableValue)
         let clear = JSON.parse(JSON.stringify(this.state.clearObj))
-        //TODO   发送请求
         this.setState({
             visible: false,
             TableValue: clear,
@@ -216,15 +220,14 @@ class Simple extends Component {
         })
     }
     handleChange = (key, value) => {//第一层
-        console.log(key,value)
+        // console.log(key, value)
         this.setState({
             TableValue: Object.assign(this.state.TableValue, { [key]: value })
         })
     }
-    handleSwitch = (Obj) => {//侧边
-        console.log(Obj)
+    isOK = (DataObj) => {
+        console.log(DataObj)
     }
-
     render() {
         const { Data, columns, ActiveKey, TableValue, visible, clearTable } = this.state
         return (
@@ -264,9 +267,10 @@ class Simple extends Component {
                     key={Math.random()}
                 >
                     <SimpleEdit
+                        Collapse={this.Collapse}
                         TableValue={TableValue}
+                        isOK={this.isOK.bind(this)}
                         handleChange={this.handleChange.bind(this)}
-                        handleSwitch={this.handleSwitch.bind(this)}
                     ></SimpleEdit>
                 </Modal>
             </div>

@@ -1,12 +1,38 @@
 import React, { Component } from 'react';
 import { Modal, Button, Icon, Input } from 'antd'
 import { Searchs } from '../../Math/APIconfig'
-import { getFetch } from '../../Math/Math'
+import { getFetch, getTime } from '../../Math/Math'
 import Tables from '../Tables/Tables'
 const InputSearch = Input.Search
 class SimpleBtn extends Component {
     constructor(props) {
         super(props)
+        this.DquerySqlReset =  {
+            Author: '',
+            BranchID: "STD",
+            CreateTime: getTime(),
+            DeleteFlag: 0,
+            FK: -1,
+            GuidString: null,
+            LastModifyTime: getTime(),
+            LastUpdater: null,
+            LineID: -1,
+            Module: null,
+            Note: null,
+            OriginalGuidString: null,
+            PK: -1,
+            QueryDataRightCode: null,
+            ScriptType: null,
+            SoftSystemCode: "GOS",
+            SqlName: '',
+            SqlScripe: '',
+            TableDisplayerGuid: null,
+            Tag: null,
+            Version: 5,
+            VersionNum: 4,
+            WorkFlowGuid: "",
+            WorkFlowState: "",
+        }
         this.state = {
             visible: false,
             TableData: [],
@@ -33,13 +59,14 @@ class SimpleBtn extends Component {
             }],
         }
     }
-    componentWillMount() {
-        getFetch(Searchs().SimpleTableAPI, (res) => {
-            this.setState({
-                TableData: res
-            })
-        })
-    }
+    //内存泄漏 在组建处于componentWillUnmonut的时候
+    // componentWillMount() {
+    //     getFetch(Searchs().SimpleTableAPI, (res) => {
+    //         this.setState({
+    //             TableData: res
+    //         })
+    //     })
+    // }
 
     showModal = () => {
         this.setState({
@@ -55,6 +82,7 @@ class SimpleBtn extends Component {
         this.setState({
             visible: false
         })
+        this.props.handleBook(this.DquerySqlReset)
     }
     TableEmitData = (TableValue) => {
         // console.log(TableValue)
