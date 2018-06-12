@@ -4,6 +4,7 @@ import { Link, Route } from 'react-router-dom'
 import Action from '../Action/Action';
 import Windows from '../Windows/Windows'
 import Simple from '../Simple/Simple';
+import PV from '../../Logrecord/PV';
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -35,23 +36,26 @@ class Home extends React.Component {
             </Menu.Item>
             <SubMenu
               key="sub1"
-              title={<span><Icon type="user" /><span>User</span></span>}
+              title={<span><Icon type="user" /><span>配置</span></span>}
             >
-              <Menu.Item key="3"><Link to='/Home/Action'>Action</Link></Menu.Item>
-              <Menu.Item key="4"><Link to='/Home/Windows'>WindowsAction</Link></Menu.Item>
-              <Menu.Item key="5"><Link to='/Home/Simple'>SimpleAction</Link></Menu.Item>
+              <Menu.Item key="3"><Link to='/Home/Action'>菜单管理</Link></Menu.Item>
+              <Menu.Item key="4"><Link to='/Home/Windows'>窗体行为编辑</Link></Menu.Item>
+              <Menu.Item key="5"><Link to='/Home/Simple'>简单通用查询</Link></Menu.Item>
             </SubMenu>
             <SubMenu
               key="sub2"
-              title={<span><Icon type="team" /><span>Team</span></span>}
+              title={<span><Icon type="team" /><span>发布与构建</span></span>}
             >
               <Menu.Item key="6">Team 1</Menu.Item>
-              <Menu.Item key="8">Team 2</Menu.Item>
+              <Menu.Item key="7">Team 2</Menu.Item>
             </SubMenu>
-            <Menu.Item key="9">
-              <Icon type="file" />
-              <span>File</span>
-            </Menu.Item>
+            <SubMenu
+              key="sub3"
+              title={<span><Icon type="team" /><span>日志查询</span></span>}
+            >
+              <Menu.Item key="8"><Link to='/Home/PV'>PV查询</Link></Menu.Item>
+              <Menu.Item key="9"><Link to=''>耗时查询</Link></Menu.Item>
+            </SubMenu>
           </Menu>
         </Sider>
         <Layout>
@@ -64,6 +68,7 @@ class Home extends React.Component {
               <Route path='/Home/Action' component={Action}></Route>
               <Route path='/Home/Windows' component={Windows}></Route>
               <Route path='/Home/Simple' component={Simple}></Route>
+              <Route path='/Home/PV' component={PV}></Route>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

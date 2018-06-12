@@ -31,5 +31,9 @@ const Searchs = (Search = '') => (
     }
 )
 
-
-export { API, LoginAPI, ActionAPI, Searchs }
+const GetPV = () => (
+    {
+        GetOrgList: APIconfig.Server + '/api/lasticSearch/GetOrgList'
+    }
+)
+export { API, LoginAPI, ActionAPI, Searchs, GetPV }
