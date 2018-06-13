@@ -1,6 +1,7 @@
 const APIconfig = {
     Server: 'http://10.3.2.22:50002',
-    XX: 'http://10.2.128.94:9016'
+    XX: 'http://10.2.128.94:9016',
+    liujun: 'http://10.2.129.182:9013'
 }
 
 const API = {
@@ -31,9 +32,12 @@ const Searchs = (Search = '') => (
     }
 )
 
-const GetPV = () => (
+const GetPV = (value, controller, name, startDate, endDate) => (
     {
-        GetOrgList: APIconfig.Server + '/api/lasticSearch/GetOrgList'
+        GetOrgList: APIconfig.Server + '/api/lasticSearch/GetOrgList',
+        GetOrgListServer: APIconfig.Server + '/api/lasticSearch/GetServiceList?serverIp=' + value,
+        GetControllerList: APIconfig.Server + '/api/lasticSearch/GetControllerList?serverIp=' + value + '&port=' + controller,
+        GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetIntervalPvIisLogs?startDate='+startDate+'&endDate='+endDate+'&serverIp='+value+'&port='+controller+'&controllerName=' + name
     }
 )
 export { API, LoginAPI, ActionAPI, Searchs, GetPV }

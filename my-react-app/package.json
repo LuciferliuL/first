@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "antd": "^3.5.1",
+    "echarts": "^4.1.0",
+    "echarts-for-react": "^2.0.12-beta.0",
     "es6-promise": "^4.2.4",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.22.2",

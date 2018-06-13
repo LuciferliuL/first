@@ -73,29 +73,71 @@ export { postFetch }
  * @param {链接} URL 
  *
  */
-function getFetch(URL, Callback) {
-    fetch(URL, { method: "GET" })
-        .then((response) => response.json())
-        .then(data => {
-            Callback(data)
-        })
-        .catch(error => error)
+function getFetch(URL, Callback){
+    fetch(URL, {method:"GET"})
+    .then((response)=> response.json())
+    .then(data => {
+        Callback(data)
+    })
+    .catch(error =>{
+        console.log(error)
+    })
 }
 
 export { getFetch }
+/**
+ * 
+ * @param {链接} URL 
+ */
+function getTimeFetch(URL, Callback) {
+    //超时对象  超过5000ms 返回reject
+    let time = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('timeout')
+        }, 30000);
+    })
+    //请求对象 resolve返回data reject返回error
+    let fetchs = new Promise((resolve, reject) => {
+        fetch(URL, { method: "GET" })
+            .then((response) => {
+                // console.log(response)
+                if(response.status === 200){//成功
+                    return response.json()
+                }else{
+                    return '获取数据失败'
+                }
+            })
+            .then(data => {
+                // console.log(data)
+                resolve(data)
+            })
+            .catch(error => reject(error))
+    })
+    Promise.race([time, fetchs]).then((result) => {
+        console.log(result)
+        //5秒以后  返回timeout
+        Callback(result)
+    }).catch((error) => {
+        // console.log(error)
+        return error
+    })
+}
+
+export {getTimeFetch}
+
 
 /**
  * 
  * @param {检测PK} PK 
  * @param {回调} Callback 
  */
-function Alert(PK,Callback) {
-    if(PK === 0){
+function Alert(PK, Callback) {
+    if (PK === 0) {
         notification.open({
             message: '错误提示',
             description: '请选择一个节点',
-          });
-    }else{
+        });
+    } else {
         Callback()
     }
 
@@ -103,12 +145,23 @@ function Alert(PK,Callback) {
 
 export { Alert }
 
-function Errors(v){
+function Errors(v) {
     notification.error({
-        message:'错误提示',
-        description:v + '为必填项'
+        message: '错误提示',
+        description: v + '为必填项'
     })
 }
 
-export {Errors}
+export { Errors }
 
+function Time() {
+    let time = new Date()
+    let y = time.getFullYear()
+    let m = time.getMonth() + 1
+    m = m < 10 ? ('0' + m) : m
+    let d = time.getDate()
+    d = d < 10 ? ('0' + d) : d
+    return y + '/' + m + '/' + d
+}
+
+export { Time }

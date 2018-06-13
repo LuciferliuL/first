@@ -13,7 +13,8 @@ class DataPick extends Component {
         return current > moment().endOf('day');
     }
     onChange = (dates, dateStrings)=>{//选择时间有改变触发
-        console.log(dateStrings[0]+',to:'+dateStrings[1])
+        // console.log(dateStrings[0]+',to:'+dateStrings[1])
+        this.props.handleChangeDate(dateStrings)
     }
     render() {
         return (
