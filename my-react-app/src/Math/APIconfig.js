@@ -32,15 +32,15 @@ const Searchs = (Search = '') => (
     }
 )
 
-const GetPV = (value, controller, name, startDate, endDate) => (
+const GetPV = (value, controller, name, startDate, endDate, offset, limit) => (
     {
-        GetOrgList: APIconfig.Server + '/api/lasticSearch/GetOrgList',
-        GetOrgListServer: APIconfig.Server + '/api/lasticSearch/GetServiceList?serverIp=' + value,
-        GetControllerList: APIconfig.Server + '/api/lasticSearch/GetControllerList?serverIp=' + value + '&port=' + controller,
+        GetOrgList: APIconfig.liujun + '/api/lasticSearch/GetOrgList',
+        GetOrgListServer: APIconfig.liujun + '/api/lasticSearch/GetServiceList?serverIp=' + value,
+        GetControllerList: APIconfig.liujun + '/api/lasticSearch/GetControllerList?serverIp=' + value + '&port=' + controller,
         //点击量查询
-        GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogs?startDate='+startDate+'&endDate='+endDate+'&serverIp='+value+'&port='+controller+'&controllerName=' + name,
+        GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
         //点击量详情
-        GetPVparticular: APIconfig.liujun + 'http://10.2.129.182:9013/api/lasticSearch/GetPvAggsIisLogDetails?limit=100&offset=0&startDate=2018/5/22&endDate=2018/5/23&serverIp=10.3.4.233&port=20336'
+        GetPVparticular: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogDetails?limit=' + limit + '&offset=' + offset + '&startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
     }
 )
 export { API, LoginAPI, ActionAPI, Searchs, GetPV }

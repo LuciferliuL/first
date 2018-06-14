@@ -209,6 +209,7 @@ class Windows extends Component {
                     onChange={this.callback.bind(this)}
                     accordion
                     activeKey={ActiveKey}
+                    showArrow={true}
                 >
                     <Panel header='表单' key="1" showArrow={false}>
                         <Tables

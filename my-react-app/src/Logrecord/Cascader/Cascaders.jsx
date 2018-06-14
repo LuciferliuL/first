@@ -11,9 +11,9 @@ class Cascaders extends Component {
     componentDidMount() {
         getFetch(GetPV().GetOrgList, (res) => {
             let data = JSON.parse(res.Result)
-            // console.log(data)
+            console.log(data)
             let option = data.aggregations.pv_result.buckets
-            // console.log(option)
+            console.log(option)
             option.map((v) => {
                 v.isLeaf = false
                 v.LeveL = 1

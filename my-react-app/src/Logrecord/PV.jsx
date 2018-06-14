@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification } from 'antd'
+import { Row, Col, Card, Button, Spin, notification, Carousel } from 'antd'
 import Cascaders from './Cascader/Cascaders'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time } from '../Math/Math'
@@ -9,32 +9,26 @@ import Barcharts from './charts/Barcharts'
 import TableServer from './TableServer/TableServer'
 const ButtonGroup = Button.Group
 const columns = [{
-    dataIndex: '_id',
-    title: '_id',
+    dataIndex: '_source.clientip',
+    title: '_source.clientip',
     key: '_id'
 }, {
-    dataIndex: 'iislogdate',
+    dataIndex: '_source.iislogdate',
     title: 'iislogdate',
-    formatter: function (value, row, index) {
-        var date = new Date(value);
-        date.setHours(date.getHours() + 8);
-        console.log(date)
-        // console.log(value)
-        return date;
-    }
 }, {
-    dataIndex: 'request',
+    dataIndex: '_source.request',
     title: 'request'
 }, {
-    dataIndex: 'timetaken',
+    dataIndex: '_source.timetaken',
     title: 'timetaken(ms)'
 }, {
-    dataIndex: 'urlparam',
+    dataIndex: '_source.urlparam',
     title: "urlparam"
 }, {
-    dataIndex: 'port',
+    dataIndex: '_source.port',
     title: "port"
 }]
+
 class PV extends Component {
     constructor(props) {
         super(props)
@@ -46,16 +40,20 @@ class PV extends Component {
                 controller: ' ',
                 name: ' '
             },
-            Data: [],
+            Data: [],//图标数据
+            TableURL: [],//发送到Table的链接地址
             SQLmessage: '',
             disableds: true,
             loading: false,
-            chartsTatol: "详细图表"
+            chartsTatol: "详细图表",
+            pagination: {},
+            loading: false,
+            data: []
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
     }
-
+    //点击查询
     PVchecked = () => {
         if (this.state.URLData.value === null) {
             notification.warning({
@@ -94,6 +92,7 @@ class PV extends Component {
             })
         }
     }
+    //获取选择框的数组
     handleChangeState = (value) => {
         // console.log(value)
         this.setState({
@@ -103,9 +102,11 @@ class PV extends Component {
                 name: value[2],
                 startDate: this.state.URLData.startDate,
                 endDate: this.state.URLData.endDate
-            }
+            },
+            TableURL: value//存入数组第一位为地址，二位 ， 三位
         })
     }
+    //获取时间
     handleChangeDate = (DateStrings) => {
         // console.log(DateStrings)
         this.setState({
@@ -118,14 +119,85 @@ class PV extends Component {
             }
         })
     }
+    //弹出的sql语句
     SQLchecked = () => {
         notification.success({
             message: 'SQL语句',
             description: this.state.SQLmessage,
         })
     }
+    onChange = (a, b, c) => {//carousel改变触发
+        console.log(a, b, c);
+    }
+    //下一个图
+    handleNext = () => {
+        const CarouselRef = this.refs.CarouselRef
+        CarouselRef.next()
+    }
+    //上一个图
+    handlePre = () => {
+        const CarouselRef = this.refs.CarouselRef
+        CarouselRef.prev()
+    }
+    //获取图标的点击 并发送请求渲染表格
+    getBarChartsName = (v) => {
+        let TableURL = this.state.TableURL//数组长度决定了选择了几个
+        if (TableURL.length > 1) {
+            TableURL.pop()
+        }
+        TableURL.push(v)
+        console.log(TableURL)
+        this.setState({
+            URLData: {
+                value: TableURL[0],
+                controller: TableURL[1],
+                name: TableURL[2],
+                startDate: this.state.URLData.startDate,
+                endDate: this.state.URLData.endDate
+            },
+            TableURL: TableURL
+        })
+        if (this.state.URLData.value !== ' ') {
+            this.fetch({ offset: 1, limit: 100 }, this.state.URLData);
+        }
+    }
+    //渲染表格
+    fetch = (params = {}, URLData) => {
+        // console.log(URLData)
+        // console.log('params:', params);
+        this.setState({ loading: true });
+        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit).GetPVparticular, (data) => {
+            let paramdata = JSON.parse(data.Result)
+            console.log(paramdata)
+            let total = paramdata.hits.total//数据量
+            const pagination = { ...this.state.pagination };
+            pagination.total = total;
+            pagination.pageSize = 100
+            this.setState({
+                loading: false,
+                data: paramdata.hits.hits,
+                pagination,
+            });
+        })
+    }
+    //分页的回调
+    handleTableChange = (pagination, filters, sorter) => {
+        console.log(pagination)
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager,
+        });
+        this.fetch({
+            limit: 100,
+            offset: pagination.current,
+            sortField: sorter.field,
+            sortOrder: sorter.order,
+            ...filters,
+        }, this.state.URLData);
+    }
     render() {
-        const { Data } = this.state
+        const { Data, URLData, pagination, loading, data } = this.state
         const charts = []
         const table = []
         // console.log(Data)
@@ -133,8 +205,16 @@ class PV extends Component {
             charts.push(<p key='charts1'>暂时没有数据，请选择另一个节点</p>)
             table.push(<p key='table1'>暂时没有数据，请选择另一个节点</p>)
         } else {
-            charts.push(<Barcharts Data={Data} key='charts2'></Barcharts>)
-            table.push(<TableServer columns={columns} key='table2'></TableServer>)
+            charts.push(<Barcharts Data={Data} key='charts2' getBarChartsName={this.getBarChartsName}></Barcharts>)
+            table.push(<TableServer
+                columns={columns}
+                key='table2'
+                URLData={URLData}
+                loading={loading}
+                pagination={pagination}
+                data={data}
+                handleTableChange={this.handleTableChange}
+            ></TableServer>)
         }
         return (
             <div>
@@ -157,7 +237,20 @@ class PV extends Component {
                             </Row>
 
                         </Card>
-                        <Col span={10}>
+                        {/* 走马灯 */}
+                        <Carousel afterChange={this.onChange} dots={false} ref="CarouselRef">
+                            <Card title={this.state.chartsTatol} className='MarginTop'
+                                extra={<Button onClick={this.handleNext}>切换详细表格</Button>}
+                            >
+                                {charts}
+                            </Card>
+                            <Card title="详细表格" className='MarginTop'
+                                extra={<Button onClick={this.handlePre}>切换详细图标</Button>}
+                            >
+                                {table}
+                            </Card>
+                        </Carousel>
+                        {/* <Col span={10}>
                             <Card title={this.state.chartsTatol} className='MarginTop'>
                                 {charts}
                             </Card>
@@ -166,7 +259,7 @@ class PV extends Component {
                             <Card title="详细表格" className='MarginTop'>
                                 {table}
                             </Card>
-                        </Col>
+                        </Col> */}
                     </Row>
                 </Spin>
             </div>

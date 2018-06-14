@@ -1,27 +1,31 @@
 import React from 'react'
 import { Table } from 'antd';
 // import reqwest from 'reqwest';
-import { getTimeFetch } from '../../Math/Math'
+// import { getTimeFetch} from '../../Math/Math'
+// import { GetPV } from '../../Math/APIconfig';
 
 export default class TableServer extends React.Component {
-    state = {
-        data: [],
-        pagination: {},
-        loading: false,
-    };
+    // state = {
+    //     data: [],
+    //     pagination: {},
+    //     loading: false,
+    //     URLData:{}
+    // };
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = { ...this.state.pagination };
-        pager.current = pagination.current;
-        this.setState({
-          pagination: pager,
-        });
-        this.fetch({
-          results: pagination.pageSize,
-          page: pagination.current,
-          sortField: sorter.field,
-          sortOrder: sorter.order,
-          ...filters,
-        });
+        console.log(pagination)
+        this.props.handleTableChange(pagination, filters, sorter)
+        // const pager = { ...this.state.pagination };
+        // pager.current = pagination.current;
+        // this.setState({
+        //     pagination: pager,
+        // });
+        // this.fetch({
+        //     limit: 100,
+        //     offset: pagination.current,
+        //     sortField: sorter.field,
+        //     sortOrder: sorter.order,
+        //     ...filters,
+        // },this.state.URLData);
     }
     //   fetch = (params = {}) => {
     //     console.log('params:', params);
@@ -47,37 +51,46 @@ export default class TableServer extends React.Component {
     //     });
     //   }
 
-    fetch = (params = {}) => {
-        console.log('params:', params);
-        this.setState({ loading: true });
-        getTimeFetch('http://10.2.129.182:9013/api/lasticSearch/GetPvAggsIisLogDetails?limit=100&offset=0&startDate=2018/5/22&endDate=2018/5/23&serverIp=10.3.4.233&port=20336', (data) => {
-            
-            let paramdata = JSON.parse(data.Result)
-            console.log(paramdata)
-            let total = paramdata.hits.hits.length//数据量
-            const pagination = { ...this.state.pagination };
-            pagination.total = total;
-            this.setState({
-                loading: false,
-                data: paramdata.hits.hits,
-                pagination,
-            });
-        })
-    }
-    componentDidMount() {
-        this.fetch();
-    }
+    // fetch = (params = {},URLData) => {
+    //     // console.log(URLData)
+    //     // console.log('params:', params);
+    //     this.setState({ loading: true });
+    //     getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit).GetPVparticular, (data) => {
+    //         let paramdata = JSON.parse(data.Result)
+    //         console.log(paramdata)
+    //         let total = paramdata.hits.total//数据量
+    //         const pagination = { ...this.state.pagination };
+    //         pagination.total = total;
+    //         pagination.pageSize=100
+    //         this.setState({
+    //             loading: false,
+    //             data: paramdata.hits.hits,
+    //             pagination,
+    //         });
+    //     })
+    // }
+    // componentWillReceiveProps(pre) {
+    //     console.log(pre)
+    //     if (pre.URLData.value !== ' ') {
+    //         this.fetch({ offset: 1, limit: 100 },pre.URLData);
+    //         this.setState({
+    //             URLData:pre.URLData
+    //         })
+    //     }
+    // }
     render() {
-        const { columns } = this.props
+        const { columns, loading, data, pagination } = this.props
         return (
-            <Table columns={columns}
+            <Table
+                // title={this.titleFun}
+                columns={columns}
                 rowKey='_id'
-                dataSource={this.state.data}
-                pagination={this.state.pagination}//分页器
-                loading={this.state.loading}//页面加载中
+                dataSource={data}
+                pagination={pagination}//分页器
+                loading={loading}//页面加载中
                 onChange={this.handleTableChange}//分页排序，筛选变化时触发
-                // scroll={{ y: 450 }}
-                style={{padding:'10px'}}
+                scroll={{ y: 550 }}
+                // style={{ padding: '10px' }}
             />
         );
     }
