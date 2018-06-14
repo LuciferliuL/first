@@ -37,7 +37,10 @@ const GetPV = (value, controller, name, startDate, endDate) => (
         GetOrgList: APIconfig.Server + '/api/lasticSearch/GetOrgList',
         GetOrgListServer: APIconfig.Server + '/api/lasticSearch/GetServiceList?serverIp=' + value,
         GetControllerList: APIconfig.Server + '/api/lasticSearch/GetControllerList?serverIp=' + value + '&port=' + controller,
-        GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetIntervalPvIisLogs?startDate='+startDate+'&endDate='+endDate+'&serverIp='+value+'&port='+controller+'&controllerName=' + name
+        //点击量查询
+        GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogs?startDate='+startDate+'&endDate='+endDate+'&serverIp='+value+'&port='+controller+'&controllerName=' + name,
+        //点击量详情
+        GetPVparticular: APIconfig.liujun + 'http://10.2.129.182:9013/api/lasticSearch/GetPvAggsIisLogDetails?limit=100&offset=0&startDate=2018/5/22&endDate=2018/5/23&serverIp=10.3.4.233&port=20336'
     }
 )
 export { API, LoginAPI, ActionAPI, Searchs, GetPV }

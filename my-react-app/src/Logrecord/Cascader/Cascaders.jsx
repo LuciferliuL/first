@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Cascader } from 'antd';
-import { getFetch } from '../../Math/Math';
+import { getFetch, ObjRegister } from '../../Math/Math';
 import { GetPV } from '../../Math/APIconfig'
 import './Cascader.css'
 
@@ -19,6 +19,7 @@ class Cascaders extends Component {
                 v.LeveL = 1
                 return v
             })
+            option = ObjRegister(option)
             this.setState({
                 options: option
             })
@@ -42,6 +43,8 @@ class Cascaders extends Component {
                     return v
                 })
                 targetOption.children = option;
+                // console.log(option)
+                option = ObjRegister(option)
                 this.setState({
                     options: [...this.state.options],
                 }, () => { targetOption.loading = false; });
@@ -55,6 +58,7 @@ class Cascaders extends Component {
                 //     v.LeveL = 3
                 // }) 如果还有后续可以使用
                 targetOption.children = option;
+                option = ObjRegister(option)
                 this.setState({
                     options: [...this.state.options],
                 }, () => { targetOption.loading = false; });
@@ -85,7 +89,7 @@ class Cascaders extends Component {
                     loadData={this.loadData}
                     changeOnSelect
                     displayRender={this.displayRender}
-                    filedNames={{ label: 'key', value: 'key', children: 'children', code: 'doc_count' }}
+                    filedNames={{ label: 'Port', value: 'key', children: 'children', code: 'doc_count' }}
                 />
             </div>
         );

@@ -73,15 +73,15 @@ export { postFetch }
  * @param {链接} URL 
  *
  */
-function getFetch(URL, Callback){
-    fetch(URL, {method:"GET"})
-    .then((response)=> response.json())
-    .then(data => {
-        Callback(data)
-    })
-    .catch(error =>{
-        console.log(error)
-    })
+function getFetch(URL, Callback) {
+    fetch(URL, { method: "GET" })
+        .then((response) => response.json())
+        .then(data => {
+            Callback(data)
+        })
+        .catch(error => {
+            console.log(error)
+        })
 }
 
 export { getFetch }
@@ -101,9 +101,9 @@ function getTimeFetch(URL, Callback) {
         fetch(URL, { method: "GET" })
             .then((response) => {
                 // console.log(response)
-                if(response.status === 200){//成功
+                if (response.status === 200) {//成功
                     return response.json()
-                }else{
+                } else {
                     return '获取数据失败'
                 }
             })
@@ -114,7 +114,7 @@ function getTimeFetch(URL, Callback) {
             .catch(error => reject(error))
     })
     Promise.race([time, fetchs]).then((result) => {
-        console.log(result)
+        // console.log(result)
         //5秒以后  返回timeout
         Callback(result)
     }).catch((error) => {
@@ -123,7 +123,7 @@ function getTimeFetch(URL, Callback) {
     })
 }
 
-export {getTimeFetch}
+export { getTimeFetch }
 
 
 /**
@@ -165,3 +165,42 @@ function Time() {
 }
 
 export { Time }
+
+
+function ObjRegister(data) {
+    let NameBook = [
+        { Port: "20291", Module: "OAuth" },
+        { Port: "20301", Module: "Lookup" },
+        { Port: "20296", Module: "Sys" },
+        { Port: "20376", Module: "Store" },
+        { Port: "20279", Module: "SaleOrder" },
+        { Port: "9004", Module: "Query" },
+        { Port: "20341", Module: "Quality" },
+        { Port: "20336", Module: "Purchase" },
+        { Port: "20386", Module: "PreAssign" },
+        { Port: "20306", Module: "Basis" },
+        { Port: "20321", Module: "Finance" },
+        { Port: "20331", Module: "Price" },
+        { Port: "20351", Module: "Sale" },
+        { Port: "20311", Module: "Business" },
+        { Port: "20361", Module: "Interface" },
+        { Port: "20326", Module: "WF1" }
+    ]
+    data.map((v) => {
+        NameBook.map(value => {
+            if (v.key === value.Port) {
+                v.Port = value.Module
+            } else {
+                if (!v.Port) {
+                    v.Port = v.key
+                }
+            }
+            return true
+        })
+        return true
+    })
+    // console.log(data)
+    return data
+}
+
+export { ObjRegister }
