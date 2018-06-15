@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification, Carousel ,Select} from 'antd'
+import { Row, Col, Card, Button, Spin, notification, Carousel, Select} from 'antd'
 import Cascaders from './Cascader/Cascaders'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time } from '../Math/Math'
@@ -7,8 +7,8 @@ import './PV.css'
 import { GetPV } from '../Math/APIconfig';
 import Barcharts from './charts/Barcharts'
 import TableServer from './TableServer/TableServer'
+const Option = Select.Option
 const ButtonGroup = Button.Group
-const {Option} = Select
 const columns = [{
     dataIndex: '_source.clientip',
     title: '_source.clientip',
@@ -29,7 +29,6 @@ const columns = [{
     dataIndex: '_source.port',
     title: "port"
 }]
-
 class PV extends Component {
     constructor(props) {
         super(props)
@@ -238,8 +237,8 @@ class PV extends Component {
                                 <Col span={6}>
                                     <DataPick handleChangeDate={this.handleChangeDate}></DataPick>
                                 </Col>
-                                <Col span={3} className="btnGroup">
-                                <Select defaultValue="Option2">
+                                <Col span={3} className='btnGroup'>
+                                        <Select defaultValue="Option2">
                                             <Option value="Option1">升序排列</Option>
                                             <Option value="Option2">降序排列</Option>
                                         </Select>

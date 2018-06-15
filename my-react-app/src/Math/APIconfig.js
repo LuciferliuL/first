@@ -39,7 +39,7 @@ const GetPV = (value, controller, name, startDate, endDate, offset, limit) => (
         GetControllerList: APIconfig.liujun + '/api/lasticSearch/GetControllerList?serverIp=' + value + '&port=' + controller,
         //点击量查询
         GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
-        //点击量详情
+        //点击柱子显示详情  有升降序
         GetPVparticular: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogDetails?limit=' + limit + '&offset=' + offset + '&startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
     }
 )

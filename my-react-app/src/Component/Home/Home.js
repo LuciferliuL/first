@@ -5,6 +5,8 @@ import Action from '../Action/Action';
 import Windows from '../Windows/Windows'
 import Simple from '../Simple/Simple';
 import PV from '../../Logrecord/PV';
+import Time from '../../Logrecord/Time'
+import Errorlog from '../../Logrecord/Errorlog'
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -53,8 +55,9 @@ class Home extends React.Component {
               key="sub3"
               title={<span><Icon type="team" /><span>日志查询</span></span>}
             >
-              <Menu.Item key="8"><Link to='/Home/PV'>PV查询</Link></Menu.Item>
-              <Menu.Item key="9"><Link to=''>耗时查询</Link></Menu.Item>
+              <Menu.Item key="8"><Link to='/Home/PV'>按条件分组</Link></Menu.Item>
+              <Menu.Item key="9"><Link to='/Home/Time'>按时段分组</Link></Menu.Item>
+              <Menu.Item key="10"><Link to="/Home/Errorlog">错误日志</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
@@ -69,10 +72,12 @@ class Home extends React.Component {
               <Route path='/Home/Windows' component={Windows}></Route>
               <Route path='/Home/Simple' component={Simple}></Route>
               <Route path='/Home/PV' component={PV}></Route>
+              <Route path='/Home/Time' component={Time}></Route>
+              <Route path="/Home/Errorlog" component={Errorlog}></Route>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            Ant Design ©2018 Created by Ant UED
+            DEV Design ©2018 Created by L UED
           </Footer>
         </Layout>
       </Layout>

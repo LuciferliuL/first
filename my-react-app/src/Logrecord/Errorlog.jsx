@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification, Carousel ,Select} from 'antd'
+import { Row, Col, Card, Button, Spin, notification, Input } from 'antd'
 import Cascaders from './Cascader/Cascaders'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time } from '../Math/Math'
@@ -7,8 +7,7 @@ import './PV.css'
 import { GetPV } from '../Math/APIconfig';
 import Barcharts from './charts/Barcharts'
 import TableServer from './TableServer/TableServer'
-const ButtonGroup = Button.Group
-const {Option} = Select
+const Search = Input.Search
 const columns = [{
     dataIndex: '_source.clientip',
     title: '_source.clientip',
@@ -55,7 +54,8 @@ class PV extends Component {
         this.handleChangeState = this.handleChangeState.bind(this)
     }
     //点击查询
-    PVchecked = () => {
+    PVchecked = (value) => {
+        //value就是USERID得值
         if (this.state.URLData.value === null) {
             notification.warning({
                 message: '警告',
@@ -67,30 +67,7 @@ class PV extends Component {
             })
             // console.log(this.state.URLData)
             let URL = this.state.URLData
-            getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetPVSearch, (res) => {
-                console.log(res)
-                if (res === 'timeout') {
-                    notification.open({
-                        message: '提示信息',
-                        description: '请求超时',
-                    })
-                    this.setState({
-                        loading: false
-                    })
-                } else {
-                    // let extMessage = JSON.parse(res.ExtMessage)
-                    let Result = JSON.parse(res.Result)
-                    console.log(Result)
-                    // console.log(extMessage)
-                    this.setState({
-                        Data: Result.aggregations.pv_result.buckets,
-                        SQLmessage: res.ExtMessage,
-                        loading: false,
-                        disableds: false,
-                        chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
-                    })
-                }
-            })
+            this.fetch({ offset: 1, limit: 100 }, URL)
         }
     }
     //获取选择框的数组
@@ -119,57 +96,6 @@ class PV extends Component {
                 endDate: DateStrings[1],
             }
         })
-    }
-    //弹出的sql语句
-    SQLchecked = () => {
-        notification.success({
-            message: 'SQL语句',
-            description: this.state.SQLmessage,
-        })
-    }
-    onChange = (a, b, c) => {//carousel改变触发
-        console.log(a, b, c);
-    }
-    //下一个图
-    handleNext = () => {
-        console.log(this.state.data)
-        let nextTableValue = this.state.data
-        if (nextTableValue.length < 1) {
-            notification.warning({
-                message: '警告',
-                description: '请求点击一个图标，以确保显示其具体内容',
-            })
-        } else {
-            const CarouselRef = this.refs.CarouselRef
-            CarouselRef.next()
-        }
-    }
-    //上一个图
-    handlePre = () => {
-        const CarouselRef = this.refs.CarouselRef
-        CarouselRef.prev()
-    }
-    //获取图标的点击 并发送请求渲染表格
-    getBarChartsName = (v) => {
-        let TableURL = this.state.TableURL//数组长度决定了选择了几个
-        if (TableURL.length > 1) {
-            TableURL.pop()
-        }
-        TableURL.push(v)
-        console.log(TableURL)
-        this.setState({
-            URLData: {
-                value: TableURL[0],
-                controller: TableURL[1],
-                name: TableURL[2],
-                startDate: this.state.URLData.startDate,
-                endDate: this.state.URLData.endDate
-            },
-            TableURL: TableURL
-        })
-        if (this.state.URLData.value !== ' ') {
-            this.fetch({ offset: 1, limit: 100 }, this.state.URLData);
-        }
     }
     //渲染表格
     fetch = (params = {}, URLData) => {
@@ -235,47 +161,21 @@ class PV extends Component {
                                 <Col span={8}>
                                     <Cascaders handleChangeState={this.handleChangeState}></Cascaders>
                                 </Col>
-                                <Col span={6}>
+                                <Col span={8}>
                                     <DataPick handleChangeDate={this.handleChangeDate}></DataPick>
                                 </Col>
-                                <Col span={3} className="btnGroup">
-                                <Select defaultValue="Option2">
-                                            <Option value="Option1">升序排列</Option>
-                                            <Option value="Option2">降序排列</Option>
-                                        </Select>
-                                </Col>
-                                <Col span={3} className='btnGroup'>
-                                    <ButtonGroup >
-                                        <Button onClick={this.PVchecked}>查询</Button>
-                                        <Button onClick={this.SQLchecked} disabled={this.state.disableds}>查看SQL</Button>
-                                    </ButtonGroup>
+                                <Col span={8} className="btnGroup">
+                                    <Search 
+                                        placeholder='请输入USERID'
+                                        enterButton='查询'
+                                        onSearch={this.PVchecked}
+                                    ></Search>
                                 </Col>
                             </Row>
-
                         </Card>
-                        {/* 走马灯 */}
-                        <Carousel afterChange={this.onChange} dots={false} ref="CarouselRef">
-                            <Card title={this.state.chartsTatol} className='MarginTop'
-                                extra={<Button onClick={this.handleNext}>切换详细表格</Button>}
-                            >
-                                {charts}
-                            </Card>
-                            <Card title="详细表格" className='MarginTop'
-                                extra={<Button onClick={this.handlePre}>切换详细图标</Button>}
-                            >
-                                {table}
-                            </Card>
-                        </Carousel>
-                        {/* <Col span={10}>
-                            <Card title={this.state.chartsTatol} className='MarginTop'>
-                                {charts}
-                            </Card>
-                        </Col>
-                        <Col span={14}>
-                            <Card title="详细表格" className='MarginTop'>
-                                {table}
-                            </Card>
-                        </Col> */}
+                        <Card title="详细表格" className='MarginTop'>
+                            {table}
+                        </Card>
                     </Row>
                 </Spin>
             </div>
