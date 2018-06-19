@@ -19,7 +19,7 @@ class Barcharts extends Component {
     constructor(props) {
         super(props)
         const { Data } = this.props
-        if (Data.length > 1) {
+        if (Data.length >= 1) {
             ObjRegister(Data)
             let name = []
             let value = []
@@ -28,6 +28,7 @@ class Barcharts extends Component {
                 value.push(v.doc_count)
                 return true
             })
+            // console.log(Data)
             this.state = {
                 themes: {},
                 Data: Data,
@@ -39,7 +40,7 @@ class Barcharts extends Component {
     componentWillReceiveProps(pre, next) {
         // console.log(pre)
         const Data = pre.Data
-        if (Data.length > 1) {
+        if (Data.length >= 1) {
             ObjRegister(Data)
             let name = []
             let value = []

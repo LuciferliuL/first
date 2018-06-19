@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification, Carousel ,Select} from 'antd'
+import { Row, Col, Card, Button, Spin, notification, Carousel, Select } from 'antd'
 import Cascaders from './Cascader/Cascaders'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time } from '../Math/Math'
@@ -8,26 +8,31 @@ import { GetPV } from '../Math/APIconfig';
 import Barcharts from './charts/Barcharts'
 import TableServer from './TableServer/TableServer'
 const ButtonGroup = Button.Group
-const {Option} = Select
+const { Option } = Select
 const columns = [{
     dataIndex: '_source.clientip',
-    title: '_source.clientip',
-    key: '_id'
+    title: 'clientip',
+    key: '_id',
+    width: 120
 }, {
     dataIndex: '_source.iislogdate',
     title: 'iislogdate',
+    width: 200
 }, {
     dataIndex: '_source.request',
-    title: 'request'
+    title: 'request',
+    width: 400
 }, {
     dataIndex: '_source.timetaken',
-    title: 'timetaken(ms)'
+    title: 'timetaken(ms)',
+    width: 100
 }, {
     dataIndex: '_source.urlparam',
     title: "urlparam"
 }, {
     dataIndex: '_source.port',
-    title: "port"
+    title: "port",
+    width: 80
 }]
 
 class PV extends Component {
@@ -39,7 +44,8 @@ class PV extends Component {
                 endDate: Time(),
                 value: ' ',
                 controller: ' ',
-                name: ' '
+                name: ' ',
+                KeyName: 'desc'
             },
             Data: [],//图标数据
             TableURL: [],//发送到Table的链接地址
@@ -48,18 +54,22 @@ class PV extends Component {
             loading: false,
             chartsTatol: "详细图表",
             pagination: {},
-            loading: false,
             data: []
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
+    }
+    componentWillMount() {
+        getTimeFetch(GetPV().firstAPI, (res) => {
+            console.log(res)
+        })
     }
     //点击查询
     PVchecked = () => {
         if (this.state.URLData.value === null) {
             notification.warning({
                 message: '警告',
-                description: '请求选择一个服务器',
+                description: '请选择一个服务器',
             })
         } else {
             this.setState({
@@ -68,7 +78,7 @@ class PV extends Component {
             // console.log(this.state.URLData)
             let URL = this.state.URLData
             getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetPVSearch, (res) => {
-                console.log(res)
+                // console.log(res)
                 if (res === 'timeout') {
                     notification.open({
                         message: '提示信息',
@@ -95,14 +105,15 @@ class PV extends Component {
     }
     //获取选择框的数组
     handleChangeState = (value) => {
-        // console.log(value)
+        console.log(value)
         this.setState({
             URLData: {
                 value: value[0],
                 controller: value[1],
                 name: value[2],
                 startDate: this.state.URLData.startDate,
-                endDate: this.state.URLData.endDate
+                endDate: this.state.URLData.endDate,
+                KeyName: this.state.URLData.KeyName
             },
             TableURL: value//存入数组第一位为地址，二位 ， 三位
         })
@@ -117,6 +128,7 @@ class PV extends Component {
                 name: this.state.URLData.name,
                 startDate: DateStrings[0],
                 endDate: DateStrings[1],
+                KeyName: this.state.URLData.KeyName
             }
         })
     }
@@ -128,16 +140,21 @@ class PV extends Component {
         })
     }
     onChange = (a, b, c) => {//carousel改变触发
-        console.log(a, b, c);
+        // console.log(a, b, c);
     }
     //下一个图
     handleNext = () => {
-        console.log(this.state.data)
         let nextTableValue = this.state.data
-        if (nextTableValue.length < 1) {
+        let nextTableURL = this.state.TableURL
+        if (nextTableValue.length < 1 && nextTableURL.length === 1) {
             notification.warning({
                 message: '警告',
-                description: '请求点击一个图标，以确保显示其具体内容',
+                description: '请点击一个柱状，以确保显示其具体内容',
+            })
+        } else if (nextTableValue.length < 1 && (nextTableURL.length === 3 || nextTableURL.length === 2)) {
+            notification.warning({
+                message: '警告',
+                description: '请重新点击一个柱状，上一个没有数据',
             })
         } else {
             const CarouselRef = this.refs.CarouselRef
@@ -151,6 +168,7 @@ class PV extends Component {
     }
     //获取图标的点击 并发送请求渲染表格
     getBarChartsName = (v) => {
+        console.log(v)
         let TableURL = this.state.TableURL//数组长度决定了选择了几个
         if (TableURL.length > 1) {
             TableURL.pop()
@@ -163,7 +181,8 @@ class PV extends Component {
                 controller: TableURL[1],
                 name: TableURL[2],
                 startDate: this.state.URLData.startDate,
-                endDate: this.state.URLData.endDate
+                endDate: this.state.URLData.endDate,
+                KeyName: this.state.URLData.KeyName
             },
             TableURL: TableURL
         })
@@ -176,7 +195,7 @@ class PV extends Component {
         // console.log(URLData)
         // console.log('params:', params);
         this.setState({ loading: true });
-        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit).GetPVparticular, (data) => {
+        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName).GetPVparticular, (data) => {
             let paramdata = JSON.parse(data.Result)
             console.log(paramdata)
             let total = paramdata.hits.total//数据量
@@ -205,6 +224,31 @@ class PV extends Component {
             sortOrder: sorter.order,
             ...filters,
         }, this.state.URLData);
+    }
+    desc = (value) => {
+        if (value === 1) {
+            this.setState({
+                URLData: {
+                    value: this.state.URLData.value,
+                    controller: this.state.URLData.controller,
+                    name: this.state.URLData.name,
+                    startDate: this.state.URLData.startDate,
+                    endDate: this.state.URLData.endDate,
+                    KeyName: 'asc'
+                }
+            })
+        } else {
+            this.setState({
+                URLData: {
+                    value: this.state.URLData.value,
+                    controller: this.state.URLData.controller,
+                    name: this.state.URLData.name,
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                    KeyName: 'desc'
+                }
+            })
+        }
     }
     render() {
         const { Data, URLData, pagination, loading, data } = this.state
@@ -239,10 +283,10 @@ class PV extends Component {
                                     <DataPick handleChangeDate={this.handleChangeDate}></DataPick>
                                 </Col>
                                 <Col span={3} className="btnGroup">
-                                <Select defaultValue="Option2">
-                                            <Option value="Option1">升序排列</Option>
-                                            <Option value="Option2">降序排列</Option>
-                                        </Select>
+                                    <Select defaultValue="Option2" onChange={this.desc}>
+                                        <Option value="Option1">升序排列</Option>
+                                        <Option value="Option2">降序排列</Option>
+                                    </Select>
                                 </Col>
                                 <Col span={3} className='btnGroup'>
                                     <ButtonGroup >

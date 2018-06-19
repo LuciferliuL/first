@@ -47,7 +47,6 @@ class PV extends Component {
             loading: false,
             chartsTatol: "详细图表",
             pagination: {},
-            loading: false,
             data: []
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)

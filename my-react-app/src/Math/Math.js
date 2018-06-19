@@ -164,6 +164,10 @@ function Alert(PK, Callback) {
 
 export { Alert }
 
+/**
+ * 
+ * @param {错误名称} v 
+ */
 function Errors(v) {
     notification.error({
         message: '错误提示',
@@ -173,6 +177,9 @@ function Errors(v) {
 
 export { Errors }
 
+/**
+ * 返回  年/月/日  固定格式
+ */
 function Time() {
     let time = new Date()
     let y = time.getFullYear()
@@ -185,7 +192,10 @@ function Time() {
 
 export { Time }
 
-
+/**
+ * 
+ * @param {需要字典翻译得数组} data 
+ */
 function ObjRegister(data) {
     data.map((v) => {
         NameBook.map(value => {
@@ -206,16 +216,45 @@ function ObjRegister(data) {
 
 export { ObjRegister }
 
-function findName(Name){
-    console.log( typeof(Name))
-    let num
+/**
+ * @param{Name}对比字典 找到对应得名字
+ */
+function findName(Name) {
+    // console.log( typeof(Name))
+    let num = Name
     // let name = String(Name)
-    NameBook.map((v)=>{
-        if(v.Module == Name){
-            num = v.Port          
+    NameBook.map((v) => {
+        if (v.Module === Name) {
+            num = v.Port
         }
+        return true
     })
     return num
 }
 
-export {findName}
+export { findName }
+
+/**
+ * 
+ * @param {转换格式得数组} data 
+ * {key：XXX,Port: xxx, doc_count:aaaa}
+ */
+function filtArr(data) {
+    let buckets = []
+    data.forEach((v, index) => {
+        let P = v.aggregations.pv_result.buckets
+        if(P.length > 0){
+            P[0].Port = index + 1
+            P[0].key = P[0].key + 'x'
+            buckets.push(P[0])
+        }else{
+            let miniP = {key:0,doc_count:0,Port:index + 1}
+            buckets.push(miniP)
+        }
+        
+    })
+    console.log(buckets)
+    return buckets
+}
+
+export { filtArr }

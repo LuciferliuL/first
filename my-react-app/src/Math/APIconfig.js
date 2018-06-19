@@ -32,15 +32,32 @@ const Searchs = (Search = '') => (
     }
 )
 
-const GetPV = (value, controller, name, startDate, endDate, offset, limit) => (
+//firstAPI 用来更新每个页面请求API服务启动 keyName 升序降序  asc desc
+const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyName) => (
     {
+        firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erpiislog&esType=erpiislog_table',
+        //获取服务器地址
         GetOrgList: APIconfig.liujun + '/api/lasticSearch/GetOrgList',
         GetOrgListServer: APIconfig.liujun + '/api/lasticSearch/GetServiceList?serverIp=' + value,
         GetControllerList: APIconfig.liujun + '/api/lasticSearch/GetControllerList?serverIp=' + value + '&port=' + controller,
         //点击量查询
         GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
         //点击柱子显示详情  有升降序
-        GetPVparticular: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogDetails?limit=' + limit + '&offset=' + offset + '&startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
+        GetPVparticular: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogDetails?keyName=' + keyName + '&limit=' + limit + '&offset=' + offset + '&startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
+        //点击获取延时查询
+        GetInterval: APIconfig.liujun + '/api/lasticSearch/GetIntervalPvIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
     }
 )
+
+const ErrorLog = () => ({
+    firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erperrorlog&esType=erperrorlog_table'
+})
+
+const saleLog = () => ({
+    firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erpbusilog&esType=erpbusilog_table'
+})
+
+const currentLog = () => ({
+    firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erpiislog&esType=erpiislog_table'
+})
 export { API, LoginAPI, ActionAPI, Searchs, GetPV }

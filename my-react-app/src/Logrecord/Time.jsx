@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification, Carousel, Select} from 'antd'
+import { Row, Col, Card, Button, Spin, notification, Carousel, Select } from 'antd'
 import Cascaders from './Cascader/Cascaders'
 import DataPick from '../Math/DataPick'
-import { getTimeFetch, Time } from '../Math/Math'
+import { getTimeFetch, Time, filtArr } from '../Math/Math'
 import './PV.css'
 import { GetPV } from '../Math/APIconfig';
 import Barcharts from './charts/Barcharts'
@@ -38,7 +38,8 @@ class PV extends Component {
                 endDate: Time(),
                 value: ' ',
                 controller: ' ',
-                name: ' '
+                name: ' ',
+                KeyName: 'desc'
             },
             Data: [],//图标数据
             TableURL: [],//发送到Table的链接地址
@@ -47,11 +48,17 @@ class PV extends Component {
             loading: false,
             chartsTatol: "详细图表",
             pagination: {},
-            loading: false,
-            data: []
+            data: [],
+            Start :Time() ,
+            End : Time()
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
+    }
+    componentWillMount() {
+        getTimeFetch(GetPV().firstAPI, (res) => {
+            console.log(res)
+        })
     }
     //点击查询
     PVchecked = () => {
@@ -66,8 +73,8 @@ class PV extends Component {
             })
             // console.log(this.state.URLData)
             let URL = this.state.URLData
-            getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetPVSearch, (res) => {
-                console.log(res)
+            getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetInterval, (res) => {
+                // console.log(res)
                 if (res === 'timeout') {
                     notification.open({
                         message: '提示信息',
@@ -79,10 +86,16 @@ class PV extends Component {
                 } else {
                     // let extMessage = JSON.parse(res.ExtMessage)
                     let Result = JSON.parse(res.Result)
-                    console.log(Result)
+
+                    Result.map((v, index) => {
+                        Result[index] = JSON.parse(v)
+                    })
+                    // console.log(Result)
+                    let buckets = filtArr(Result)
+                    // console.log(buckets)
                     // console.log(extMessage)
                     this.setState({
-                        Data: Result.aggregations.pv_result.buckets,
+                        Data: buckets,
                         SQLmessage: res.ExtMessage,
                         loading: false,
                         disableds: false,
@@ -101,7 +114,8 @@ class PV extends Component {
                 controller: value[1],
                 name: value[2],
                 startDate: this.state.URLData.startDate,
-                endDate: this.state.URLData.endDate
+                endDate: this.state.URLData.endDate,
+                KeyName: this.state.URLData.KeyName
             },
             TableURL: value//存入数组第一位为地址，二位 ， 三位
         })
@@ -116,7 +130,10 @@ class PV extends Component {
                 name: this.state.URLData.name,
                 startDate: DateStrings[0],
                 endDate: DateStrings[1],
-            }
+                KeyName: this.state.URLData.KeyName
+            },
+            Start : DateStrings[0],
+            End : DateStrings[1]
         })
     }
     //弹出的sql语句
@@ -131,12 +148,17 @@ class PV extends Component {
     }
     //下一个图
     handleNext = () => {
-        console.log(this.state.data)
         let nextTableValue = this.state.data
-        if (nextTableValue.length < 1) {
+        let nextTableURL = this.state.TableURL
+        if (nextTableValue.length < 1 && nextTableURL.length === 1) {
             notification.warning({
                 message: '警告',
-                description: '请求点击一个图标，以确保显示其具体内容',
+                description: '请点击一个柱状，以确保显示其具体内容',
+            })
+        } else if (nextTableValue.length < 1 && (nextTableURL.length === 3 || nextTableURL.length === 2)) {
+            notification.warning({
+                message: '警告',
+                description: '请重新点击一个柱状，上一个没有数据',
             })
         } else {
             const CarouselRef = this.refs.CarouselRef
@@ -150,21 +172,44 @@ class PV extends Component {
     }
     //获取图标的点击 并发送请求渲染表格
     getBarChartsName = (v) => {
-        let TableURL = this.state.TableURL//数组长度决定了选择了几个
-        if (TableURL.length > 1) {
-            TableURL.pop()
+        // let TableURL = this.state.TableURL//数组长度决定了选择了几个
+        // if (TableURL.length > 1) {
+        //     TableURL.pop()
+        // }
+        // let BarChartsName = this.state.Data[v].key
+        // BarChartsName = BarChartsName.replace(/x/, '')
+        // TableURL.push(BarChartsName)
+        //判断是不是今天
+        let date = this.state.URLData
+        let startDate = this.state.Start
+        let endDate = this.state.End
+        if (startDate === endDate) {
+            //是今天  就是小时
+            startDate = startDate + 'T' + (v - 1) + ':00:00'
+            endDate = endDate + 'T' + v + ':00:00'
+        } else {
+            //不是今天 按日期算
+            let timeV = v - 1//1就是startDate 所以减一
+            //分解起始日期
+            let timearr = startDate.split('/')
+            let Numtime = Number(timearr[2]) + timeV
+            Numtime > 9 ?
+                timearr[2] = String(Numtime) :
+                timearr[2] = '0' + String(Numtime)
+            startDate = `${timearr[0]}/${timearr[1]}/${timearr[2]}`
+            endDate = `${timearr[0]}/${timearr[1]}/${timearr[2]}`
         }
-        TableURL.push(v)
-        console.log(TableURL)
+        // console.log(date)
         this.setState({
             URLData: {
-                value: TableURL[0],
-                controller: TableURL[1],
-                name: TableURL[2],
-                startDate: this.state.URLData.startDate,
-                endDate: this.state.URLData.endDate
+                value: date.value,
+                controller: date.controller,
+                name: date.name,
+                startDate: startDate,
+                endDate: endDate,
+                KeyName: date.KeyName
             },
-            TableURL: TableURL
+            TableURL: date
         })
         if (this.state.URLData.value !== ' ') {
             this.fetch({ offset: 1, limit: 100 }, this.state.URLData);
@@ -172,10 +217,10 @@ class PV extends Component {
     }
     //渲染表格
     fetch = (params = {}, URLData) => {
-        // console.log(URLData)
+        console.log(URLData)
         // console.log('params:', params);
         this.setState({ loading: true });
-        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit).GetPVparticular, (data) => {
+        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName).GetPVparticular, (data) => {
             let paramdata = JSON.parse(data.Result)
             console.log(paramdata)
             let total = paramdata.hits.total//数据量
@@ -204,6 +249,31 @@ class PV extends Component {
             sortOrder: sorter.order,
             ...filters,
         }, this.state.URLData);
+    }
+    desc = (value) => {
+        if (value === 1) {
+            this.setState({
+                URLData: {
+                    value: this.state.URLData.value,
+                    controller: this.state.URLData.controller,
+                    name: this.state.URLData.name,
+                    startDate: this.state.URLData.startDate,
+                    endDate: this.state.URLData.endDate,
+                    KeyName: 'asc'
+                }
+            })
+        } else {
+            this.setState({
+                URLData: {
+                    value: this.state.URLData.value,
+                    controller: this.state.URLData.controller,
+                    name: this.state.URLData.name,
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                    KeyName: 'desc'
+                }
+            })
+        }
     }
     render() {
         const { Data, URLData, pagination, loading, data } = this.state
@@ -238,10 +308,10 @@ class PV extends Component {
                                     <DataPick handleChangeDate={this.handleChangeDate}></DataPick>
                                 </Col>
                                 <Col span={3} className='btnGroup'>
-                                        <Select defaultValue="Option2">
-                                            <Option value="Option1">升序排列</Option>
-                                            <Option value="Option2">降序排列</Option>
-                                        </Select>
+                                    <Select defaultValue="Option2" onChange={this.desc}>
+                                        <Option value="Option1">升序排列</Option>
+                                        <Option value="Option2">降序排列</Option>
+                                    </Select>
                                 </Col>
                                 <Col span={3} className='btnGroup'>
                                     <ButtonGroup >

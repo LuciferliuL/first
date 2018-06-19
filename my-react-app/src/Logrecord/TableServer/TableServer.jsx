@@ -83,13 +83,14 @@ export default class TableServer extends React.Component {
         return (
             <Table
                 // title={this.titleFun}
+                bordered
                 columns={columns}
                 rowKey='_id'
                 dataSource={data}
                 pagination={pagination}//分页器
                 loading={loading}//页面加载中
                 onChange={this.handleTableChange}//分页排序，筛选变化时触发
-                scroll={{ y: 550 }}
+                scroll={{ x:1200 ,y: 550 }}
                 // style={{ padding: '10px' }}
             />
         );
