@@ -4,8 +4,8 @@ import { Link, Route } from 'react-router-dom'
 import Action from '../Action/Action';
 import Windows from '../Windows/Windows'
 import Simple from '../Simple/Simple';
-import PV from '../../Logrecord/PV';
-import Time from '../../Logrecord/Time'
+import PVComponent from '../../Logrecord/PVComponent';
+import TimeComponent from '../../Logrecord/TimeComponent'
 import Errorlog from '../../Logrecord/Errorlog'
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -55,8 +55,8 @@ class Home extends React.Component {
               key="sub3"
               title={<span><Icon type="team" /><span>日志查询</span></span>}
             >
-              <Menu.Item key="8"><Link to='/Home/PV'>按条件分组</Link></Menu.Item>
-              <Menu.Item key="9"><Link to='/Home/Time'>按时段分组</Link></Menu.Item>
+              <Menu.Item key="8"><Link to='/Home/PVComponent'>按条件分组</Link></Menu.Item>
+              <Menu.Item key="9"><Link to='/Home/TimeComponent'>按时段分组</Link></Menu.Item>
               <Menu.Item key="10"><Link to="/Home/Errorlog">错误日志</Link></Menu.Item>
             </SubMenu>
           </Menu>
@@ -71,8 +71,8 @@ class Home extends React.Component {
               <Route path='/Home/Action' component={Action}></Route>
               <Route path='/Home/Windows' component={Windows}></Route>
               <Route path='/Home/Simple' component={Simple}></Route>
-              <Route path='/Home/PV' component={PV}></Route>
-              <Route path='/Home/Time' component={Time}></Route>
+              <Route path='/Home/PVComponent' component={PVComponent}></Route>
+              <Route path='/Home/TimeComponent' component={TimeComponent}></Route>
               <Route path="/Home/Errorlog" component={Errorlog}></Route>
             </div>
           </Content>

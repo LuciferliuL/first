@@ -11,25 +11,36 @@ const Option = Select.Option
 const ButtonGroup = Button.Group
 const columns = [{
     dataIndex: '_source.clientip',
-    title: '_source.clientip',
-    key: '_id'
+    title: 'clientip',
+    key: '_id',
+    width: 120
 }, {
     dataIndex: '_source.iislogdate',
     title: 'iislogdate',
+    width: 200
 }, {
     dataIndex: '_source.request',
-    title: 'request'
+    title: 'request',
+    width: 400
 }, {
     dataIndex: '_source.timetaken',
-    title: 'timetaken(ms)'
+    title: 'timetaken(ms)',
+    width: 100
 }, {
     dataIndex: '_source.urlparam',
     title: "urlparam"
 }, {
     dataIndex: '_source.port',
-    title: "port"
+    title: "port",
+    width: 80
 }]
-class PV extends Component {
+const API = {
+    ID:'Time',
+    first:'GetOrgList',
+    secend:'GetOrgListServer',
+    third:'GetControllerList'
+}
+class TimeComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -49,8 +60,8 @@ class PV extends Component {
             chartsTatol: "详细图表",
             pagination: {},
             data: [],
-            Start :Time() ,
-            End : Time()
+            Start: Time(),
+            End: Time()
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -89,6 +100,7 @@ class PV extends Component {
 
                     Result.map((v, index) => {
                         Result[index] = JSON.parse(v)
+                        return true
                     })
                     // console.log(Result)
                     let buckets = filtArr(Result)
@@ -132,8 +144,8 @@ class PV extends Component {
                 endDate: DateStrings[1],
                 KeyName: this.state.URLData.KeyName
             },
-            Start : DateStrings[0],
-            End : DateStrings[1]
+            Start: DateStrings[0],
+            End: DateStrings[1]
         })
     }
     //弹出的sql语句
@@ -172,21 +184,24 @@ class PV extends Component {
     }
     //获取图标的点击 并发送请求渲染表格
     getBarChartsName = (v) => {
-        // let TableURL = this.state.TableURL//数组长度决定了选择了几个
-        // if (TableURL.length > 1) {
-        //     TableURL.pop()
-        // }
-        // let BarChartsName = this.state.Data[v].key
-        // BarChartsName = BarChartsName.replace(/x/, '')
-        // TableURL.push(BarChartsName)
         //判断是不是今天
         let date = this.state.URLData
         let startDate = this.state.Start
         let endDate = this.state.End
         if (startDate === endDate) {
             //是今天  就是小时
-            startDate = startDate + 'T' + (v - 1) + ':00:00'
-            endDate = endDate + 'T' + v + ':00:00'
+            if (v > 10) {
+                startDate = String(startDate) + 'T' + (v - 1) + ':00:00'
+                    endDate = String(endDate) + 'T' + v + ':00:00'
+            }
+            else if (v = 10) {
+                startDate = String(startDate) + 'T' + '0' + (v - 1) + ':00:00'
+                    endDate = String(endDate) + 'T' + v + ':00:00'
+            }
+            else if (v < 10) {
+                startDate = String(startDate) + 'T' + '0' + (v - 1) + ':00:00'
+                    endDate = String(endDate) + 'T' + '0' + v + ':00:00'
+            }
         } else {
             //不是今天 按日期算
             let timeV = v - 1//1就是startDate 所以减一
@@ -217,7 +232,7 @@ class PV extends Component {
     }
     //渲染表格
     fetch = (params = {}, URLData) => {
-        console.log(URLData)
+        // console.log(URLData)
         // console.log('params:', params);
         this.setState({ loading: true });
         getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName).GetPVparticular, (data) => {
@@ -251,7 +266,7 @@ class PV extends Component {
         }, this.state.URLData);
     }
     desc = (value) => {
-        if (value === 1) {
+        if (value === '1') {        
             this.setState({
                 URLData: {
                     value: this.state.URLData.value,
@@ -262,14 +277,14 @@ class PV extends Component {
                     KeyName: 'asc'
                 }
             })
-        } else {
+        } else { 
             this.setState({
                 URLData: {
                     value: this.state.URLData.value,
                     controller: this.state.URLData.controller,
                     name: this.state.URLData.name,
-                    startDate: this.state.startDate,
-                    endDate: this.state.endDate,
+                    startDate: this.state.URLData.startDate,
+                    endDate: this.state.URLData.endDate,
                     KeyName: 'desc'
                 }
             })
@@ -302,16 +317,13 @@ class PV extends Component {
                         <Card>
                             <Row gutter={3}>
                                 <Col span={8}>
-                                    <Cascaders handleChangeState={this.handleChangeState}></Cascaders>
+                                    <Cascaders handleChangeState={this.handleChangeState} API={API}></Cascaders>
                                 </Col>
                                 <Col span={6}>
                                     <DataPick handleChangeDate={this.handleChangeDate}></DataPick>
                                 </Col>
                                 <Col span={3} className='btnGroup'>
-                                    <Select defaultValue="Option2" onChange={this.desc}>
-                                        <Option value="Option1">升序排列</Option>
-                                        <Option value="Option2">降序排列</Option>
-                                    </Select>
+
                                 </Col>
                                 <Col span={3} className='btnGroup'>
                                     <ButtonGroup >
@@ -325,7 +337,15 @@ class PV extends Component {
                         {/* 走马灯 */}
                         <Carousel afterChange={this.onChange} dots={false} ref="CarouselRef">
                             <Card title={this.state.chartsTatol} className='MarginTop'
-                                extra={<Button onClick={this.handleNext}>切换详细表格</Button>}
+                                extra={
+                                    <div>
+                                        <Select defaultValue="2" onChange={this.desc}>
+                                            <Option value="1">升序排列</Option>
+                                            <Option value="2">降序排列</Option>
+                                        </Select>
+                                        <Button onClick={this.handleNext}>切换详细表格</Button>
+                                    </div>
+                                }
                             >
                                 {charts}
                             </Card>
@@ -352,4 +372,4 @@ class PV extends Component {
     }
 }
 
-export default PV;
+export default TimeComponent;

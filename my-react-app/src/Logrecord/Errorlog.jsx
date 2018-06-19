@@ -1,61 +1,93 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification, Input } from 'antd'
-import Cascaders from './Cascader/Cascaders'
+import { Row, Col, Card, Spin, notification, Input } from 'antd'
+import CascaderError from './Cascader/CascaderError'
 import DataPick from '../Math/DataPick'
-import { getTimeFetch, Time } from '../Math/Math'
+import { getTimeFetch, Time, postFetch } from '../Math/Math'
 import './PV.css'
-import { GetPV } from '../Math/APIconfig';
-import Barcharts from './charts/Barcharts'
+import { ErrorLog } from '../Math/APIconfig';
 import TableServer from './TableServer/TableServer'
+import RenderModal from './RenderModal'
 const Search = Input.Search
-const columns = [{
-    dataIndex: '_source.clientip',
-    title: '_source.clientip',
-    key: '_id'
-}, {
-    dataIndex: '_source.iislogdate',
-    title: 'iislogdate',
-}, {
-    dataIndex: '_source.request',
-    title: 'request'
-}, {
-    dataIndex: '_source.timetaken',
-    title: 'timetaken(ms)'
-}, {
-    dataIndex: '_source.urlparam',
-    title: "urlparam"
-}, {
-    dataIndex: '_source.port',
-    title: "port"
-}]
-
-class PV extends Component {
+const API = {
+    first: 'GetComList',
+    secend: 'GetComServer',
+    third: 'GetComServiceName'
+}
+class Errorlog extends Component {
     constructor(props) {
         super(props)
         this.state = {
             URLData: {
-                startDate: Time(),
-                endDate: Time(),
-                value: ' ',
-                controller: ' ',
-                name: ' '
+                startDate: Time('-'),
+                endDate: Time('-'),
+                serverIp: ' ',
+                controllerName: ' ',
+                port: ' '
             },
             Data: [],//图标数据
             TableURL: [],//发送到Table的链接地址
             SQLmessage: '',
             disableds: true,
             loading: false,
-            chartsTatol: "详细图表",
             pagination: {},
             data: []
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
+        this.columns = [{
+            dataIndex: '_source.Timestamp',
+            title: 'Timestamp',
+            key: '_id',
+            width: 100
+        }, {
+            dataIndex: '_source.Origin.ServiceName',
+            title: 'ServiceName',
+            width: 150
+        }, {
+            dataIndex: '_source.Origin.CallingApplication',
+            title: 'CallingApplication',
+            width: 300
+        }, {
+            dataIndex: '_source.Origin.Application',
+            title: 'Application',
+            width: 100
+        }, {
+            dataIndex: '_source.Origin.Component',
+            title: "Details",
+            width: 150
+        }, {
+            dataIndex: '_source.Customer.UserId',
+            title: "UserId",
+            width: 80
+        }, {
+            dataIndex: '_source.Customer.CustomerCode',
+            title: "Code",
+            width: 80
+        }, {
+            dataIndex: '_source.Details',
+            title: "action",
+            width: 80,
+            render: (text, value) => {
+                let Message = text.Message
+                let StackTrace = text.StackTrace
+                let Timestamp = value._source.Timestamp
+                let UserId = value._source.Customer.UserId
+                let arr = [Message, StackTrace, Timestamp, UserId]
+                return (<RenderModal arr={arr}></RenderModal>)
+
+            }
+        }]
+
+    }
+    componentWillMount() {
+        getTimeFetch(ErrorLog().firstAPI, (res) => {
+            console.log(res)
+        })
     }
     //点击查询
     PVchecked = (value) => {
         //value就是USERID得值
-        if (this.state.URLData.value === null) {
+        if (this.state.URLData.serverIp === ' ') {
             notification.warning({
                 message: '警告',
                 description: '请求选择一个服务器',
@@ -66,6 +98,7 @@ class PV extends Component {
             })
             // console.log(this.state.URLData)
             let URL = this.state.URLData
+            URL.Userid = value
             this.fetch({ offset: 1, limit: 100 }, URL)
         }
     }
@@ -74,9 +107,9 @@ class PV extends Component {
         // console.log(value)
         this.setState({
             URLData: {
-                value: value[0],
-                controller: value[1],
-                name: value[2],
+                serverIp: value[0],
+                controllerName: value[2],
+                port: value[1],
                 startDate: this.state.URLData.startDate,
                 endDate: this.state.URLData.endDate
             },
@@ -88,9 +121,9 @@ class PV extends Component {
         // console.log(DateStrings)
         this.setState({
             URLData: {
-                value: this.state.URLData.value,
-                controller: this.state.URLData.controller,
-                name: this.state.URLData.name,
+                port: this.state.URLData.port,
+                controllerName: this.state.URLData.controllerName,
+                serverIp: this.state.URLData.serverIp,
                 startDate: DateStrings[0],
                 endDate: DateStrings[1],
             }
@@ -100,14 +133,22 @@ class PV extends Component {
     fetch = (params = {}, URLData) => {
         // console.log(URLData)
         // console.log('params:', params);
+        let FormData = { ...URLData, ...params }
+        // console.log(JSON.stringify(FormData))
         this.setState({ loading: true });
-        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit).GetPVparticular, (data) => {
+        postFetch(ErrorLog().GetError, FormData, (data) => {
+            // console.log(data)
             let paramdata = JSON.parse(data.Result)
             console.log(paramdata)
             let total = paramdata.hits.total//数据量
             const pagination = { ...this.state.pagination };
             pagination.total = total;
             pagination.pageSize = 100
+            let datas = paramdata.hits.hits
+            datas.forEach(element => {
+                let arr = element._source.Timestamp.split('.')
+                element._source.Timestamp = arr[0]
+            });
             this.setState({
                 loading: false,
                 data: paramdata.hits.hits,
@@ -132,25 +173,8 @@ class PV extends Component {
         }, this.state.URLData);
     }
     render() {
-        const { Data, URLData, pagination, loading, data } = this.state
-        const charts = []
-        const table = []
+        const { URLData, pagination, loading, data } = this.state
         // console.log(Data)
-        if (Data.length === 0) {
-            charts.push(<p key='charts1'>暂时没有数据，请选择另一个节点</p>)
-            table.push(<p key='table1'>暂时没有数据，请选择另一个节点</p>)
-        } else {
-            charts.push(<Barcharts Data={Data} key='charts2' getBarChartsName={this.getBarChartsName}></Barcharts>)
-            table.push(<TableServer
-                columns={columns}
-                key='table2'
-                URLData={URLData}
-                loading={loading}
-                pagination={pagination}
-                data={data}
-                handleTableChange={this.handleTableChange}
-            ></TableServer>)
-        }
         return (
             <div>
                 <Spin tip="Loading..." spinning={this.state.loading}>
@@ -158,13 +182,13 @@ class PV extends Component {
                         <Card>
                             <Row gutter={3}>
                                 <Col span={8}>
-                                    <Cascaders handleChangeState={this.handleChangeState}></Cascaders>
+                                    <CascaderError handleChangeState={this.handleChangeState} API={API}></CascaderError>
                                 </Col>
                                 <Col span={8}>
                                     <DataPick handleChangeDate={this.handleChangeDate}></DataPick>
                                 </Col>
                                 <Col span={8} className="btnGroup">
-                                    <Search 
+                                    <Search
                                         placeholder='请输入USERID'
                                         enterButton='查询'
                                         onSearch={this.PVchecked}
@@ -173,7 +197,15 @@ class PV extends Component {
                             </Row>
                         </Card>
                         <Card title="详细表格" className='MarginTop'>
-                            {table}
+                            <TableServer
+                                columns={this.columns}
+                                key='table2'
+                                URLData={URLData}
+                                loading={loading}
+                                pagination={pagination}
+                                data={data}
+                                handleTableChange={this.handleTableChange}
+                            ></TableServer>
                         </Card>
                     </Row>
                 </Spin>
@@ -182,4 +214,4 @@ class PV extends Component {
     }
 }
 
-export default PV;
+export default Errorlog;

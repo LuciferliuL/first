@@ -34,8 +34,13 @@ const columns = [{
     title: "port",
     width: 80
 }]
-
-class PV extends Component {
+const API = {
+    ID:'Time',
+    first:'GetOrgList',
+    secend:'GetOrgListServer',
+    third:'GetControllerList'
+}
+class PVComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -168,23 +173,54 @@ class PV extends Component {
     }
     //获取图标的点击 并发送请求渲染表格
     getBarChartsName = (v) => {
-        console.log(v)
-        let TableURL = this.state.TableURL//数组长度决定了选择了几个
-        if (TableURL.length > 1) {
-            TableURL.pop()
+        // let TableURL = this.state.TableURL//数组长度决定了选择了几个
+        // if (TableURL.length > 1) {
+        //     TableURL.pop()
+        // }
+        // let BarChartsName = this.state.Data[v].key
+        // BarChartsName = BarChartsName.replace(/x/, '')
+        // TableURL.push(BarChartsName)
+        //判断是不是今天
+        let date = this.state.URLData
+        let startDate = this.state.Start
+        let endDate = this.state.End
+        if (startDate === endDate) {
+            //是今天  就是小时
+            if (v > 10) {
+                startDate = startDate + 'T' + (v - 1) + ':00:00'
+                    endDate = endDate + 'T' + v + ':00:00'
+            }
+            else if (v = 10) {
+                startDate = startDate + 'T' + '0' + (v - 1) + ':00:00'
+                    endDate = endDate + 'T' + v + ':00:00'
+            }
+            else if (v < 10) {
+                startDate = startDate + 'T' + '0' + (v - 1) + ':00:00'
+                    endDate = endDate + 'T' + '0' + v + ':00:00'
+            }
+        } else {
+            //不是今天 按日期算
+            let timeV = v - 1//1就是startDate 所以减一
+            //分解起始日期
+            let timearr = startDate.split('/')
+            let Numtime = Number(timearr[2]) + timeV
+            Numtime > 9 ?
+                timearr[2] = String(Numtime) :
+                timearr[2] = '0' + String(Numtime)
+            startDate = `${timearr[0]}/${timearr[1]}/${timearr[2]}`
+            endDate = `${timearr[0]}/${timearr[1]}/${timearr[2]}`
         }
-        TableURL.push(v)
-        console.log(TableURL)
+        // console.log(date)
         this.setState({
             URLData: {
-                value: TableURL[0],
-                controller: TableURL[1],
-                name: TableURL[2],
-                startDate: this.state.URLData.startDate,
-                endDate: this.state.URLData.endDate,
-                KeyName: this.state.URLData.KeyName
+                value: date.value,
+                controller: date.controller,
+                name: date.name,
+                startDate: startDate,
+                endDate: endDate,
+                KeyName: date.KeyName
             },
-            TableURL: TableURL
+            TableURL: date
         })
         if (this.state.URLData.value !== ' ') {
             this.fetch({ offset: 1, limit: 100 }, this.state.URLData);
@@ -226,7 +262,7 @@ class PV extends Component {
         }, this.state.URLData);
     }
     desc = (value) => {
-        if (value === 1) {
+        if (value === '1') {
             this.setState({
                 URLData: {
                     value: this.state.URLData.value,
@@ -243,8 +279,8 @@ class PV extends Component {
                     value: this.state.URLData.value,
                     controller: this.state.URLData.controller,
                     name: this.state.URLData.name,
-                    startDate: this.state.startDate,
-                    endDate: this.state.endDate,
+                    startDate: this.state.URLData.startDate,
+                    endDate: this.state.URLData.endDate,
                     KeyName: 'desc'
                 }
             })
@@ -277,16 +313,13 @@ class PV extends Component {
                         <Card>
                             <Row gutter={3}>
                                 <Col span={8}>
-                                    <Cascaders handleChangeState={this.handleChangeState}></Cascaders>
+                                    <Cascaders handleChangeState={this.handleChangeState} API={API}></Cascaders>
                                 </Col>
                                 <Col span={6}>
                                     <DataPick handleChangeDate={this.handleChangeDate}></DataPick>
                                 </Col>
                                 <Col span={3} className="btnGroup">
-                                    <Select defaultValue="Option2" onChange={this.desc}>
-                                        <Option value="Option1">升序排列</Option>
-                                        <Option value="Option2">降序排列</Option>
-                                    </Select>
+
                                 </Col>
                                 <Col span={3} className='btnGroup'>
                                     <ButtonGroup >
@@ -300,7 +333,15 @@ class PV extends Component {
                         {/* 走马灯 */}
                         <Carousel afterChange={this.onChange} dots={false} ref="CarouselRef">
                             <Card title={this.state.chartsTatol} className='MarginTop'
-                                extra={<Button onClick={this.handleNext}>切换详细表格</Button>}
+                                extra={
+                                    <div>
+                                        <Select defaultValue="2" onChange={this.desc}>
+                                            <Option value="1">升序排列</Option>
+                                            <Option value="2">降序排列</Option>
+                                        </Select>
+                                        <Button onClick={this.handleNext}>切换详细表格</Button>
+                                    </div>
+                                }
                             >
                                 {charts}
                             </Card>
@@ -327,4 +368,4 @@ class PV extends Component {
     }
 }
 
-export default PV;
+export default PVComponent;

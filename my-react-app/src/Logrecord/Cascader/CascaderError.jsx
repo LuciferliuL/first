@@ -24,16 +24,13 @@ class Cascaders extends Component {
         getFetch(GetPV()[this.state.first], (res) => {
             let data = JSON.parse(res.Result)
             // console.log(data)
-            let option = data.aggregations.pv_result.buckets
-            console.log(option)
-            option.map((v) => {
+            data.map((v) => {
                 v.isLeaf = false
                 v.LeveL = 1
                 return v
             })
-            option = ObjRegister(option)
             this.setState({
-                options: option
+                options: data
             })
         })
     }
@@ -48,15 +45,17 @@ class Cascaders extends Component {
         if (targetOption.LeveL === 1) {
             getFetch(GetPV(targetOption.key)[this.state.secend], (res) => {
                 let data = JSON.parse(res.Result)
+                console.log(res)
                 let option = data.aggregations.pv_result.buckets
                 option.map((v) => {
                     v.isLeaf = false
                     v.LeveL = 2
+                    v.valueName = v.key
                     return v
                 })
                 targetOption.children = option;
-                // console.log(option)
-                option = ObjRegister(option)
+                console.log(option)
+                // option = ObjRegister(option)
                 this.setState({
                     options: [...this.state.options],
                 }, () => { targetOption.loading = false; });
@@ -65,12 +64,13 @@ class Cascaders extends Component {
             getFetch(GetPV(selectedOptions[0].key, targetOption.key)[this.state.third], (res) => {
                 let data = JSON.parse(res.Result)
                 let option = data.aggregations.pv_result.buckets
-                // option.map((v) => {
-                //     v.isLeaf = false
-                //     v.LeveL = 3
-                // }) 如果还有后续可以使用
+                option.map((v) => {
+                    v.isLeaf = false
+                    v.LeveL = 3
+                    v.valueName = v.key
+                }) //如果还有后续可以使用
                 targetOption.children = option;
-                option = ObjRegister(option)
+                // option = ObjRegister(option)
                 this.setState({
                     options: [...this.state.options],
                 }, () => { targetOption.loading = false; });
@@ -101,7 +101,7 @@ class Cascaders extends Component {
                     loadData={this.loadData}
                     changeOnSelect
                     displayRender={this.displayRender}
-                    filedNames={{ label: 'Port', value: 'key', children: 'children', code: 'doc_count' }}
+                    filedNames={{ label: 'valueName', value: 'key', children: 'children', code: 'doc_count' }}
                 />
             </div>
         );

@@ -87,6 +87,33 @@ function postFetch(URL, postBody, Callback) {
 
 export { postFetch }
 
+
+/**
+ * 
+ * @param {链接} URL 
+ * @param {内容} postBody 
+ */
+function postFetchForm(URL, postBody, Callback) {
+    let myHeaders = new Headers();
+    myHeaders.append('Content-Type', "application/x-www-form-urlencoded");
+    let request = new Request(URL, {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(postBody),
+        headers: myHeaders
+    });
+    fetch(request)
+        .then(response => response.json())
+        .then(result => {
+            Callback(result)
+        })
+        .catch(res => {
+            console.log(res)
+        })
+}
+
+export { postFetchForm }
+
 /**
  * 
  * @param {链接} URL 
@@ -180,14 +207,14 @@ export { Errors }
 /**
  * 返回  年/月/日  固定格式
  */
-function Time() {
+function Time(v='/') {
     let time = new Date()
     let y = time.getFullYear()
     let m = time.getMonth() + 1
     m = m < 10 ? ('0' + m) : m
     let d = time.getDate()
     d = d < 10 ? ('0' + d) : d
-    return y + '/' + m + '/' + d
+    return y + v + m + v + d
 }
 
 export { Time }
