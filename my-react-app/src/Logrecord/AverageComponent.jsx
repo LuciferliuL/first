@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification,Select } from 'antd'
+import { Row, Col, Card, Button, Spin, notification, Select, Progress } from 'antd'
 import Cascaders from './Cascader/Cascaders'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time } from '../Math/Math'
@@ -59,7 +59,8 @@ class AverageComponent extends Component {
             loading: false,
             chartsTatol: "详细图表",
             pagination: {},
-            data: []
+            data: [],
+            AvgPercent: 0
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -102,7 +103,7 @@ class AverageComponent extends Component {
             const GetAverageChart = new Promise((resolve, reject) => {
                 //饼状图得数据
                 getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetAverageChart, (res) => {
-                    // console.log(res)
+                    console.log(res)
                     if (res === 'timeout') {
                         reject(res)
                     } else {
@@ -123,6 +124,7 @@ class AverageComponent extends Component {
                 this.setState({
                     Data: result[1],
                     SQLmessage: result[0][0],
+                    AvgPercent: (result[0][1]/1000).toFixed(2),
                     loading: false,
                     disableds: false,
                     chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
@@ -216,7 +218,7 @@ class AverageComponent extends Component {
         // console.log('params:', params);
         this.setState({ loading: true });
         getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName, sTime[1], sTime[0]).GetPieTable, (data) => {
-            console.log(data)
+            // console.log(data)
             let paramdata = JSON.parse(data.Result)
             let ExtMessage = data.ExtMessage
             console.log(paramdata)
@@ -228,7 +230,7 @@ class AverageComponent extends Component {
                 loading: false,
                 data: paramdata.hits.hits,
                 pagination,
-                SQLmessage:ExtMessage
+                SQLmessage: ExtMessage
             });
         })
     }
@@ -329,6 +331,8 @@ class AverageComponent extends Component {
                                     </div>
                                 }>
                                 {charts}
+                                <p>平均延迟：{this.state.AvgPercent} 秒</p>
+                                <Progress  percent={(100 - this.state.AvgPercent)}  />
                             </Card>
                         </Col>
                         <Col span={14}>

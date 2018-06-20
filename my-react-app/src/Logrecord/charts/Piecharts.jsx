@@ -23,17 +23,8 @@ class Piecharts extends Component {
             { value: 0, name: '5s - 10s', max: '10', min: '5' },
             { value: 0, name: '> 10s', max: '999', min: '10' }
         ]
-        Data.forEach(element => {
-            let s = element / 1000
-            if (s < 1) {
-                this.PieObj[0].value++
-            } else if (s > 1 && s < 5) {
-                this.PieObj[1].value++
-            } else if (s > 5 && s < 10) {
-                this.PieObj[2].value++
-            } else {
-                this.PieObj[3].value++
-            }
+        Data.forEach((element, index) => {
+            this.PieObj[index].value = element
         });
         this.state = {
             Data: this.PieObj,
@@ -49,24 +40,74 @@ class Piecharts extends Component {
                 subtext: '虚构数据',
                 left: 'center'
             },
+            label: {
+                normal: {
+                    position: 'inner'
+                }
+            },
             tooltip: {
                 trigger: 'item',
-                formatter: "延迟记录"
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
             legend: {
+                orient: 'vertical',
+                top: 'middle',
                 // orient: 'vertical',
-                // top: 'middle',
-                bottom: 10,
-                left: 'center',
+                // x: 'left',
                 data: ['0s - 1s', '1s - 5s', '5s - 10s', '> 10s']
             },
             series: [
-                {
+                {   
+                    name:'延迟统计',
                     type: 'pie',
-                    radius: '65%',
+                    radius: '38%',
                     center: ['50%', '50%'],
                     selectedMode: 'single',
                     data: this.state.Data,
+                    label: {
+                        normal: {
+                            formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                            backgroundColor: '#eee',
+                            borderColor: '#aaa',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            // shadowBlur:3,
+                            // shadowOffsetX: 2,
+                            // shadowOffsetY: 2,
+                            // shadowColor: '#999',
+                            // padding: [0, 7],
+                            rich: {
+                                a: {
+                                    color: '#999',
+                                    lineHeight: 20,
+                                    align: 'center'
+                                },
+                                // abg: {
+                                //     backgroundColor: '#333',
+                                //     width: '100%',
+                                //     align: 'right',
+                                //     height: 22,
+                                //     borderRadius: [4, 4, 0, 0]
+                                // },
+                                hr: {
+                                    borderColor: '#aaa',
+                                    width: '100%',
+                                    borderWidth: 0.5,
+                                    height: 0
+                                },
+                                b: {
+                                    fontSize: 12,
+                                    lineHeight: 28
+                                },
+                                per: {
+                                    color: '#eee',
+                                    backgroundColor: '#334455',
+                                    padding: [2, 4],
+                                    borderRadius: 2
+                                }
+                            }
+                        }
+                    },
                     itemStyle: {
                         normal: {
                             color: function (params) {
@@ -107,7 +148,7 @@ class Piecharts extends Component {
                     option={this.getOption()}//配置
                     notMerge={true}
                     lazyUpdate={true}
-                    style={{ height: '673px', width: '100%' }}//样式
+                    style={{ height: '640px', width: '100%' }}//样式
                     // theme={theme}
                     onChartReady={this.onChartReadyCallback}
                     // onEvents={this.EventsDict}//方法

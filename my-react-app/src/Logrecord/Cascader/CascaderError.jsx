@@ -23,7 +23,7 @@ class CascaderError extends Component {
     componentDidMount() {
         getFetch(GetPV()[this.state.first], (res) => {
             let data = JSON.parse(res.Result)
-            // console.log(data)
+            console.log(data)
             data.map((v) => {
                 v.isLeaf = false
                 v.LeveL = 1
@@ -45,7 +45,7 @@ class CascaderError extends Component {
         if (targetOption.LeveL === 1) {
             getFetch(GetPV(targetOption.key)[this.state.secend], (res) => {
                 let data = JSON.parse(res.Result)
-                console.log(res)
+                // console.log(res)
                 let option = data.aggregations.pv_result.buckets
                 option.map((v) => {
                     v.isLeaf = false
@@ -54,7 +54,7 @@ class CascaderError extends Component {
                     return v
                 })
                 targetOption.children = option;
-                console.log(option)
+                // console.log(option)
                 // option = ObjRegister(option)
                 this.setState({
                     options: [...this.state.options],

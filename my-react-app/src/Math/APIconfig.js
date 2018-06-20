@@ -41,9 +41,9 @@ const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyNa
         GetOrgListServer: APIconfig.liujun + '/api/lasticSearch/GetServiceList?serverIp=' + value,
         GetControllerList: APIconfig.liujun + '/api/lasticSearch/GetControllerList?serverIp=' + value + '&port=' + controller,
         //错误日志获取地址
-        GetComList: APIconfig.Server + '/api/lasticSearch/GetErrorBranchList',
-        GetComServer: APIconfig.Server + '/api/lasticSearch/GetServiceList?serverIp=' + value + '&aggsField=Origin.Application&loggerType=Error',
-        GetComServiceName: APIconfig.Server + '/api/lasticSearch/GetControllerList?serverIp=' + value + "&port=" + controller + '&aggsField=Origin.CallingApplication&loggerType=Error',
+        GetComList: APIconfig.liujun + '/api/lasticSearch/GetErrorBranchList',
+        GetComServer: APIconfig.liujun + '/api/lasticSearch/GetServiceList?serverIp=' + value + '&aggsField=Origin.Application&loggerType=Error',
+        GetComServiceName: APIconfig.liujun + '/api/lasticSearch/GetControllerList?serverIp=' + value + "&port=" + controller + '&aggsField=Origin.CallingApplication&loggerType=Error',
         //平均量查询
 
         GetAverage: APIconfig.liujun + '/api/lasticSearch/GetAvgTakenIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,

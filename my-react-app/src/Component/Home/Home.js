@@ -58,7 +58,7 @@ class Home extends React.Component {
             >
               <Menu.Item key="8"><Link to='/Home/PVComponent'>按条件分组</Link></Menu.Item>
               <Menu.Item key="9"><Link to='/Home/TimeComponent'>按时段分组</Link></Menu.Item>
-              <Menu.Item key='10'><Link to='/Home/AcerageComponent'>平均耗时分组</Link></Menu.Item>
+              <Menu.Item key='10'><Link to='/Home/AcerageComponent'>平均耗时统计</Link></Menu.Item>
               <Menu.Item key="11"><Link to="/Home/Errorlog">错误日志</Link></Menu.Item>
             </SubMenu>
           </Menu>

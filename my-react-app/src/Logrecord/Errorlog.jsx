@@ -104,7 +104,7 @@ class Errorlog extends Component {
     }
     //获取选择框的数组
     handleChangeState = (value) => {
-        // console.log(value)
+        console.log(value)
         this.setState({
             URLData: {
                 serverIp: value[0],
