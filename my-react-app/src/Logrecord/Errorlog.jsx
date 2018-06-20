@@ -6,7 +6,7 @@ import { getTimeFetch, Time, postFetch } from '../Math/Math'
 import './PV.css'
 import { ErrorLog } from '../Math/APIconfig';
 import TableServer from './TableServer/TableServer'
-import RenderModal from './RenderModal'
+import RenderModal from './Modal/RenderModal'
 const Search = Input.Search
 const API = {
     first: 'GetComList',

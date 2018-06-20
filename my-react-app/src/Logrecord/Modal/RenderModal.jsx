@@ -22,16 +22,8 @@ class RenderModal extends Component {
             visible: false,
         });
     }
-    componentWillReceiveProps(pre){
-        this.setState({
-            Message:pre.arr[0].replace(/\r\n/g,'<br>'),
-            Timestamp:pre.arr[2],
-            UserId:pre.arr[3],
-            StackTrace:pre.arr[1]
-        })
-    }
     render() {
-        const {Message,UserId,Timestamp,StackTrace} = this.state
+        const {arr} = this.props
         return (
             <div>
                 <Button type='primary' onClick={this.showModal}><Icon type="solution"></Icon></Button>
@@ -44,19 +36,19 @@ class RenderModal extends Component {
                 >
                     <Badge status="processing" text="UserId:"  style={{ backgroundColor: '#52c41a' }}/>
                     <br/>
-                    <span  >{UserId}</span>
+                    <span  >{arr[3]}</span>
                     <br/>
                     <Badge status="processing" text="Timestamp:"  style={{ backgroundColor: '#52c41a' }}/>
                     <br/>
-                    <span >{Timestamp}</span>
+                    <span >{arr[2]}</span>
                     <br/>
                     <Badge status="processing" text="Message:"  style={{ backgroundColor: '#52c41a' }}/>
                     <br/>
-                    <span>{Message}</span>
+                    <span>{arr[0].replace(/\r\n/,'<br />')}</span>
                     <br/>
                     <Badge status="processing" text="StackTrace:"  style={{ backgroundColor: '#52c41a' }}/>
                     <br/>
-                    <span >{StackTrace}</span>
+                    <span >{arr[1]}</span>
                 </Modal>
             </div>
         );

@@ -18,11 +18,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyz": "NODE_ENV=production npm_config_report=true npm run deploy:prod"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack-bundle-analyzer": "^2.13.1"
+  },
   "author": "",
   "license": "ISC"
 }

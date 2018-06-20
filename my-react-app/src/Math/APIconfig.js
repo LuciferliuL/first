@@ -33,7 +33,7 @@ const Searchs = (Search = '') => (
 )
 
 //firstAPI 用来更新每个页面请求API服务启动 keyName 升序降序  asc desc
-const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyName) => (
+const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyName, minTimetaken, maxTimetaken) => (
     {
         firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erpiislog&esType=erpiislog_table',
         //获取服务器地址
@@ -41,11 +41,14 @@ const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyNa
         GetOrgListServer: APIconfig.liujun + '/api/lasticSearch/GetServiceList?serverIp=' + value,
         GetControllerList: APIconfig.liujun + '/api/lasticSearch/GetControllerList?serverIp=' + value + '&port=' + controller,
         //错误日志获取地址
-        GetComList: APIconfig.liujun + '/api/lasticSearch/GetErrorBranchList',
-        //获取Application列表
-        GetComServer: APIconfig.Server + '/api/lasticSearch/GetServiceList?serverIp=' + value +'&aggsField=Origin.Application&loggerType=Error',
-        //获取最后列表
-        GetComServiceName: APIconfig.Server + '/api/lasticSearch/GetControllerList?serverIp=' + value + "&port=" + controller +'&aggsField=Origin.CallingApplication&loggerType=Error',
+        GetComList: APIconfig.Server + '/api/lasticSearch/GetErrorBranchList',
+        GetComServer: APIconfig.Server + '/api/lasticSearch/GetServiceList?serverIp=' + value + '&aggsField=Origin.Application&loggerType=Error',
+        GetComServiceName: APIconfig.Server + '/api/lasticSearch/GetControllerList?serverIp=' + value + "&port=" + controller + '&aggsField=Origin.CallingApplication&loggerType=Error',
+        //平均量查询
+
+        GetAverage: APIconfig.liujun + '/api/lasticSearch/GetAvgTakenIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
+        GetAverageChart: APIconfig.liujun + '/api/lasticSearch/GetTimetakenIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
+        GetPieTable: APIconfig.liujun + '/api/lasticSearch/GetTimetakenIisLogDetails?keyName=' + keyName + '&limit=' + limit + '&offset=' + offset + '&startDate=' + startDate + '&endDate=' + endDate + '&minTimetaken=' + minTimetaken + '&maxTimetaken=' + maxTimetaken + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
         //点击量查询
         GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
         //点击柱子显示详情  有升降序
@@ -58,9 +61,11 @@ const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyNa
 //错误日志
 const ErrorLog = () => ({
     firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erperrorlog&esType=erperrorlog_table',
-    GetError:APIconfig.liujun + '/api/lasticSearch/GetErrorErpLogs'
+    GetError: APIconfig.liujun + '/api/lasticSearch/GetErrorErpLogs'
     //获取公司列表
 })
+
+
 
 const saleLog = () => ({
     firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erpbusilog&esType=erpbusilog_table'

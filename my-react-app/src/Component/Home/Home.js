@@ -7,6 +7,7 @@ import Simple from '../Simple/Simple';
 import PVComponent from '../../Logrecord/PVComponent';
 import TimeComponent from '../../Logrecord/TimeComponent'
 import Errorlog from '../../Logrecord/Errorlog'
+import AcerageComponent from "../../Logrecord/AverageComponent.jsx";
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -57,7 +58,8 @@ class Home extends React.Component {
             >
               <Menu.Item key="8"><Link to='/Home/PVComponent'>按条件分组</Link></Menu.Item>
               <Menu.Item key="9"><Link to='/Home/TimeComponent'>按时段分组</Link></Menu.Item>
-              <Menu.Item key="10"><Link to="/Home/Errorlog">错误日志</Link></Menu.Item>
+              <Menu.Item key='10'><Link to='/Home/AcerageComponent'>平均耗时分组</Link></Menu.Item>
+              <Menu.Item key="11"><Link to="/Home/Errorlog">错误日志</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
@@ -74,6 +76,7 @@ class Home extends React.Component {
               <Route path='/Home/PVComponent' component={PVComponent}></Route>
               <Route path='/Home/TimeComponent' component={TimeComponent}></Route>
               <Route path="/Home/Errorlog" component={Errorlog}></Route>
+              <Route path='/Home/AcerageComponent' component={AcerageComponent}></Route>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

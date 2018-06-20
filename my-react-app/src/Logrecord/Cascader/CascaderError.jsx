@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Cascader } from 'antd';
-import { getFetch, ObjRegister } from '../../Math/Math';
+import { getFetch} from '../../Math/Math';
 import { GetPV } from '../../Math/APIconfig'
 import './Cascader.css'
 
-class Cascaders extends Component {
+class CascaderError extends Component {
     state = {
         options: [],
         first: '',
@@ -68,6 +68,7 @@ class Cascaders extends Component {
                     v.isLeaf = false
                     v.LeveL = 3
                     v.valueName = v.key
+                    return true
                 }) //如果还有后续可以使用
                 targetOption.children = option;
                 // option = ObjRegister(option)
@@ -108,4 +109,4 @@ class Cascaders extends Component {
     }
 }
 
-export default Cascaders;
+export default CascaderError;
