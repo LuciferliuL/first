@@ -33,7 +33,7 @@ const Searchs = (Search = '') => (
 )
 
 //firstAPI 用来更新每个页面请求API服务启动 keyName 升序降序  asc desc
-const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyName, minTimetaken, maxTimetaken) => (
+const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyName, minTimetaken, maxTimetaken, method) => (
     {
         firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erpiislog&esType=erpiislog_table',
         //获取服务器地址
@@ -52,7 +52,7 @@ const GetPV = (value, controller, name, startDate, endDate, offset, limit, keyNa
         //点击量查询
         GetPVSearch: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
         //点击柱子显示详情  有升降序
-        GetPVparticular: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogDetails?keyName=' + keyName + '&limit=' + limit + '&offset=' + offset + '&startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
+        GetPVparticular: APIconfig.liujun + '/api/lasticSearch/GetPvAggsIisLogDetails?keyName=' + keyName + '&limit=' + limit + '&offset=' + offset + '&startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name + '&methodName=' + method,
         //点击获取延时查询
         GetInterval: APIconfig.liujun + '/api/lasticSearch/GetIntervalPvIisLogs?startDate=' + startDate + '&endDate=' + endDate + '&serverIp=' + value + '&port=' + controller + '&controllerName=' + name,
     }

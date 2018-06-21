@@ -180,6 +180,11 @@ class TimeComponent extends Component {
     //上一个图
     handlePre = () => {
         const CarouselRef = this.refs.CarouselRef
+        const pager = { ...this.state.pagination };
+        pager.current = 1;
+        this.setState({
+            pagination: pager,
+        });
         CarouselRef.prev()
     }
     //获取图标的点击 并发送请求渲染表格

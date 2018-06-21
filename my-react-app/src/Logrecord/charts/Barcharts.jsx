@@ -19,6 +19,7 @@ class Barcharts extends Component {
     constructor(props) {
         super(props)
         const { Data } = this.props
+        console.log(Data)
         if (Data.length >= 1) {
             ObjRegister(Data)
             let name = []
@@ -120,7 +121,7 @@ class Barcharts extends Component {
     onChartReadyCallback = (e)=>{
         // console.log(e)
         e.on('click',(value)=>{//点击的柱子 发送的请求
-            // console.log(value)
+            console.log(value)
             let name = findName(value.name)
             console.log(name)
             this.props.getBarChartsName(name)

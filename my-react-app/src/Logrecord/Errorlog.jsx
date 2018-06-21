@@ -40,20 +40,20 @@ class Errorlog extends Component {
             key: '_id',
             width: 100
         }, {
-            dataIndex: '_source.Origin.ServiceName',
-            title: 'ServiceName',
-            width: 150
+            dataIndex: '_source.Origin.ServerIP',
+            title: 'ServerIP',
+            width: 100
         }, {
             dataIndex: '_source.Origin.CallingApplication',
             title: 'CallingApplication',
-            width: 300
+            width: 250
         }, {
             dataIndex: '_source.Origin.Application',
             title: 'Application',
-            width: 100
+            width: 120
         }, {
-            dataIndex: '_source.Origin.Component',
-            title: "Details",
+            dataIndex: '_source.Origin.Method',
+            title: "Method",
             width: 150
         }, {
             dataIndex: '_source.Customer.UserId',

@@ -24,8 +24,12 @@ const columns = [{
     width: 400
 }, {
     dataIndex: '_source.timetaken',
-    title: 'timetaken(ms)',
-    width: 100
+    title: 'timetaken(s)',
+    width: 100,
+    render:(text) => {
+        let texts = text/1000
+        return (<span>{texts}</span>)
+    }
 }, {
     dataIndex: '_source.urlparam',
     title: "urlparam"
@@ -43,6 +47,7 @@ const API = {
 class PVComponent extends Component {
     constructor(props) {
         super(props)
+        this.count = 0
         this.state = {
             URLData: {
                 startDate: Time(),
@@ -59,7 +64,8 @@ class PVComponent extends Component {
             loading: false,
             chartsTatol: "详细图表",
             pagination: {},
-            data: []
+            data: [],
+            Method:''
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -71,6 +77,7 @@ class PVComponent extends Component {
     }
     //点击查询
     PVchecked = () => {
+        this.count = 0
         if (this.state.URLData.value === null) {
             notification.warning({
                 message: '警告',
@@ -149,6 +156,7 @@ class PVComponent extends Component {
     }
     //下一个图
     handleNext = () => {
+        this.count = 1
         let nextTableValue = this.state.data
         let nextTableURL = this.state.TableURL
         if (nextTableValue.length < 1 && nextTableURL.length === 1) {
@@ -169,69 +177,45 @@ class PVComponent extends Component {
     //上一个图
     handlePre = () => {
         const CarouselRef = this.refs.CarouselRef
+        const pager = { ...this.state.pagination };
+        pager.current = 1;
+        this.setState({
+            pagination: pager,
+        });
         CarouselRef.prev()
     }
     //获取图标的点击 并发送请求渲染表格
     getBarChartsName = (v) => {
-        // let TableURL = this.state.TableURL//数组长度决定了选择了几个
-        // if (TableURL.length > 1) {
-        //     TableURL.pop()
-        // }
-        // let BarChartsName = this.state.Data[v].key
-        // BarChartsName = BarChartsName.replace(/x/, '')
-        // TableURL.push(BarChartsName)
-        //判断是不是今天
-        let date = this.state.URLData
-        let startDate = this.state.Start
-        let endDate = this.state.End
-        if (startDate === endDate) {
-            //是今天  就是小时
-            if (v > 10) {
-                startDate = startDate + 'T' + (v - 1) + ':00:00'
-                    endDate = endDate + 'T' + v + ':00:00'
-            }
-            else if (v = 10) {
-                startDate = startDate + 'T' + '0' + (v - 1) + ':00:00'
-                    endDate = endDate + 'T' + v + ':00:00'
-            }
-            else if (v < 10) {
-                startDate = startDate + 'T' + '0' + (v - 1) + ':00:00'
-                    endDate = endDate + 'T' + '0' + v + ':00:00'
-            }
-        } else {
-            //不是今天 按日期算
-            let timeV = v - 1//1就是startDate 所以减一
-            //分解起始日期
-            let timearr = startDate.split('/')
-            let Numtime = Number(timearr[2]) + timeV
-            Numtime > 9 ?
-                timearr[2] = String(Numtime) :
-                timearr[2] = '0' + String(Numtime)
-            startDate = `${timearr[0]}/${timearr[1]}/${timearr[2]}`
-            endDate = `${timearr[0]}/${timearr[1]}/${timearr[2]}`
+        console.log(v)
+        let TableURL = this.state.TableURL//数组长度决定了选择了几个
+        if (this.count === 1) {
+            TableURL.pop()
         }
-        // console.log(date)
+        TableURL.push(v)
+        console.log(TableURL)
         this.setState({
             URLData: {
-                value: date.value,
-                controller: date.controller,
-                name: date.name,
-                startDate: startDate,
-                endDate: endDate,
-                KeyName: date.KeyName
+                value: TableURL[0],
+                controller: TableURL[1],
+                name: TableURL[2],
+                startDate: this.state.URLData.startDate,
+                endDate: this.state.URLData.endDate,
+                KeyName: this.state.URLData.KeyName
             },
-            TableURL: date
+            Method:TableURL[3],
+            TableURL: TableURL
         })
         if (this.state.URLData.value !== ' ') {
-            this.fetch({ offset: 1, limit: 100 }, this.state.URLData);
+            this.fetch({ offset: 1, limit: 100 }, this.state.URLData,this.state.Method);
         }
+        this.handleNext()
     }
     //渲染表格
-    fetch = (params = {}, URLData) => {
+    fetch = (params = {}, URLData,Method = '') => {
         // console.log(URLData)
         // console.log('params:', params);
         this.setState({ loading: true });
-        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName).GetPVparticular, (data) => {
+        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName, '','', Method).GetPVparticular, (data) => {
             let paramdata = JSON.parse(data.Result)
             console.log(paramdata)
             let total = paramdata.hits.total//数据量
