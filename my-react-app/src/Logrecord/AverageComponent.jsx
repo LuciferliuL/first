@@ -100,7 +100,7 @@ class AverageComponent extends Component {
                         let Result = JSON.parse(res.Result)
                         // console.log(Result)
                         let AvgValue = Result.aggregations.avg_timetaken.value
-                        console.log(AvgValue)
+                        // console.log(AvgValue)
                         let Avg = [extMessage, AvgValue]
                         //返回获取得值
                         resolve(Avg)
@@ -128,7 +128,7 @@ class AverageComponent extends Component {
                 })
             });
             Promise.all([GetAverage, GetAverageChart]).then((result) => {
-                console.log(result)
+                // console.log(result)
                 this.setState({
                     Data: result[1],
                     SQLmessage: result[0][0],
@@ -140,7 +140,7 @@ class AverageComponent extends Component {
             }).catch((error) => {
                 notification.open({
                     message: '提示信息',
-                    description: '请求超时',
+                    description: '请求超时' + error,
                 })
                 this.setState({
                     loading: false
@@ -265,18 +265,11 @@ class AverageComponent extends Component {
 
     render() {
         const { Data, URLData, pagination, loading, data } = this.state
-        const charts = []
         const table = []
         // console.log(Data)
         if (Data.length === 0) {
-            charts.push(<p key='charts1'>暂时没有数据，请选择另一个节点</p>)
             table.push(<p key='table1'>暂时没有数据，请选择另一个节点</p>)
         } else {
-            charts.push(<Piecharts
-                Data={Data}
-                key='charts3'
-                getBarChartsName={this.getBarChartsName}
-            ></Piecharts>)
             table.push(<TableServer
                 columns={columns}
                 key='table2'
@@ -342,9 +335,13 @@ class AverageComponent extends Component {
                                         </Select>
                                     </div>
                                 }>
-                                {charts}
                                 <p>平均延迟：{this.state.AvgPercent} 秒</p>
                                 <Progress percent={(100 - this.state.AvgPercent)} />
+                                <Piecharts
+                                    Data={Data}
+                                    key='charts3'
+                                    getBarChartsName={this.getBarChartsName}
+                                ></Piecharts>
                             </Card>
                         </Col>
                         <Col span={14}>

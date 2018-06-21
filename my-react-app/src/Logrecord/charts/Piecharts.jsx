@@ -30,6 +30,15 @@ class Piecharts extends Component {
             Data: this.PieObj,
         }
     }
+    componentWillReceiveProps(pre) {
+        const Data = pre.Data
+        Data.forEach((element, index) => {
+            this.PieObj[index].value = element
+        });
+        this.setState({
+            Data: this.PieObj
+        })
+    }
     componentWillUnmount() {
         this.setState({})
     }
@@ -57,8 +66,8 @@ class Piecharts extends Component {
                 data: ['0s - 1s', '1s - 5s', '5s - 10s', '> 10s']
             },
             series: [
-                {   
-                    name:'延迟统计',
+                {
+                    name: '延迟统计',
                     type: 'pie',
                     radius: '38%',
                     center: ['50%', '50%'],

@@ -43,6 +43,7 @@ const API = {
 class TimeComponent extends Component {
     constructor(props) {
         super(props)
+        this.count = 0
         this.state = {
             URLData: {
                 startDate: Time(),
@@ -61,7 +62,10 @@ class TimeComponent extends Component {
             pagination: {},
             data: [],
             Start: Time(),
-            End: Time()
+            End: Time(),
+            tableTatol: '详细表格',
+            TimesStart:Time(),
+            TimesEnd:Time()
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -111,7 +115,7 @@ class TimeComponent extends Component {
                         SQLmessage: res.ExtMessage,
                         loading: false,
                         disableds: false,
-                        chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
+                        chartsTatol: `详细图表:${this.state.TimesStart}---${this.state.TimesEnd}`
                     })
                 }
             })
@@ -145,7 +149,9 @@ class TimeComponent extends Component {
                 KeyName: this.state.URLData.KeyName
             },
             Start: DateStrings[0],
-            End: DateStrings[1]
+            End: DateStrings[1],
+            TimesStart:DateStrings[0],
+            TimesEnd:DateStrings[1]
         })
     }
     //弹出的sql语句
@@ -173,12 +179,14 @@ class TimeComponent extends Component {
                 description: '请重新点击一个柱状，上一个没有数据',
             })
         } else {
+            this.count = 1
             const CarouselRef = this.refs.CarouselRef
             CarouselRef.next()
         }
     }
     //上一个图
     handlePre = () => {
+        this.count = 0
         const CarouselRef = this.refs.CarouselRef
         const pager = { ...this.state.pagination };
         pager.current = 1;
@@ -229,7 +237,7 @@ class TimeComponent extends Component {
                 endDate: endDate,
                 KeyName: date.KeyName
             },
-            TableURL: date
+            // TableURL: date
         })
         if (this.state.URLData.value !== ' ') {
             this.fetch({ offset: 1, limit: 100 }, this.state.URLData);
@@ -261,7 +269,12 @@ class TimeComponent extends Component {
                     loading: false,
                     data: paramdata.hits.hits,
                     pagination,
-                }, () => { this.handleNext() });
+                    SQLmessage: data.ExtMessage,
+                    tableTatol: this.state.TableURL[this.state.TableURL.length - 1] + '详细表格数据' + URLData.startDate + '至' + URLData.endDate
+                }, () => {
+                    //count为1  进入表格 为0 进入图表  所以为0跳转
+                    if (this.count === 0) { this.handleNext() }
+                });
             }
         })
     }
@@ -307,7 +320,7 @@ class TimeComponent extends Component {
         }
     }
     render() {
-        const { Data, URLData, pagination, loading, data } = this.state
+        const { Data, URLData, pagination, loading, data, tableTatol } = this.state
         const charts = []
         const table = []
         // console.log(Data)
@@ -365,8 +378,8 @@ class TimeComponent extends Component {
                             >
                                 {charts}
                             </Card>
-                            <Card title="详细表格" className='MarginTop'
-                                extra={<Button onClick={this.handlePre}>切换详细图标</Button>}
+                            <Card title={tableTatol} className='MarginTop'
+                                extra={<Button onClick={this.handlePre}>切换详细图表</Button>}
                             >
                                 {table}
                             </Card>

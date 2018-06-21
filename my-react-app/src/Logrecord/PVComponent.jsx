@@ -65,7 +65,8 @@ class PVComponent extends Component {
             chartsTatol: "详细图表",
             pagination: {},
             data: [],
-            Method: ''
+            Method: '',
+            tableTatol:'详细表格'
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -224,7 +225,7 @@ class PVComponent extends Component {
                     description: '请重新选择排序方式查看数据。',
                 })
                 this.setState({
-                    loading:false
+                    loading: false
                 })
             } else {
                 let total = paramdata.hits.total//数据量
@@ -235,7 +236,12 @@ class PVComponent extends Component {
                     loading: false,
                     data: paramdata.hits.hits,
                     pagination,
-                }, () => { this.handleNext() });
+                    SQLmessage:data.ExtMessage,
+                    tableTatol:this.state.TableURL[this.state.TableURL.length - 1] + '详细表格'
+                }, () => {
+                    //count为1  进入表格 为0 进入图表  所以为0跳转
+                    if (this.count === 0) { this.handleNext() }
+                });
             }
         })
     }
@@ -281,7 +287,7 @@ class PVComponent extends Component {
         }
     }
     render() {
-        const { Data, URLData, pagination, loading, data } = this.state
+        const { Data, URLData, pagination, loading, data, tableTatol } = this.state
         const charts = []
         const table = []
         // console.log(Data)
@@ -339,8 +345,8 @@ class PVComponent extends Component {
                             >
                                 {charts}
                             </Card>
-                            <Card title="详细表格" className='MarginTop'
-                                extra={<Button onClick={this.handlePre}>切换详细图标</Button>}
+                            <Card title={tableTatol} className='MarginTop'
+                                extra={<Button onClick={this.handlePre}>切换详细图表</Button>}
                             >
                                 {table}
                             </Card>
