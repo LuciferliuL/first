@@ -148,7 +148,7 @@ class Piecharts extends Component {
                     option={this.getOption()}//配置
                     notMerge={true}
                     lazyUpdate={true}
-                    style={{ height: '640px', width: '100%' }}//样式
+                    style={{ height: '635px', width: '100%' }}//样式
                     // theme={theme}
                     onChartReady={this.onChartReadyCallback}
                     // onEvents={this.EventsDict}//方法

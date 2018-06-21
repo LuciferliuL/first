@@ -26,8 +26,8 @@ const columns = [{
     dataIndex: '_source.timetaken',
     title: 'timetaken(s)',
     width: 100,
-    render:(text) => {
-        let texts = text/1000
+    render: (text) => {
+        let texts = text / 1000
         return (<span>{texts}</span>)
     }
 }, {
@@ -39,10 +39,10 @@ const columns = [{
     width: 80
 }]
 const API = {
-    ID:'Time',
-    first:'GetOrgList',
-    secend:'GetOrgListServer',
-    third:'GetControllerList'
+    ID: 'Time',
+    first: 'GetOrgList',
+    secend: 'GetOrgListServer',
+    third: 'GetControllerList'
 }
 class PVComponent extends Component {
     constructor(props) {
@@ -65,7 +65,7 @@ class PVComponent extends Component {
             chartsTatol: "详细图表",
             pagination: {},
             data: [],
-            Method:''
+            Method: ''
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -202,31 +202,41 @@ class PVComponent extends Component {
                 endDate: this.state.URLData.endDate,
                 KeyName: this.state.URLData.KeyName
             },
-            Method:TableURL[3],
+            Method: TableURL[3],
             TableURL: TableURL
         })
         if (this.state.URLData.value !== ' ') {
-            this.fetch({ offset: 1, limit: 100 }, this.state.URLData,this.state.Method);
+            this.fetch({ offset: 1, limit: 100 }, this.state.URLData, this.state.Method);
         }
-        this.handleNext()
+
     }
     //渲染表格
-    fetch = (params = {}, URLData,Method = '') => {
+    fetch = (params = {}, URLData, Method = '') => {
         // console.log(URLData)
         // console.log('params:', params);
         this.setState({ loading: true });
-        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName, '','', Method).GetPVparticular, (data) => {
+        getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName, '', '', Method).GetPVparticular, (data) => {
             let paramdata = JSON.parse(data.Result)
             console.log(paramdata)
-            let total = paramdata.hits.total//数据量
-            const pagination = { ...this.state.pagination };
-            pagination.total = total;
-            pagination.pageSize = 100
-            this.setState({
-                loading: false,
-                data: paramdata.hits.hits,
-                pagination,
-            });
+            if (paramdata === null) {
+                notification.warning({
+                    message: '警告',
+                    description: '请重新选择排序方式查看数据。',
+                })
+                this.setState({
+                    loading:false
+                })
+            } else {
+                let total = paramdata.hits.total//数据量
+                const pagination = { ...this.state.pagination };
+                pagination.total = total;
+                pagination.pageSize = 100
+                this.setState({
+                    loading: false,
+                    data: paramdata.hits.hits,
+                    pagination,
+                }, () => { this.handleNext() });
+            }
         })
     }
     //分页的回调

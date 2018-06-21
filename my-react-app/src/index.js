@@ -8,7 +8,6 @@ import Login from './Component/Login/Login';
 import Home from './Component/Home/Home';
 import './Math/Config'
 
-
 ReactDOM.render(
     <BrowserRouter basename='/'>
         <Switch>    

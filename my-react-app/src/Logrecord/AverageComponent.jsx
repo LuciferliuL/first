@@ -24,8 +24,14 @@ const columns = [{
     width: 400
 }, {
     dataIndex: '_source.timetaken',
-    title: 'timetaken(ms)',
-    width: 100
+    title: 'timetaken/s',
+    width: 100,
+    render: (text) => {
+        let s = text / 1000
+        return (
+            <span>{s}</span>
+        )
+    }
 }, {
     dataIndex: '_source.urlparam',
     title: "urlparam"
@@ -60,7 +66,8 @@ class AverageComponent extends Component {
             chartsTatol: "详细图表",
             pagination: {},
             data: [],
-            AvgPercent: 0
+            AvgPercent: 0,
+            sTime: []
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -113,6 +120,7 @@ class AverageComponent extends Component {
                             let a = JSON.parse(v)
                             a = a.hits.total
                             AvgArr.push(a)
+                            return true
                         })
                         // console.log(AvgArr)
                         resolve(AvgArr)
@@ -124,7 +132,7 @@ class AverageComponent extends Component {
                 this.setState({
                     Data: result[1],
                     SQLmessage: result[0][0],
-                    AvgPercent: (result[0][1]/1000).toFixed(2),
+                    AvgPercent: (result[0][1] / 1000).toFixed(2),
                     loading: false,
                     disableds: false,
                     chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
@@ -204,18 +212,22 @@ class AverageComponent extends Component {
     }
     //获取图标的点击 并发送请求渲染表格
     getBarChartsName = (v) => {
-        console.log(v)
         let sTime = [v.data.max, v.data.min]
-        console.log(sTime)
-        //判断是不是今天
-        if (this.state.URLData.value !== ' ') {
-            this.fetch({ offset: 1, limit: 100 }, this.state.URLData, sTime);
-        }
+        this.setState({
+            sTime: sTime
+        }, () => {
+            if (this.state.URLData.value !== ' ') {
+                this.fetch({ offset: 1, limit: 100 }, this.state.URLData, this.state.sTime);
+            }
+        })
+        // console.log(sTime)
+        //判断是不是今天  
     }
     //渲染表格
     fetch = (params = {}, URLData, sTime) => {
         // console.log(URLData)
         // console.log('params:', params);
+        console.log(sTime)
         this.setState({ loading: true });
         getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName, sTime[1], sTime[0]).GetPieTable, (data) => {
             // console.log(data)
@@ -248,7 +260,7 @@ class AverageComponent extends Component {
             sortField: sorter.field,
             sortOrder: sorter.order,
             ...filters,
-        }, this.state.URLData);
+        }, this.state.URLData, this.state.sTime);
     }
 
     render() {
@@ -332,7 +344,7 @@ class AverageComponent extends Component {
                                 }>
                                 {charts}
                                 <p>平均延迟：{this.state.AvgPercent} 秒</p>
-                                <Progress  percent={(100 - this.state.AvgPercent)}  />
+                                <Progress percent={(100 - this.state.AvgPercent)} />
                             </Card>
                         </Col>
                         <Col span={14}>

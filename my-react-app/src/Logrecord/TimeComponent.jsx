@@ -35,10 +35,10 @@ const columns = [{
     width: 80
 }]
 const API = {
-    ID:'Time',
-    first:'GetOrgList',
-    secend:'GetOrgListServer',
-    third:'GetControllerList'
+    ID: 'Time',
+    first: 'GetOrgList',
+    secend: 'GetOrgListServer',
+    third: 'GetControllerList'
 }
 class TimeComponent extends Component {
     constructor(props) {
@@ -197,15 +197,15 @@ class TimeComponent extends Component {
             //是今天  就是小时
             if (v > 10) {
                 startDate = String(startDate) + 'T' + (v - 1) + ':00:00'
-                    endDate = String(endDate) + 'T' + v + ':00:00'
+                endDate = String(endDate) + 'T' + v + ':00:00'
             }
             else if (v = 10) {
                 startDate = String(startDate) + 'T' + '0' + (v - 1) + ':00:00'
-                    endDate = String(endDate) + 'T' + v + ':00:00'
+                endDate = String(endDate) + 'T' + v + ':00:00'
             }
             else if (v < 10) {
                 startDate = String(startDate) + 'T' + '0' + (v - 1) + ':00:00'
-                    endDate = String(endDate) + 'T' + '0' + v + ':00:00'
+                endDate = String(endDate) + 'T' + '0' + v + ':00:00'
             }
         } else {
             //不是今天 按日期算
@@ -234,6 +234,7 @@ class TimeComponent extends Component {
         if (this.state.URLData.value !== ' ') {
             this.fetch({ offset: 1, limit: 100 }, this.state.URLData);
         }
+
     }
     //渲染表格
     fetch = (params = {}, URLData) => {
@@ -243,15 +244,25 @@ class TimeComponent extends Component {
         getTimeFetch(GetPV(URLData.value, URLData.controller, URLData.name, URLData.startDate, URLData.endDate, params.offset, params.limit, URLData.KeyName).GetPVparticular, (data) => {
             let paramdata = JSON.parse(data.Result)
             console.log(paramdata)
-            let total = paramdata.hits.total//数据量
-            const pagination = { ...this.state.pagination };
-            pagination.total = total;
-            pagination.pageSize = 100
-            this.setState({
-                loading: false,
-                data: paramdata.hits.hits,
-                pagination,
-            });
+            if (paramdata === null) {
+                notification.warning({
+                    message: '警告',
+                    description: '请重新选择排序方式查看数据。',
+                })
+                this.setState({
+                    loading: false
+                })
+            } else {
+                let total = paramdata.hits.total//数据量
+                const pagination = { ...this.state.pagination };
+                pagination.total = total;
+                pagination.pageSize = 100
+                this.setState({
+                    loading: false,
+                    data: paramdata.hits.hits,
+                    pagination,
+                }, () => { this.handleNext() });
+            }
         })
     }
     //分页的回调
@@ -271,7 +282,7 @@ class TimeComponent extends Component {
         }, this.state.URLData);
     }
     desc = (value) => {
-        if (value === '1') {        
+        if (value === '1') {
             this.setState({
                 URLData: {
                     value: this.state.URLData.value,
@@ -282,7 +293,7 @@ class TimeComponent extends Component {
                     KeyName: 'asc'
                 }
             })
-        } else { 
+        } else {
             this.setState({
                 URLData: {
                     value: this.state.URLData.value,
