@@ -17,7 +17,16 @@ const columns = [{
 }, {
     dataIndex: '_source.iislogdate',
     title: 'iislogdate',
-    width: 200
+    width: 200,
+    render: (text) => {
+        text=text.substring(0,text.length-1)
+        let time = new Date(text)//自动加8小时
+        time.setTime(time.setHours(time.getHours() + 16))
+        let t = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}T${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+        return (
+            <span>{t}</span>
+        )
+    }
 }, {
     dataIndex: '_source.request',
     title: 'request',
@@ -25,10 +34,10 @@ const columns = [{
 }, {
     dataIndex: '_source.timetaken',
     title: 'timetaken(s)',
-    width: 100,
+    width: 120,
     render: (text) => {
         let texts = text / 1000
-        return (<span>{texts}</span>)
+        return (<span style={{ color: 'red' }}>{texts}</span>)
     }
 }, {
     dataIndex: '_source.urlparam',
@@ -47,7 +56,8 @@ const API = {
 class PVComponent extends Component {
     constructor(props) {
         super(props)
-        this.count = 0
+        this.count = 0//控制是否跳转到table
+        this.btn = 0//控制查询返回图标 0在图表面 1在table面
         this.state = {
             URLData: {
                 startDate: Time(),
@@ -66,7 +76,7 @@ class PVComponent extends Component {
             pagination: {},
             data: [],
             Method: '',
-            tableTatol:'详细表格'
+            tableTatol: '详细表格'
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -79,42 +89,88 @@ class PVComponent extends Component {
     //点击查询
     PVchecked = () => {
         this.count = 0
-        if (this.state.URLData.value === null) {
-            notification.warning({
-                message: '警告',
-                description: '请选择一个服务器',
-            })
-        } else {
-            this.setState({
-                loading: true
-            })
-            // console.log(this.state.URLData)
-            let URL = this.state.URLData
-            getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetPVSearch, (res) => {
-                // console.log(res)
-                if (res === 'timeout') {
-                    notification.open({
-                        message: '提示信息',
-                        description: '请求超时',
-                    })
-                    this.setState({
-                        loading: false
-                    })
-                } else {
-                    // let extMessage = JSON.parse(res.ExtMessage)
-                    let Result = JSON.parse(res.Result)
-                    console.log(Result)
-                    // console.log(extMessage)
-                    this.setState({
-                        Data: Result.aggregations.pv_result.buckets,
-                        SQLmessage: res.ExtMessage,
-                        loading: false,
-                        disableds: false,
-                        chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
-                    })
-                }
-            })
+        if (this.btn === 0) {
+            if (this.state.URLData.value === null) {
+                notification.warning({
+                    message: '警告',
+                    description: '请选择一个服务器',
+                })
+            } else {
+                this.setState({
+                    loading: true
+                })
+                // console.log(this.state.URLData)
+                let URL = this.state.URLData
+                getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetPVSearch, (res) => {
+                    // console.log(res)
+                    if (res === 'timeout') {
+                        notification.open({
+                            message: '提示信息',
+                            description: '请求超时',
+                        })
+                        this.setState({
+                            loading: false
+                        })
+                    } else {
+                        // let extMessage = JSON.parse(res.ExtMessage)
+                        let Result = JSON.parse(res.Result)
+                        console.log(Result)
+                        // console.log(extMessage)
+                        this.setState({
+                            Data: Result.aggregations.pv_result.buckets,
+                            SQLmessage: res.ExtMessage,
+                            loading: false,
+                            disableds: false,
+                            chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
+                        })
+                    }
+                })
+            }
+        } else if (this.btn === 1) {
+            const CarouselRef = this.refs.CarouselRef
+            this.count = 0
+            CarouselRef.prev()
+            const pager = { ...this.state.pagination };
+            pager.current = 1;
+            if (this.state.URLData.value === null) {
+                notification.warning({
+                    message: '警告',
+                    description: '请选择一个服务器',
+                })
+            } else {
+                this.setState({
+                    loading: true,
+                    pagination: pager
+                })
+                // console.log(this.state.URLData)
+                let URL = this.state.URLData
+                getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetPVSearch, (res) => {
+                    // console.log(res)
+                    if (res === 'timeout') {
+                        notification.open({
+                            message: '提示信息',
+                            description: '请求超时',
+                        })
+                        this.setState({
+                            loading: false
+                        })
+                    } else {
+                        // let extMessage = JSON.parse(res.ExtMessage)
+                        let Result = JSON.parse(res.Result)
+                        console.log(Result)
+                        // console.log(extMessage)
+                        this.setState({
+                            Data: Result.aggregations.pv_result.buckets,
+                            SQLmessage: res.ExtMessage,
+                            loading: false,
+                            disableds: false,
+                            chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
+                        })
+                    }
+                })
+            }
         }
+
     }
     //获取选择框的数组
     handleChangeState = (value) => {
@@ -153,24 +209,20 @@ class PVComponent extends Component {
         })
     }
     onChange = (a, b, c) => {//carousel改变触发
-        // console.log(a, b, c);
+        console.log(a, b, c);
+        this.btn = a
     }
     //下一个图
     handleNext = () => {
-        this.count = 1
         let nextTableValue = this.state.data
         let nextTableURL = this.state.TableURL
-        if (nextTableValue.length < 1 && nextTableURL.length === 1) {
+        if (nextTableValue.length < 1) {
             notification.warning({
                 message: '警告',
                 description: '请点击一个柱状，以确保显示其具体内容',
             })
-        } else if (nextTableValue.length < 1 && (nextTableURL.length === 3 || nextTableURL.length === 2)) {
-            notification.warning({
-                message: '警告',
-                description: '请重新点击一个柱状，上一个没有数据',
-            })
         } else {
+            this.count = 1
             const CarouselRef = this.refs.CarouselRef
             CarouselRef.next()
         }
@@ -180,20 +232,20 @@ class PVComponent extends Component {
         const CarouselRef = this.refs.CarouselRef
         const pager = { ...this.state.pagination };
         pager.current = 1;
+        let TableURL = this.state.TableURL
+        TableURL.pop()
         this.setState({
             pagination: pager,
+            TableURL: TableURL
         });
+        this.count = 0
         CarouselRef.prev()
     }
     //获取图标的点击 并发送请求渲染表格
     getBarChartsName = (v) => {
         console.log(v)
         let TableURL = this.state.TableURL//数组长度决定了选择了几个
-        if (this.count === 1) {
-            TableURL.pop()
-        }
         TableURL.push(v)
-        console.log(TableURL)
         this.setState({
             URLData: {
                 value: TableURL[0],
@@ -236,8 +288,8 @@ class PVComponent extends Component {
                     loading: false,
                     data: paramdata.hits.hits,
                     pagination,
-                    SQLmessage:data.ExtMessage,
-                    tableTatol:this.state.TableURL[this.state.TableURL.length - 1] + '详细表格'
+                    SQLmessage: data.ExtMessage,
+                    tableTatol: this.state.TableURL[this.state.TableURL.length - 1] + '详细表格'
                 }, () => {
                     //count为1  进入表格 为0 进入图表  所以为0跳转
                     if (this.count === 0) { this.handleNext() }

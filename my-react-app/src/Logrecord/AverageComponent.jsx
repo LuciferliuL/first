@@ -17,7 +17,16 @@ const columns = [{
 }, {
     dataIndex: '_source.iislogdate',
     title: 'iislogdate',
-    width: 200
+    width: 200,
+    render: (text) => {
+        text = text.substring(0, text.length - 1)
+        let time = new Date(text)//自动加8小时
+        time.setTime(time.setHours(time.getHours() + 16))
+        let t = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}T${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+        return (
+            <span>{t}</span>
+        )
+    }
 }, {
     dataIndex: '_source.request',
     title: 'request',

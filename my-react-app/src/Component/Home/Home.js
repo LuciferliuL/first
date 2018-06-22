@@ -8,6 +8,7 @@ import PVComponent from '../../Logrecord/PVComponent';
 import TimeComponent from '../../Logrecord/TimeComponent'
 import Errorlog from '../../Logrecord/Errorlog'
 import AcerageComponent from "../../Logrecord/AverageComponent.jsx";
+import Bill from '../../Component/Bill/Bill'
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -44,13 +45,14 @@ class Home extends React.Component {
               <Menu.Item key="3"><Link to='/Home/Action'>菜单管理</Link></Menu.Item>
               <Menu.Item key="4"><Link to='/Home/Windows'>窗体行为编辑</Link></Menu.Item>
               <Menu.Item key="5"><Link to='/Home/Simple'>简单通用查询</Link></Menu.Item>
+              <Menu.Item key="6"><Link to='/Home/Bill'>单据定义</Link></Menu.Item>
             </SubMenu>
             <SubMenu
               key="sub2"
               title={<span><Icon type="team" /><span>发布与构建</span></span>}
             >
-              <Menu.Item key="6">Team 1</Menu.Item>
-              <Menu.Item key="7">Team 2</Menu.Item>
+              <Menu.Item key="111">Team 1</Menu.Item>
+              <Menu.Item key="71">Team 2</Menu.Item>
             </SubMenu>
             <SubMenu
               key="sub3"
@@ -77,6 +79,7 @@ class Home extends React.Component {
               <Route path='/Home/TimeComponent' component={TimeComponent}></Route>
               <Route path="/Home/Errorlog" component={Errorlog}></Route>
               <Route path='/Home/AcerageComponent' component={AcerageComponent}></Route>
+              <Route path='/Home/Bill' component={Bill}></Route>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

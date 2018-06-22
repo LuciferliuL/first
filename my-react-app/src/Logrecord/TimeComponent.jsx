@@ -17,15 +17,30 @@ const columns = [{
 }, {
     dataIndex: '_source.iislogdate',
     title: 'iislogdate',
-    width: 200
+    width: 200,
+    render: (text) => {
+        text=text.substring(0,text.length-1)
+        let time = new Date(text)//自动加8小时
+        time.setTime(time.setHours(time.getHours() + 16))
+        let t = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}T${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+        return (
+            <span>{t}</span>
+        )
+    }
 }, {
     dataIndex: '_source.request',
     title: 'request',
     width: 400
 }, {
     dataIndex: '_source.timetaken',
-    title: 'timetaken(ms)',
-    width: 100
+    title: 'timetaken/s',
+    width: 120,
+    render: (text) => {
+        let s = text / 1000
+        return (
+            <span style={{ color: 'red' }}>{s}</span>
+        )
+    }
 }, {
     dataIndex: '_source.urlparam',
     title: "urlparam"
@@ -44,6 +59,7 @@ class TimeComponent extends Component {
     constructor(props) {
         super(props)
         this.count = 0
+        this.btn = 0
         this.state = {
             URLData: {
                 startDate: Time(),
@@ -64,8 +80,8 @@ class TimeComponent extends Component {
             Start: Time(),
             End: Time(),
             tableTatol: '详细表格',
-            TimesStart:Time(),
-            TimesEnd:Time()
+            TimesStart: Time(),
+            TimesEnd: Time()
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -77,49 +93,101 @@ class TimeComponent extends Component {
     }
     //点击查询
     PVchecked = () => {
-        if (this.state.URLData.value === null) {
-            notification.warning({
-                message: '警告',
-                description: '请求选择一个服务器',
-            })
-        } else {
-            this.setState({
-                loading: true
-            })
-            // console.log(this.state.URLData)
-            let URL = this.state.URLData
-            getTimeFetch(GetPV(URL.value, URL.controller, URL.name, URL.startDate, URL.endDate).GetInterval, (res) => {
-                // console.log(res)
-                if (res === 'timeout') {
-                    notification.open({
-                        message: '提示信息',
-                        description: '请求超时',
-                    })
-                    this.setState({
-                        loading: false
-                    })
-                } else {
-                    // let extMessage = JSON.parse(res.ExtMessage)
-                    let Result = JSON.parse(res.Result)
+        if (this.btn === 0) {
+            if (this.state.URLData.value === null) {
+                notification.warning({
+                    message: '警告',
+                    description: '请求选择一个服务器',
+                })
+            } else {
+                this.setState({
+                    loading: true
+                })
+                // console.log(this.state.URLData)
+                let URL = this.state.URLData
+                let start = this.state.TimesStart
+                let end = this.state.TimesEnd
+                getTimeFetch(GetPV(URL.value, URL.controller, URL.name, start, end).GetInterval, (res) => {
+                    // console.log(res)
+                    if (res === 'timeout') {
+                        notification.open({
+                            message: '提示信息',
+                            description: '请求超时',
+                        })
+                        this.setState({
+                            loading: false
+                        })
+                    } else {
+                        // let extMessage = JSON.parse(res.ExtMessage)
+                        let Result = JSON.parse(res.Result)
 
-                    Result.map((v, index) => {
-                        Result[index] = JSON.parse(v)
-                        return true
-                    })
-                    // console.log(Result)
-                    let buckets = filtArr(Result)
-                    // console.log(buckets)
-                    // console.log(extMessage)
-                    this.setState({
-                        Data: buckets,
-                        SQLmessage: res.ExtMessage,
-                        loading: false,
-                        disableds: false,
-                        chartsTatol: `详细图表:${this.state.TimesStart}---${this.state.TimesEnd}`
-                    })
-                }
-            })
+                        Result.map((v, index) => {
+                            Result[index] = JSON.parse(v)
+                            return true
+                        })
+                        // console.log(Result)
+                        let buckets = filtArr(Result)
+                        // console.log(buckets)
+                        // console.log(extMessage)
+                        this.setState({
+                            Data: buckets,
+                            SQLmessage: res.ExtMessage,
+                            loading: false,
+                            disableds: false,
+                            chartsTatol: `详细图表:${this.state.TimesStart}---${this.state.TimesEnd}`
+                        })
+                    }
+                })
+            }
+        } else if (this.btn === 1) {
+            this.handlePre()
+            if (this.state.URLData.value === null) {
+                notification.warning({
+                    message: '警告',
+                    description: '请求选择一个服务器',
+                })
+            } else {
+                this.setState({
+                    loading: true
+                })
+                // console.log(this.state.URLData)
+                let URL = this.state.URLData
+                let start = this.state.TimesStart
+                let end = this.state.TimesEnd
+                getTimeFetch(GetPV(URL.value, URL.controller, URL.name, start, end).GetInterval, (res) => {
+                    // console.log(res)
+                    if (res === 'timeout') {
+                        notification.open({
+                            message: '提示信息',
+                            description: '请求超时',
+                        })
+                        this.setState({
+                            loading: false
+                        })
+                    } else {
+                        // let extMessage = JSON.parse(res.ExtMessage)
+                        let Result = JSON.parse(res.Result)
+
+                        Result.map((v, index) => {
+                            Result[index] = JSON.parse(v)
+                            return true
+                        })
+                        // console.log(Result)
+                        let buckets = filtArr(Result)
+                        // console.log(buckets)
+                        // console.log(extMessage)
+                        this.setState({
+                            Data: buckets,
+                            SQLmessage: res.ExtMessage,
+                            loading: false,
+                            disableds: false,
+                            chartsTatol: `详细图表:${this.state.TimesStart}---${this.state.TimesEnd}`
+                        })
+                    }
+                })
+            }
         }
+
     }
     //获取选择框的数组
     handleChangeState = (value) => {
@@ -150,8 +218,8 @@ class TimeComponent extends Component {
             },
             Start: DateStrings[0],
             End: DateStrings[1],
-            TimesStart:DateStrings[0],
-            TimesEnd:DateStrings[1]
+            TimesStart: DateStrings[0],
+            TimesEnd: DateStrings[1]
         })
     }
     //弹出的sql语句
@@ -163,6 +231,7 @@ class TimeComponent extends Component {
     }
     onChange = (a, b, c) => {//carousel改变触发
         console.log(a, b, c);
+        this.btn = a
     }
     //下一个图
     handleNext = () => {
@@ -204,17 +273,21 @@ class TimeComponent extends Component {
         if (startDate === endDate) {
             //是今天  就是小时
             if (v > 10) {
+                console.log(1)
                 startDate = String(startDate) + 'T' + (v - 1) + ':00:00'
                 endDate = String(endDate) + 'T' + v + ':00:00'
             }
-            else if (v = 10) {
+            else if (v === 10) {
+                console.log(2)
                 startDate = String(startDate) + 'T' + '0' + (v - 1) + ':00:00'
                 endDate = String(endDate) + 'T' + v + ':00:00'
             }
             else if (v < 10) {
+                console.log(3)
                 startDate = String(startDate) + 'T' + '0' + (v - 1) + ':00:00'
                 endDate = String(endDate) + 'T' + '0' + v + ':00:00'
             }
+            console.log(startDate + '--' + endDate)
         } else {
             //不是今天 按日期算
             let timeV = v - 1//1就是startDate 所以减一

@@ -19,7 +19,7 @@ class Barcharts extends Component {
     constructor(props) {
         super(props)
         const { Data } = this.props
-        console.log(Data)
+        // console.log(Data)
         if (Data.length >= 1) {
             ObjRegister(Data)
             let name = []
@@ -103,6 +103,7 @@ class Barcharts extends Component {
                     itemStyle: {
                         normal: {
                             color: function (params) {
+                                // console.log(params)
                                 var colorList = ['#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
                                     '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
                                     '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
@@ -121,9 +122,9 @@ class Barcharts extends Component {
     onChartReadyCallback = (e)=>{
         // console.log(e)
         e.on('click',(value)=>{//点击的柱子 发送的请求
-            console.log(value)
+            // console.log(value)
             let name = findName(value.name)
-            console.log(name)
+            // console.log(name)
             this.props.getBarChartsName(name)
         })
     }
