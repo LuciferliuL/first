@@ -7,6 +7,7 @@ import './PV.css'
 import { GetPV } from '../Math/APIconfig';
 import Barcharts from './charts/Barcharts'
 import TableServer from './TableServer/TableServer'
+import downloadExl from '../Math/xlsx'
 const ButtonGroup = Button.Group
 const { Option } = Select
 const columns = [{
@@ -19,7 +20,7 @@ const columns = [{
     title: 'iislogdate',
     width: 200,
     render: (text) => {
-        text=text.substring(0,text.length-1)
+        text = text.substring(0, text.length - 1)
         let time = new Date(text)//自动加8小时
         time.setTime(time.setHours(time.getHours() + 16))
         let t = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}T${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
@@ -58,6 +59,7 @@ class PVComponent extends Component {
         super(props)
         this.count = 0//控制是否跳转到table
         this.btn = 0//控制查询返回图标 0在图表面 1在table面
+        this.downData = []
         this.state = {
             URLData: {
                 startDate: Time(),
@@ -215,7 +217,7 @@ class PVComponent extends Component {
     //下一个图
     handleNext = () => {
         let nextTableValue = this.state.data
-        let nextTableURL = this.state.TableURL
+        // let nextTableURL = this.state.TableURL
         if (nextTableValue.length < 1) {
             notification.warning({
                 message: '警告',
@@ -281,6 +283,7 @@ class PVComponent extends Component {
                 })
             } else {
                 let total = paramdata.hits.total//数据量
+                this.downData = paramdata.hits.hits
                 const pagination = { ...this.state.pagination };
                 pagination.total = total;
                 pagination.pageSize = 100
@@ -338,6 +341,29 @@ class PVComponent extends Component {
             })
         }
     }
+    downloadExl = () => {
+        if (this.downData.length < 1) {
+            notification.error({
+                message:'提示',
+                description:'请先选择表格数据'
+            })
+        } else {
+            let Exlarr = []
+            this.downData.forEach(element => {
+                let Exl = {
+                    clientip:element._source.clientip,
+                    iislogdate:element._source.iislogdate,
+                    request:element._source.request,
+                    timetaken:(element._source.timetaken/1000),
+                    urlparam:element._source.urlparam,
+                    port:element._source.port
+                }
+                Exlarr.push(Exl)
+            });
+            // console.log(Exlarr)
+            downloadExl(Exlarr)
+        }
+    }
     render() {
         const { Data, URLData, pagination, loading, data, tableTatol } = this.state
         const charts = []
@@ -356,6 +382,7 @@ class PVComponent extends Component {
                 pagination={pagination}
                 data={data}
                 handleTableChange={this.handleTableChange}
+                scroll={{ x: 1200, y: 500 }}
             ></TableServer>)
         }
         return (
@@ -398,7 +425,12 @@ class PVComponent extends Component {
                                 {charts}
                             </Card>
                             <Card title={tableTatol} className='MarginTop'
-                                extra={<Button onClick={this.handlePre}>切换详细图表</Button>}
+                                extra={
+                                    <ButtonGroup>
+                                        <Button onClick={this.handlePre}>切换详细图表</Button>
+                                        <Button onClick={this.downloadExl}>下载表格</Button>
+                                        <a href="" download='PVExl.xlsx' id='hf'></a>
+                                    </ButtonGroup>}
                             >
                                 {table}
                             </Card>

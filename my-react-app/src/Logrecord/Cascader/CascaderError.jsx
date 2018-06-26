@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Cascader } from 'antd';
-import { getFetch} from '../../Math/Math';
+import { Cascader, Spin } from 'antd';
+import { getFetch } from '../../Math/Math';
 import { GetPV } from '../../Math/APIconfig'
 import './Cascader.css'
 
@@ -9,7 +9,8 @@ class CascaderError extends Component {
         options: [],
         first: '',
         secend: '',
-        third: ''
+        third: '',
+        loading:false
     }
     componentWillMount() {
         // console.log(this.props.API)
@@ -17,20 +18,21 @@ class CascaderError extends Component {
         this.setState({
             first: API.first,
             secend: API.secend,
-            third: API.third
-        })
-    }
-    componentDidMount() {
-        getFetch(GetPV()[this.state.first], (res) => {
-            let data = JSON.parse(res.Result)
-            console.log(data)
-            data.map((v) => {
-                v.isLeaf = false
-                v.LeveL = 1
-                return v
-            })
-            this.setState({
-                options: data
+            third: API.third,
+            loading:true
+        }, () => {
+            getFetch(GetPV()[this.state.first], (res) => {
+                let data = JSON.parse(res.Result)
+                console.log(data)
+                data.map((v) => {
+                    v.isLeaf = false
+                    v.LeveL = 1
+                    return v
+                })
+                this.setState({
+                    options: data,
+                    loading:false
+                })
             })
         })
     }
@@ -94,16 +96,18 @@ class CascaderError extends Component {
     render() {
         return (
             <div>
-                <Cascader
-                    className='CascaderWidth'
-                    options={this.state.options}
-                    expandTrigger="hover"
-                    onChange={this.onChange}
-                    loadData={this.loadData}
-                    changeOnSelect
-                    displayRender={this.displayRender}
-                    filedNames={{ label: 'valueName', value: 'key', children: 'children', code: 'doc_count' }}
-                />
+                <Spin spinning={this.state.loading}>
+                    <Cascader
+                        className='CascaderWidth'
+                        options={this.state.options}
+                        expandTrigger="hover"
+                        onChange={this.onChange}
+                        loadData={this.loadData}
+                        changeOnSelect
+                        displayRender={this.displayRender}
+                        filedNames={{ label: 'valueName', value: 'key', children: 'children', code: 'doc_count' }}
+                    />
+                </Spin>
             </div>
         );
     }

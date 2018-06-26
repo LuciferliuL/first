@@ -7,6 +7,7 @@ import './PV.css'
 import { GetPV } from '../Math/APIconfig';
 import Barcharts from './charts/Barcharts'
 import TableServer from './TableServer/TableServer'
+import downloadExl from '../Math/xlsx'
 const Option = Select.Option
 const ButtonGroup = Button.Group
 const columns = [{
@@ -19,7 +20,7 @@ const columns = [{
     title: 'iislogdate',
     width: 200,
     render: (text) => {
-        text=text.substring(0,text.length-1)
+        text = text.substring(0, text.length - 1)
         let time = new Date(text)//自动加8小时
         time.setTime(time.setHours(time.getHours() + 16))
         let t = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}T${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
@@ -60,6 +61,7 @@ class TimeComponent extends Component {
         super(props)
         this.count = 0
         this.btn = 0
+        this.downData = []
         this.state = {
             URLData: {
                 startDate: Time(),
@@ -335,6 +337,7 @@ class TimeComponent extends Component {
                 })
             } else {
                 let total = paramdata.hits.total//数据量
+                this.downData = paramdata.hits.hits
                 const pagination = { ...this.state.pagination };
                 pagination.total = total;
                 pagination.pageSize = 100
@@ -392,6 +395,29 @@ class TimeComponent extends Component {
             })
         }
     }
+    downloadExl = () => {
+        if (this.downData.length < 1) {
+            notification.error({
+                message: '提示',
+                description: '请先选择表格数据'
+            })
+        } else {
+            let Exlarr = []
+            this.downData.forEach(element => {
+                let Exl = {
+                    clientip: element._source.clientip,
+                    iislogdate: element._source.iislogdate,
+                    request: element._source.request,
+                    timetaken: (element._source.timetaken / 1000),
+                    urlparam: element._source.urlparam,
+                    port: element._source.port
+                }
+                Exlarr.push(Exl)
+            });
+            // console.log(Exlarr)
+            downloadExl(Exlarr)
+        }
+    }
     render() {
         const { Data, URLData, pagination, loading, data, tableTatol } = this.state
         const charts = []
@@ -410,6 +436,7 @@ class TimeComponent extends Component {
                 pagination={pagination}
                 data={data}
                 handleTableChange={this.handleTableChange}
+                scroll={{ x: 1200, y: 500 }}
             ></TableServer>)
         }
         return (
@@ -452,7 +479,12 @@ class TimeComponent extends Component {
                                 {charts}
                             </Card>
                             <Card title={tableTatol} className='MarginTop'
-                                extra={<Button onClick={this.handlePre}>切换详细图表</Button>}
+                                extra={
+                                    <ButtonGroup>
+                                        <Button onClick={this.handlePre}>切换详细图表</Button>
+                                        <Button onClick={this.downloadExl}>下载表格</Button>
+                                        <a href="" download='TIMEExl.xlsx' id='hf'></a>
+                                    </ButtonGroup>}
                             >
                                 {table}
                             </Card>

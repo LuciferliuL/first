@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Cascader } from 'antd';
+import { Cascader, Spin } from 'antd';
 import { getFetch, ObjRegister } from '../../Math/Math';
 import { GetPV } from '../../Math/APIconfig'
 import './Cascader.css'
@@ -9,7 +9,8 @@ class Cascaders extends Component {
         options: [],
         first: '',
         secend: '',
-        third: ''
+        third: '',
+        loading:false
     }
     componentWillMount() {
         // console.log(this.props.API)
@@ -17,23 +18,24 @@ class Cascaders extends Component {
         this.setState({
             first: API.first,
             secend: API.secend,
-            third: API.third
-        })
-    }
-    componentDidMount() {
-        getFetch(GetPV()[this.state.first], (res) => {
-            let data = JSON.parse(res.Result)
-            // console.log(data)
-            let option = data.aggregations.pv_result.buckets
-            // console.log(option)
-            option.map((v) => {
-                v.isLeaf = false
-                v.LeveL = 1
-                return v
-            })
-            option = ObjRegister(option)
-            this.setState({
-                options: option
+            third: API.third,
+            loading:true
+        }, () => {
+            getFetch(GetPV()[this.state.first], (res) => {
+                let data = JSON.parse(res.Result)
+                // console.log(data)
+                let option = data.aggregations.pv_result.buckets
+                // console.log(option)
+                option.map((v) => {
+                    v.isLeaf = false
+                    v.LeveL = 1
+                    return v
+                })
+                option = ObjRegister(option)
+                this.setState({
+                    options: option,
+                    loading:false
+                })
             })
         })
     }
@@ -93,16 +95,18 @@ class Cascaders extends Component {
     render() {
         return (
             <div>
-                <Cascader
-                    className='CascaderWidth'
-                    options={this.state.options}
-                    expandTrigger="hover"
-                    onChange={this.onChange}
-                    loadData={this.loadData}
-                    changeOnSelect
-                    displayRender={this.displayRender}
-                    filedNames={{ label: 'Port', value: 'key', children: 'children', code: 'doc_count' }}
-                />
+                <Spin spinning={this.state.loading}>
+                    <Cascader
+                        className='CascaderWidth'
+                        options={this.state.options}
+                        expandTrigger="hover"
+                        onChange={this.onChange}
+                        loadData={this.loadData}
+                        changeOnSelect
+                        displayRender={this.displayRender}
+                        filedNames={{ label: 'Port', value: 'key', children: 'children', code: 'doc_count' }}
+                    />
+                </Spin>
             </div>
         );
     }

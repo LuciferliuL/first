@@ -7,6 +7,7 @@ import './PV.css'
 import { GetPV } from '../Math/APIconfig';
 import Piecharts from './charts/Piecharts'
 import TableServer from './TableServer/TableServer'
+import downloadExl from '../Math/xlsx'
 const ButtonGroup = Button.Group
 const Option = Select.Option
 const columns = [{
@@ -38,7 +39,7 @@ const columns = [{
     render: (text) => {
         let s = text / 1000
         return (
-            <span>{s}</span>
+            <span style={{ color: 'red' }}>{s}</span>
         )
     }
 }, {
@@ -58,6 +59,8 @@ const API = {
 class AverageComponent extends Component {
     constructor(props) {
         super(props)
+        this.downData = []
+        this.total = 0
         this.state = {
             URLData: {
                 startDate: Time(),
@@ -138,12 +141,15 @@ class AverageComponent extends Component {
             });
             Promise.all([GetAverage, GetAverageChart]).then((result) => {
                 // console.log(result)
+                this.total = 0
                 this.setState({
                     Data: result[1],
                     SQLmessage: result[0][0],
                     AvgPercent: (result[0][1] / 1000).toFixed(2),
                     loading: false,
                     disableds: false,
+                    data:[],
+                    pagination:false,
                     chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
                 })
             }).catch((error) => {
@@ -243,9 +249,10 @@ class AverageComponent extends Component {
             let paramdata = JSON.parse(data.Result)
             let ExtMessage = data.ExtMessage
             console.log(paramdata)
-            let total = paramdata.hits.total//数据量
+            this.downData = paramdata.hits.hits
+            this.total = paramdata.hits.total//数据量
             const pagination = { ...this.state.pagination };
-            pagination.total = total;
+            pagination.total = this.total;
             pagination.pageSize = 100
             this.setState({
                 loading: false,
@@ -258,7 +265,7 @@ class AverageComponent extends Component {
     //分页的回调
     handleTableChange = (pagination, filters, sorter) => {
         console.log(pagination)
-        const pager = { ...this.state.pagination };
+        const pager = { ...this.state.pagination};
         pager.current = pagination.current;
         this.setState({
             pagination: pager,
@@ -271,7 +278,29 @@ class AverageComponent extends Component {
             ...filters,
         }, this.state.URLData, this.state.sTime);
     }
-
+    downloadExl = () => {
+        if (this.downData.length < 1) {
+            notification.error({
+                message: '提示',
+                description: '请先选择表格数据'
+            })
+        } else {
+            let Exlarr = []
+            this.downData.forEach(element => {
+                let Exl = {
+                    clientip: element._source.clientip,
+                    iislogdate: element._source.iislogdate,
+                    request: element._source.request,
+                    timetaken: (element._source.timetaken / 1000),
+                    urlparam: element._source.urlparam,
+                    port: element._source.port
+                }
+                Exlarr.push(Exl)
+            });
+            // console.log(Exlarr)
+            downloadExl(Exlarr)
+        }
+    }
     render() {
         const { Data, URLData, pagination, loading, data } = this.state
         const table = []
@@ -287,6 +316,7 @@ class AverageComponent extends Component {
                 pagination={pagination}
                 data={data}
                 handleTableChange={this.handleTableChange}
+                scroll={{ x: 1200, y: 500 }}
             ></TableServer>)
         }
         return (
@@ -354,7 +384,13 @@ class AverageComponent extends Component {
                             </Card>
                         </Col>
                         <Col span={14}>
-                            <Card title="详细表格" className='MarginTop'>
+                            <Card className='MarginTop' extra={
+                                <ButtonGroup>
+                                    <Button onClick={this.handlePre}>切换详细图表</Button>
+                                    <Button onClick={this.downloadExl}>下载表格</Button>
+                                    <a href="" download='AVGExl.xlsx' id='hf'></a>
+                                </ButtonGroup>
+                            }>
                                 {table}
                             </Card>
                         </Col>

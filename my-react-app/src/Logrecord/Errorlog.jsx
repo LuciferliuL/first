@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Spin, notification, Input } from 'antd'
+import { Row, Col, Card, Spin, notification, Input, Button } from 'antd'
 import CascaderError from './Cascader/CascaderError'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time, postFetch } from '../Math/Math'
@@ -7,15 +7,18 @@ import './PV.css'
 import { ErrorLog } from '../Math/APIconfig';
 import TableServer from './TableServer/TableServer'
 import RenderModal from './Modal/RenderModal'
+import downloadExl from '../Math/xlsx'
 const Search = Input.Search
 const API = {
     first: 'GetComList',
     secend: 'GetComServer',
     third: 'GetComServiceName'
 }
+
 class Errorlog extends Component {
     constructor(props) {
         super(props)
+        this.downData = []
         this.state = {
             URLData: {
                 startDate: Time('-'),
@@ -140,20 +143,32 @@ class Errorlog extends Component {
             // console.log(data)
             let paramdata = JSON.parse(data.Result)
             console.log(paramdata)
-            let total = paramdata.hits.total//数据量
-            const pagination = { ...this.state.pagination };
-            pagination.total = total;
-            pagination.pageSize = 100
-            let datas = paramdata.hits.hits
-            datas.forEach(element => {
-                let arr = element._source.Timestamp.split('.')
-                element._source.Timestamp = arr[0]
-            });
-            this.setState({
-                loading: false,
-                data: paramdata.hits.hits,
-                pagination,
-            });
+            if (paramdata) {
+                let total = paramdata.hits.total//数据量
+                const pagination = { ...this.state.pagination };
+                pagination.total = total;
+                pagination.pageSize = 100
+                let datas = paramdata.hits.hits
+                this.downData = datas
+                datas.forEach(element => {
+                    let arr = element._source.Timestamp.split('.')
+                    element._source.Timestamp = arr[0]
+                });
+                this.setState({
+                    loading: false,
+                    data: datas,
+                    pagination,
+                });
+            } else {
+                notification.warning({
+                    message: '警告',
+                    description: '暂时没有获取到数据',
+                })
+                this.setState({
+                    loading: false
+                })
+            }
+
         })
     }
     //分页的回调
@@ -171,6 +186,31 @@ class Errorlog extends Component {
             sortOrder: sorter.order,
             ...filters,
         }, this.state.URLData);
+    }
+    //下载表格
+    downloadExl = () => {
+        if (this.downData.length < 1) {
+            notification.error({
+                message:'提示',
+                description:'请先选择表格数据'
+            })
+        } else {
+            let Exlarr = []
+            this.downData.forEach(element => {
+                let Exl = {
+                    Timestamp: element._source.Timestamp,
+                    ServerIP: element._source.Origin.ServerIP,
+                    CallingApplication: element._source.Origin.CallingApplication,
+                    Application: element._source.Origin.Application,
+                    Method: element._source.Origin.Method,
+                    UserId: element._source.Customer.UserId,
+                    CustomerCode: element._source.Customer.CustomerCode,
+                }
+                Exlarr.push(Exl)
+            });
+            // console.log(Exlarr)
+            downloadExl(Exlarr)
+        }
     }
     render() {
         const { URLData, pagination, loading, data } = this.state
@@ -196,7 +236,9 @@ class Errorlog extends Component {
                                 </Col>
                             </Row>
                         </Card>
-                        <Card title="详细表格" className='MarginTop'>
+                        <Card title="详细表格" className='MarginTop' extra={<div>
+                            <Button onClick={this.downloadExl}>下载表格</Button><a href="" download='123.xlsx' id='hf'></a>
+                        </div>}>
                             <TableServer
                                 columns={this.columns}
                                 key='table2'
@@ -205,6 +247,7 @@ class Errorlog extends Component {
                                 pagination={pagination}
                                 data={data}
                                 handleTableChange={this.handleTableChange}
+                                scroll={{ x: 1200 }}
                             ></TableServer>
                         </Card>
                     </Row>

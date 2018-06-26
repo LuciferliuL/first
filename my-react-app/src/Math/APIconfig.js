@@ -24,12 +24,13 @@ const ActionAPI = (PK) => (
         Simple: APIconfig.Server + '/api/QueryExtend/GetInfoForPk?PK=' + PK
     }
 )
-
+//配置里面得所有搜索
 const Searchs = (Search = '') => (
     {
         WindowsAPI: APIconfig.Server + '/api/ActionInitial/GetListActionList?BranchId=STD&strQuery=' + Search,
         SimpleAPI: APIconfig.Server + '/api/QueryExtend/GetQuerySimpleList?branchID=STD&strQuery=' + Search,
-        SimpleTableAPI: APIconfig.Server + '/api/SQLScript/GetSqlInfoList?BranchId=STD&strQuery=' + Search
+        SimpleTableAPI: APIconfig.Server + '/api/SQLScript/GetSqlInfoList?BranchId=STD&strQuery=' + Search,
+        BillAPI:APIconfig.Server + '/api/BillDefine/GetBillDefineList?branchid=STD&strQuery=' + Search
     }
 )
 

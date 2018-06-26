@@ -21,7 +21,7 @@ class Piecharts extends Component {
             { value: 0, name: '0s - 1s', max: '1', min: '0' },
             { value: 0, name: '1s - 5s', max: '5', min: '1' },
             { value: 0, name: '5s - 10s', max: '10', min: '5' },
-            { value: 0, name: '> 10s', max: '999', min: '10' }
+            { value: 0, name: '> 10s', max: '999999', min: '10' }
         ]
         Data.forEach((element, index) => {
             this.PieObj[index].value = element
@@ -157,7 +157,7 @@ class Piecharts extends Component {
                     option={this.getOption()}//配置
                     notMerge={true}
                     lazyUpdate={true}
-                    style={{ height: '635px', width: '100%' }}//样式
+                    style={{ height: '570px', width: '100%' }}//样式
                     // theme={theme}
                     onChartReady={this.onChartReadyCallback}
                     // onEvents={this.EventsDict}//方法

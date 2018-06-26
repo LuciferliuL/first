@@ -2,7 +2,7 @@ Arguments:
   E:\node\node.exe C:\Users\leo\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js start
 
 PATH: 
-  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;E:\Git\cmd;E:\node\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Users\leo\AppData\Local\Microsoft\WindowsApps;C:\Users\leo\AppData\Roaming\npm;C:\Program Files\Microsoft VS Code\bin;E:\Microsoft VS Code\bin
+  C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;E:\Git\cmd;E:\node\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;F:\TortoiseGit\bin;D:\Java\jdk1.8.0_60\bin;C:\Intel\gradle-4.7\bin;C:\Users\leo\AppData\Local\Microsoft\WindowsApps;C:\Users\leo\AppData\Roaming\npm;C:\Program Files\Microsoft VS Code\bin;E:\Microsoft VS Code\bin;
 
 Yarn version: 
   1.5.1

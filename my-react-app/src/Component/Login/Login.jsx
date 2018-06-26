@@ -1,22 +1,40 @@
 import React, { Component } from 'react';
 import logo from '../../logo.svg'
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, notification } from 'antd';
 import './Login.css'
+import { LoginAPI } from '../../Math/APIconfig'
+import { getTimeFetch } from '../../Math/Math'
 const FormItem = Form.Item;
 const widthform = {
-    width:400,
-    margin:'auto'
+    width: 400,
+    margin: 'auto'
 }
 class Logins extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-          if (!err) {
-            console.log('Received values of form: ', values);
-            this.props.history.push('/Home')
-          }
+            // console.log(err)
+            if (!err) {
+                getTimeFetch(LoginAPI(values.userName, values.password).Login, (res) => {
+                    console.log(res)
+                    if (res === 'True') {
+                        let path = {
+                            pathname:'/Home',
+                            state:values
+                        }
+                        this.props.history.push(path)
+                    } else {
+                        notification.warning({
+                            message: '用户名或密码错误',
+                            description: res
+                        })
+                    }
+                })
+                console.log('Received values of form: ', values);
+
+            }
         });
-      }
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
