@@ -21,7 +21,8 @@ const ActionAPI = (PK) => (
     //菜单 点击获取数据
     {
         Action: APIconfig.Server + '/api/Menu/GetMenuInfoForPK?pk=' + PK,
-        Simple: APIconfig.Server + '/api/QueryExtend/GetInfoForPk?PK=' + PK
+        Simple: APIconfig.Server + '/api/QueryExtend/GetInfoForPk?PK=' + PK,
+        Bill: APIconfig.Server + '/api/BillDefine/GetBillDefineInfo?pk=' + PK
     }
 )
 //配置里面得所有搜索
@@ -30,7 +31,25 @@ const Searchs = (Search = '') => (
         WindowsAPI: APIconfig.Server + '/api/ActionInitial/GetListActionList?BranchId=STD&strQuery=' + Search,
         SimpleAPI: APIconfig.Server + '/api/QueryExtend/GetQuerySimpleList?branchID=STD&strQuery=' + Search,
         SimpleTableAPI: APIconfig.Server + '/api/SQLScript/GetSqlInfoList?BranchId=STD&strQuery=' + Search,
-        BillAPI:APIconfig.Server + '/api/BillDefine/GetBillDefineList?branchid=STD&strQuery=' + Search
+        BillAPI: APIconfig.Server + '/api/BillDefine/GetBillDefineList?branchid=STD&strQuery=' + Search
+    }
+)
+//保存增加或修改
+const Save = () => (
+    {
+        BillAPI: APIconfig.Server + '/api/BillDefine/SaveBillDefine'
+    }
+)
+//同步请求
+const Copy = (PK) => (
+    {
+        BillDefine: APIconfig.Server + '/api/BillDefine/CopyBillDefineForBranch?PK=' + PK
+    }
+)
+//删除
+const Del = (PK) => (
+    {
+        BillDefine: APIconfig.Server + '/api/BillDefine/DelBillDefine?PK=' + PK
     }
 )
 
@@ -67,8 +86,6 @@ const ErrorLog = () => ({
     //获取公司列表
 })
 
-
-
 const saleLog = () => ({
     firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erpbusilog&esType=erpbusilog_table'
 })
@@ -76,4 +93,4 @@ const saleLog = () => ({
 const currentLog = () => ({
     firstAPI: APIconfig.liujun + '/api/lasticSearch/InitDbLink?esIndex=erpiislog&esType=erpiislog_table'
 })
-export { API, LoginAPI, ActionAPI, Searchs, GetPV, ErrorLog, saleLog, currentLog }
+export { API, LoginAPI, ActionAPI, Searchs, GetPV, ErrorLog, saleLog, currentLog, Copy, Del, Save }

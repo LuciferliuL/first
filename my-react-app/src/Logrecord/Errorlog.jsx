@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Spin, notification, Input, Button } from 'antd'
+import { Row, Col, Card, Spin, notification, Input, Button, BackTop } from 'antd'
 import CascaderError from './Cascader/CascaderError'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time, postFetch } from '../Math/Math'
@@ -191,8 +191,8 @@ class Errorlog extends Component {
     downloadExl = () => {
         if (this.downData.length < 1) {
             notification.error({
-                message:'提示',
-                description:'请先选择表格数据'
+                message: '提示',
+                description: '请先选择表格数据'
             })
         } else {
             let Exlarr = []
@@ -217,6 +217,9 @@ class Errorlog extends Component {
         // console.log(Data)
         return (
             <div>
+                <BackTop>
+                    <div className="ant-back-top-inner">UP</div>
+                </BackTop>
                 <Spin tip="Loading..." spinning={this.state.loading}>
                     <Row gutter={2}>
                         <Card>

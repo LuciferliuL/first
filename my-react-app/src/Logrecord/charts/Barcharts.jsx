@@ -136,7 +136,7 @@ class Barcharts extends Component {
                     option={this.getOption()}//配置
                     notMerge={true}
                     lazyUpdate={true}
-                    style={{ height: '673px', width: '100%' }}//样式
+                    style={{ height: '550px', width: '100%' }}//样式
                     // theme={theme}
                     onChartReady={this.onChartReadyCallback}
                     // onEvents={this.EventsDict}//方法

@@ -9,6 +9,7 @@ import TimeComponent from '../../Logrecord/TimeComponent'
 import Errorlog from '../../Logrecord/Errorlog'
 import AcerageComponent from "../../Logrecord/AverageComponent.jsx";
 import Bill from '../../Component/Bill/Bill'
+import AsyncData from '../../Builds/AsyncData';
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -58,7 +59,7 @@ class Home extends React.Component {
                 key="sub2"
                 title={<span><Icon type="team" /><span>发布与构建</span></span>}
               >
-                <Menu.Item key="111">Team 1</Menu.Item>
+                <Menu.Item key="111"><Link to='/Home/AsyncData'>数据同步</Link></Menu.Item>
                 <Menu.Item key="71">Team 2</Menu.Item>
               </SubMenu>
               <SubMenu
@@ -78,7 +79,7 @@ class Home extends React.Component {
                 <Breadcrumb.Item>User</Breadcrumb.Item>
                 <Breadcrumb.Item>Bill</Breadcrumb.Item>
               </Breadcrumb>
-              <div style={{ padding: 20, background: '#fff', minHeight: 560 }}>
+              <div style={{ padding: 5, background: '#fff', minHeight: 560 }}>
                 <Route path='/Home/Action' component={Action}></Route>
                 <Route path='/Home/Windows' component={Windows}></Route>
                 <Route path='/Home/Simple' component={Simple}></Route>
@@ -87,9 +88,10 @@ class Home extends React.Component {
                 <Route path="/Home/Errorlog" component={Errorlog}></Route>
                 <Route path='/Home/AcerageComponent' component={AcerageComponent}></Route>
                 <Route path='/Home/Bill' component={Bill}></Route>
+                <Route path='/Home/AsyncData' component={AsyncData}></Route>
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>
+            <Footer style={{ textAlign: 'center', padding:10 }}>
               DEV Design ©2018 Created by L UED
           </Footer>
           </Layout>

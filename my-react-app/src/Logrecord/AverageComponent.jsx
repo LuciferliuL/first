@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification, Select, Progress } from 'antd'
+import { Row, Col, Card, Button, Spin, notification, Select,Icon } from 'antd'
 import Cascaders from './Cascader/Cascaders'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time } from '../Math/Math'
@@ -8,6 +8,7 @@ import { GetPV } from '../Math/APIconfig';
 import Piecharts from './charts/Piecharts'
 import TableServer from './TableServer/TableServer'
 import downloadExl from '../Math/xlsx'
+import './PV.css'
 const ButtonGroup = Button.Group
 const Option = Select.Option
 const columns = [{
@@ -79,7 +80,8 @@ class AverageComponent extends Component {
             pagination: {},
             data: [],
             AvgPercent: 0,
-            sTime: []
+            sTime: [],
+            show: true //是否显示查询栏
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -148,8 +150,9 @@ class AverageComponent extends Component {
                     AvgPercent: (result[0][1] / 1000).toFixed(2),
                     loading: false,
                     disableds: false,
-                    data:[],
-                    pagination:false,
+                    data: [],
+                    show: false,
+                    pagination: false,
                     chartsTatol: `详细图表:${this.state.URLData.startDate}---${this.state.URLData.endDate}`
                 })
             }).catch((error) => {
@@ -265,7 +268,7 @@ class AverageComponent extends Component {
     //分页的回调
     handleTableChange = (pagination, filters, sorter) => {
         console.log(pagination)
-        const pager = { ...this.state.pagination};
+        const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
             pagination: pager,
@@ -301,8 +304,13 @@ class AverageComponent extends Component {
             downloadExl(Exlarr)
         }
     }
+    showhide = () => {
+        this.setState({
+            show: true
+        })
+    }
     render() {
-        const { Data, URLData, pagination, loading, data } = this.state
+        const { Data, URLData, pagination, loading, data, show } = this.state
         const table = []
         // console.log(Data)
         if (Data.length === 0) {
@@ -316,14 +324,18 @@ class AverageComponent extends Component {
                 pagination={pagination}
                 data={data}
                 handleTableChange={this.handleTableChange}
-                scroll={{ x: 1200, y: 500 }}
+                scroll={{ x: 1200, y: 450 }}
             ></TableServer>)
         }
         return (
             <div>
+                <Button onClick={this.showhide.bind(this)} style={{ display: show ? 'none' : 'block', right: '50%', position: 'fixed', top:'0px', transform:'transionx(-50%)' }} type='primary'>
+                显示查询栏
+                <Icon type="down-square-o" />
+                </Button>
                 <Spin tip="Loading..." spinning={this.state.loading}>
                     <Row gutter={2}>
-                        <Card>
+                        <Card style={{ display: !show ? 'none' : 'block' }}>
                             <Row gutter={3}>
                                 <Col span={8}>
                                     <Cascaders handleChangeState={this.handleChangeState} API={API}></Cascaders>
@@ -375,7 +387,6 @@ class AverageComponent extends Component {
                                     </div>
                                 }>
                                 <p>平均延迟：{this.state.AvgPercent} 秒</p>
-                                <Progress percent={(100 - this.state.AvgPercent)} />
                                 <Piecharts
                                     Data={Data}
                                     key='charts3'
@@ -386,7 +397,7 @@ class AverageComponent extends Component {
                         <Col span={14}>
                             <Card className='MarginTop' extra={
                                 <ButtonGroup>
-                                    <Button onClick={this.handlePre}>切换详细图表</Button>
+                                    {/* <Button onClick={this.handlePre}>切换详细图表</Button> */}
                                     <Button onClick={this.downloadExl}>下载表格</Button>
                                     <a href="" download='AVGExl.xlsx' id='hf'></a>
                                 </ButtonGroup>
@@ -400,5 +411,7 @@ class AverageComponent extends Component {
         );
     }
 }
+
+
 
 export default AverageComponent;

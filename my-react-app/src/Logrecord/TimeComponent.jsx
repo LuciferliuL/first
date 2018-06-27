@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Button, Spin, notification, Carousel, Select } from 'antd'
+import { Row, Col, Card, Button, Spin, notification, Carousel, Select,Icon } from 'antd'
 import Cascaders from './Cascader/Cascaders'
 import DataPick from '../Math/DataPick'
 import { getTimeFetch, Time, filtArr } from '../Math/Math'
@@ -83,7 +83,8 @@ class TimeComponent extends Component {
             End: Time(),
             tableTatol: '详细表格',
             TimesStart: Time(),
-            TimesEnd: Time()
+            TimesEnd: Time(),
+            show:true
         }
         this.handleChangeDate = this.handleChangeDate.bind(this)
         this.handleChangeState = this.handleChangeState.bind(this)
@@ -253,6 +254,9 @@ class TimeComponent extends Component {
             this.count = 1
             const CarouselRef = this.refs.CarouselRef
             CarouselRef.next()
+            this.setState({
+                show:false
+            })
         }
     }
     //上一个图
@@ -263,6 +267,7 @@ class TimeComponent extends Component {
         pager.current = 1;
         this.setState({
             pagination: pager,
+            show:true
         });
         CarouselRef.prev()
     }
@@ -418,8 +423,14 @@ class TimeComponent extends Component {
             downloadExl(Exlarr)
         }
     }
+    showhide = () => {
+        this.setState({
+            show: true
+        })
+        this.handlePre()
+    }
     render() {
-        const { Data, URLData, pagination, loading, data, tableTatol } = this.state
+        const { Data, URLData, pagination, loading, data, tableTatol, show } = this.state
         const charts = []
         const table = []
         // console.log(Data)
@@ -441,9 +452,13 @@ class TimeComponent extends Component {
         }
         return (
             <div>
+                <Button onClick={this.showhide.bind(this)} style={{ display: show ? 'none' : 'block', right: '50%', position: 'fixed', top:'0px', transform:'transionx(-50%)' }} type='primary'>
+                显示查询栏
+                <Icon type="down-square-o" />
+                </Button>
                 <Spin tip="Loading..." spinning={this.state.loading}>
                     <Row gutter={2}>
-                        <Card>
+                        <Card style={{ display: !show ? 'none' : 'block' }}>
                             <Row gutter={3}>
                                 <Col span={8}>
                                     <Cascaders handleChangeState={this.handleChangeState} API={API}></Cascaders>
