@@ -12,6 +12,7 @@ import Bill from '../../Component/Bill/Bill'
 import AsyncData from '../../Builds/AsyncData';
 import PopWindows from '../PopWindows/PopWindows';
 import Test from '../../TestModule/Test';
+import SQLManage from '../SQLManage/SQLManage';
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -57,6 +58,7 @@ class Home extends React.Component {
                             <Menu.Item key="5"><Link to='/Home/Simple'>简单通用查询</Link></Menu.Item>
                             <Menu.Item key="6"><Link to='/Home/Bill'>单据定义</Link></Menu.Item>
                             <Menu.Item key="61"><Link to='/Home/PopWindows'>弹出选择窗口管理</Link></Menu.Item>
+                            <Menu.Item key="SQL"><Link to='/Home/SQLManage'>SQL语句管理</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub2"
@@ -101,6 +103,7 @@ class Home extends React.Component {
                             <Route path='/Home/AsyncData' component={AsyncData}></Route>
                             <Route path='/Home/PopWindows' component={PopWindows}></Route>
                             <Route path='/Home/Test' component={Test}></Route>
+                            <Route path='/Home/SQLManage' component={SQLManage}></Route>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', padding: 10 }}>

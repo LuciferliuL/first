@@ -2,7 +2,6 @@ import React from 'react'
 import { Form, Input, Select, Row, Col, Button, Radio, notification, Spin, Tabs } from 'antd';
 import { postFetchForm } from '../../Math/Math'
 import { Save } from '../../Math/APIconfig'
-import CheckboxGroup from 'antd/lib/checkbox/Group';
 import CheckBox from '../checkbox/CheckBox';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -19,19 +18,6 @@ const FormList = [
 const FormLisrSqlScript = ['Author', 'Module', 'Note', 'ScriptType',
     'SqlName', 'SqlScripe']
 const OptionValue = ['财务模块', '采购模块', '价格模块', '结算模块', '库存模块', '其他模块', '销售模块', '资金模块', '系统设置模块']
-const CheckboxOption = [
-    { label: '多选', value: 'MultiSelect' },
-    { label: '只有一行结果时,直接回写结果', value: 'OneRowAutoPopForm' },
-    { label: '立即查询', value: 'ImmediatelyQuery' }
-]
-const dataCheckbox = [
-    { label: '优先使用缓存服', value: 'IsUseCacheServer' },
-    { label: '客户端缓存', value: 'UseClientCache' }
-]
-const toolBar = [
-    { label: '显示工具栏', value: 'DisplayToolbar' },
-    { label: '条件控件', value: 'IsDisplayConditionControl' }
-]
 class RegistrationForm extends React.Component {
     constructor(props) {
         super(props)
