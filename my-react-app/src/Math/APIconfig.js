@@ -22,7 +22,9 @@ const ActionAPI = (PK) => (
     {
         Action: APIconfig.Server + '/api/Menu/GetMenuInfoForPK?pk=' + PK,
         Simple: APIconfig.Server + '/api/QueryExtend/GetInfoForPk?PK=' + PK,
-        Bill: APIconfig.Server + '/api/BillDefine/GetBillDefineInfo?pk=' + PK
+        Bill: APIconfig.Server + '/api/BillDefine/GetBillDefineInfo?pk=' + PK,
+        Pop: APIconfig.Server + '/api/SearchFlow/SearchFlowControlInfo?pk=' + PK
+
     }
 )
 //配置里面得所有搜索
@@ -31,16 +33,18 @@ const Searchs = (Search = '') => (
         WindowsAPI: APIconfig.Server + '/api/ActionInitial/GetListActionList?BranchId=STD&strQuery=' + Search,
         SimpleAPI: APIconfig.Server + '/api/QueryExtend/GetQuerySimpleList?branchID=STD&strQuery=' + Search,
         SimpleTableAPI: APIconfig.Server + '/api/SQLScript/GetSqlInfoList?BranchId=STD&strQuery=' + Search,
-        BillAPI: APIconfig.Server + '/api/BillDefine/GetBillDefineList?branchid=STD&strQuery=' + Search
+        BillAPI: APIconfig.Server + '/api/BillDefine/GetBillDefineList?branchid=STD&strQuery=' + Search,
+        Pop: APIconfig.Server + '/api/SearchFlow/GetSearchFlowList?branchID=FDG&strQuery=' + Search
     }
 )
 //保存增加或修改
 const Save = () => (
     {
-        BillAPI: APIconfig.Server + '/api/BillDefine/SaveBillDefine'
+        BillAPI: APIconfig.Server + '/api/BillDefine/SaveBillDefine',
+        Pop: APIconfig.Server + '/api/SearchFlow/SaveAndUpdateSearchFlow'
     }
 )
-//同步请求
+//与分公司同步请求
 const Copy = (PK) => (
     {
         BillDefine: APIconfig.Server + '/api/BillDefine/CopyBillDefineForBranch?PK=' + PK
@@ -49,7 +53,8 @@ const Copy = (PK) => (
 //删除
 const Del = (PK) => (
     {
-        BillDefine: APIconfig.Server + '/api/BillDefine/DelBillDefine?PK=' + PK
+        BillDefine: APIconfig.Server + '/api/BillDefine/DelBillDefine?PK=' + PK,
+        Pop: APIconfig.Server + '/api/SearchFlow/DeleteSearchFlow?PK=' + PK
     }
 )
 

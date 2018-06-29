@@ -207,7 +207,7 @@ export { Errors }
 /**
  * 返回  年/月/日  固定格式
  */
-function Time(v='/') {
+function Time(v = '/') {
     let time = new Date()
     let y = time.getFullYear()
     let m = time.getMonth() + 1
@@ -270,18 +270,43 @@ function filtArr(data) {
     let buckets = []
     data.forEach((v, index) => {
         let P = v.aggregations.pv_result.buckets
-        if(P.length > 0){
+        if (P.length > 0) {
             P[0].Port = index + 1
             P[0].key = P[0].key + 'x'
             buckets.push(P[0])
-        }else{
-            let miniP = {key:0,doc_count:0,Port:index + 1}
+        } else {
+            let miniP = { key: 0, doc_count: 0, Port: index + 1 }
             buckets.push(miniP)
         }
-        
+
     })
     console.log(buckets)
     return buckets
 }
 
 export { filtArr }
+
+/**
+ * 
+ * @param {开始时间，结束时间} 计算时间差 
+ */
+function timeFn(dbegin, ebegin) {//di作为一个变量传进来
+    //如果时间格式是正确的，那下面这一步转化时间格式就可以不用了
+    var dateBegin = new Date(dbegin.replace(/-/g, "/"));//将-转化为/，使用new Date
+    var dateEnd = new Date(ebegin.replace(/-/g, "/"));//获取当前时间
+    var dateDiff = dateEnd.getTime() - dateBegin.getTime();//时间差的毫秒数
+    var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));//计算出相差天数
+    var leave1 = dateDiff % (24 * 3600 * 1000)    //计算天数后剩余的毫秒数
+    var hours = Math.floor(leave1 / (3600 * 1000))//计算出小时数
+    //计算相差分钟数
+    var leave2 = leave1 % (3600 * 1000)    //计算小时数后剩余的毫秒数
+    var minutes = Math.floor(leave2 / (60 * 1000))//计算相差分钟数
+    //计算相差秒数
+    var leave3 = leave2 % (60 * 1000)      //计算分钟数后剩余的毫秒数
+    var seconds = Math.round(leave3 / 1000)
+    // console.log(" 相差 "+dayDiff+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒")
+    // console.log(dateDiff+"时间差的毫秒数",dayDiff+"计算出相差天数",leave1+"计算天数后剩余的毫秒数"
+    //     ,hours+"计算出小时数",minutes+"计算相差分钟数",seconds+"计算相差秒数");
+    return dayDiff + "天 " + hours + "小时 " + minutes + " 分钟" + seconds + " 秒"
+}
+export { timeFn }
