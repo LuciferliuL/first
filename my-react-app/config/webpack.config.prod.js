@@ -59,7 +59,7 @@ module.exports = {
   // In production, we only want to load the polyfills and the app code.
   entry:{
     index:[require.resolve('./polyfills'), paths.appIndexJs],
-    vendor:['react','echarts','antd','moment','react-dom','react-router-dom']
+    vendor:['react','echarts','antd','moment','react-dom','react-router-dom','xlsx']
   } ,
   output: {
     // The build folder.

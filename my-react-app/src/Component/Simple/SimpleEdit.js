@@ -38,8 +38,6 @@ class SimpleEdit extends Component {
         // console.log(key + '-----' + value)
         this.setState({
             TableValueADD: Object.assign(this.state.TableValueADD, { [key]: value })
-        }, () => {
-            console.log(this.state.TableValueADD)
         })
     }
     SelectChange = (key, value) => {//侧边选择的修改
@@ -52,8 +50,6 @@ class SimpleEdit extends Component {
         console.log(key + '-----' + value)
         this.setState({
             TableValueADD: Object.assign(this.state.TableValueADD, { [key]: value })
-        }, () => {
-            console.log(this.state.TableValueADD)
         })
     }
     TabsChange = (data, length) => {//增加框的修改

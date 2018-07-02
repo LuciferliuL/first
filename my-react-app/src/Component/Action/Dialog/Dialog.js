@@ -1,6 +1,6 @@
 import React from 'react'
 import { Modal, Form, Input } from 'antd';
-import {Errors} from '../../../Math/Math'
+import { Errors } from '../../../Math/Math'
 const FormItem = Form.Item
 const formItemLayout = {
     labelCol: { span: 4 },
@@ -13,7 +13,7 @@ const formItemLayout = {
  * @param {点击隐藏的函数} hideModal
  * @param {接受判断增删改查} key
  */
-const E = ['Author','Action','Caption']
+const E = ['Author', 'Action', 'Caption']
 class Dialog extends React.Component {
     state = {
         DialogData: {}
@@ -28,17 +28,17 @@ class Dialog extends React.Component {
     handleOk = () => {
         let D = this.state.DialogData
         let counts = 0
-        E.map((v)=>(
-            D[v]===''?Errors(v):counts++
+        E.map((v) => (
+            D[v] === '' ? Errors(v) : counts++
         ))
-        if(counts === E.length){
-            D.MenuName = D.Caption + D.Action
+        if (counts === E.length) {
+            D.MenuName = D.Caption + '_' + D.Action
             this.setState({
-                DialogData:D
+                DialogData: D
             })
             this.props.DialogSubmit(this.state.DialogData)
             this.props.hideModal()
-        }     
+        }
     }
     //关闭
     handleCancel = () => {

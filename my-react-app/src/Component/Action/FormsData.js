@@ -1,5 +1,5 @@
 import React from 'react'
-import {Form, Icon, Input} from 'antd'
+import {Form,  Input} from 'antd'
 const FormItem = Form.Item
 
 function formsData (props) {

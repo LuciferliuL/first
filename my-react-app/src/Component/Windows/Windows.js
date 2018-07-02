@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
-import { Searchs } from '../../Math/APIconfig'
-import { getFetch, getTime, Errors } from '../../Math/Math'
+import { Searchs, Save, Del } from '../../Math/APIconfig'
+import { getFetch, getTime, Errors, postFetchForm } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
-import { Collapse, Modal, notification } from 'antd'
+import { Collapse, Modal, notification, Button } from 'antd'
 import WindowsAction from '../Windows/WindowsAction'
 import WindowsEdit from '../Windows/WindowsEdit'
 const Panel = Collapse.Panel
-const E = ['Text','InitialAssemblyRef','Initial']
+const ButtonGroup = Button.Group
+const E = ['Text', 'InitialAssemblyRef', 'Initial']
 class Windows extends Component {
     state = {
         Data: [],
@@ -64,7 +65,7 @@ class Windows extends Component {
             WorkFlowState: ""
         },
         TableValue: {},
-        clearTable:false
+        clearTable: false
     }
     componentDidMount() {
         getFetch(Searchs().WindowsAPI, (res) => {
@@ -101,6 +102,7 @@ class Windows extends Component {
             TableValue: JSON.parse(JSON.stringify(TableValue))
         })
     }
+    //新增与编辑报错 An error occurred while updating the entries. See the inner exception for details.
     AddAction = (name) => {
         if (name === 'Add') {
             let clear = JSON.parse(JSON.stringify(this.state.clearObj))
@@ -108,10 +110,11 @@ class Windows extends Component {
             this.setState({
                 TableValue: clear,
                 visible: true,
-                clearTable:true
+                clearTable: true
             })
         } else if (name === 'Edit') {
-            if (this.state.TableValue.PK === undefined) {
+            console.log(this.state.TableValue)
+            if (this.state.TableValue.PK === undefined || this.state.TableValue.PK === -1) {
                 notification.warning({
                     message: '错误提示',
                     description: '请选择一个节点',
@@ -122,7 +125,7 @@ class Windows extends Component {
                 this.setState({
                     TableValue: clear,
                     visible: true,
-                    clearTable:true
+                    clearTable: true
                 })
                 return
             }
@@ -134,54 +137,87 @@ class Windows extends Component {
                 });
             } else {
                 //TODO 删除
+                getFetch(Del(this.state.TableValue.PK).Windows, (res) => {
+                    if (res === 'True') {
+                        notification.success({
+                            message: '提示',
+                            description: '删除成功'
+                        })
+                    } else {
+                        notification.warning({
+                            message: '提示',
+                            description: res
+                        })
+                        this.GetData()
+                    }
+                })
             }
         }
     }
     handleOk = () => {
         let D = this.state.TableValue
         let counts = 0
-        E.map((v)=>(
-            D[v]===''?Errors(v):counts++
+        E.map((v) => (
+            D[v] === '' ? Errors(v) : counts++
         ))
-        if(counts === E.length){
+        if (counts === E.length) {
             console.log(this.state.TableValue)
+            let data = this.state.TableValue
             //TODO   发送请求
+            postFetchForm(Save().Windows, data, (res) => {
+                if (res.IsSuccess === 'True') {
+                    notification.success({
+                        message: '提示',
+                        description: '可以执行同步',
+                        btn: <ButtonGroup>
+                            <Button onClick={this.asyncData(res.SqlList)} size='small'>同步</Button>
+                            <Button onClick={() => { notification.close() }} size='small'>取消</Button>
+                        </ButtonGroup>
+                    })
+                } else {
+                    notification.warning({
+                        message: '提示',
+                        description: res.ErrMessage
+                    })
+                }
+                this.GetData()
+            })
             this.setState({
                 visible: false,
                 TableValue: JSON.parse(JSON.stringify(this.state.clearObj)),
-                clearTable:false
+                clearTable: false
             })
-        }     
+        }
     }
     handleCancel = () => {
         this.setState({
             visible: false,
             TableValue: JSON.parse(JSON.stringify(this.state.clearObj)),
-            clearTable:false
+            clearTable: false
         })
     }
     handleChange = (key, value) => {
-        if (key === 'ActionType') {          
-            if (value === '自定义的InitialAction'){
+        if (key === 'ActionType') {
+            if (value === '自定义的InitialAction') {
                 let Table = this.state.TableValue
                 Table.InitialAssemblyRef = 'JZT.GOS.Equipment.Win'
                 Table.Initial = 'JZT.GOS.Equipment.Win.WorkFlow.LendingGoodsAuditForm'
                 this.setState({
-                    TableValue:Table
+                    TableValue: Table
                 })
-            }else if(value === '编辑单据EditBill'){
+            } else if (value === '编辑单据EditBill') {
                 let Table = this.state.TableValue
                 Table.InitialAssemblyRef = 'JZT.UI'
                 Table.Initial = 'JZT.GOS.Win.InitAction.EditBillFormByBillCodeInitial'
                 this.setState({
-                    TableValue:Table
+                    TableValue: Table
                 })
-            }else{
+            } else {
                 let Table = this.state.TableValue
                 Table.InitialAssemblyRef = 'JZT.UI'
                 Table.Initial = 'JZT.UI.Query.QueryExtendForm'
                 this.setState({
-                    TableValue:Table
+                    TableValue: Table
                 })
             }
             this.setState({
@@ -194,7 +230,13 @@ class Windows extends Component {
         }
     }
 
-
+    asyncData = (value) => {
+        let path = {
+            pathname: '/Home/AsyncData',
+            state: value
+        }
+        this.props.history.push(path)
+    }
     render() {
         const { Data, columns, ActiveKey, TableValue, visible, clearTable } = this.state
         return (

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
-import { Searchs, ActionAPI } from '../../Math/APIconfig'
-import { getFetch, getTime } from '../../Math/Math'
+import { Searchs, ActionAPI, Save, Del } from '../../Math/APIconfig'
+import { getFetch, getTime, postFetchForm } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
-import { Collapse, Modal, notification } from 'antd'
+import { Collapse, Modal, notification, Button } from 'antd'
 import SimpleAction from './SimpleAction'
 import SimpleEdit from './SimpleEdit'
 const Panel = Collapse.Panel
+const ButtonGroup = Button.Group
 
 class Simple extends Component {
     constructor(props) {
@@ -199,6 +200,21 @@ class Simple extends Component {
                 });
             } else {
                 //TODO 删除
+                let PK = this.state.TableValue.PK
+                getFetch(Del(PK).Simple, (res) => {
+                    if (res === 'True') {
+                        notification.success({
+                            message: '提示',
+                            description: '删除成功'
+                        })
+                        this.GetData()
+                    } else {
+                        notification.warning({
+                            message: '提示',
+                            description: res
+                        })
+                    }
+                })
             }
         }
     }
@@ -227,6 +243,31 @@ class Simple extends Component {
     }
     isOK = (DataObj) => {
         console.log(DataObj)
+        postFetchForm(Save().Simple, DataObj, (res) => {
+            if (res.IsSuccess === 'True') {
+                this.GetData()
+                notification.success({
+                    message: '提示',
+                    description: '可以执行同步',
+                    btn: <ButtonGroup>
+                        <Button onClick={this.asyncData(res.SqlList)} size='small'>同步</Button>
+                        <Button onClick={() => { notification.close() }} size='small'>取消</Button>
+                    </ButtonGroup>
+                })
+            } else {
+                notification.warning({
+                    message: '提示',
+                    description: res.ShortText
+                })
+            }
+        })
+    }
+    asyncData = (value) => {
+        let path = {
+            pathname: '/Home/AsyncData',
+            state: value
+        }
+        this.props.history.push(path)
     }
     render() {
         const { Data, columns, ActiveKey, TableValue, visible, clearTable } = this.state

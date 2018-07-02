@@ -42,9 +42,12 @@ const Searchs = (Search = '') => (
 //保存增加或修改
 const Save = () => (
     {
+        Root: APIconfig.Server + '/api/Menu/SaveMenuInfo',
+        Windows: APIconfig.Server + '/api/ActionInitial/SaveActionMapInfo',
+        Simple: APIconfig.Server + '/api/QueryExtend/SaveQuerySimpleInfo',
         BillAPI: APIconfig.Server + '/api/BillDefine/SaveBillDefine',
         Pop: APIconfig.Server + '/api/SearchFlow/SaveAndUpdateSearchFlow',
-        SQL:APIconfig.Server + '/api/SQLScript/SaveSqlInfo'
+        SQL: APIconfig.Server + '/api/SQLScript/SaveSqlInfo'
     }
 )
 //与分公司同步请求
@@ -56,6 +59,9 @@ const Copy = (PK) => (
 //删除
 const Del = (PK) => (
     {
+        Root: APIconfig.Server + '/api/Menu/DeleteMenu?PK=' + PK,
+        Windows: APIconfig.Server + '/api/ActionInitial/DeleteActionInfo?pk=' + PK,
+        Simple: APIconfig.Server + '/api/QueryExtend/DeleteQuerySimple?PK=' + PK,
         BillDefine: APIconfig.Server + '/api/BillDefine/DelBillDefine?PK=' + PK,
         Pop: APIconfig.Server + '/api/SearchFlow/DeleteSearchFlow?PK=' + PK
     }

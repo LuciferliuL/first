@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import Trees from './Trees'
 import { Row, Col, Card, Button, notification } from 'antd'
 import Forms from './Forms'
-import { getFetch, Alert, getTime } from '../../Math/Math'
-import { ActionAPI } from '../../Math/APIconfig'
+import { getFetch, Alert, getTime, postFetchForm, postFetch } from '../../Math/Math'
+import { ActionAPI, Save, Del, API } from '../../Math/APIconfig'
+import { TreeMathFloat } from './TreesMath'
 import Dialog from './Dialog/Dialog'
 
 const ButtonGroup = Button.Group
@@ -11,9 +12,7 @@ class Action extends Component {
     state = {
         clearObj: {
             Action: '',
-            ActionInfo: null,
             Author: '',
-            BillDefineInfo: null,
             BranchID: "STD",
             Caption: '',
             Catalog: "GOS",
@@ -36,7 +35,6 @@ class Action extends Component {
             PK: -1,
             Param1: '',
             Param2: '',
-            QuerySimpleInfo: null,
             SoftSystemCode: "GOS",
             Tag: null,
             Version: 1,
@@ -47,9 +45,7 @@ class Action extends Component {
         selectedKeys: [],
         selectedObj: {
             Action: '',
-            ActionInfo: null,
             Author: '',
-            BillDefineInfo: null,
             BranchID: "STD",
             Caption: '',
             Catalog: "GOS",
@@ -72,7 +68,6 @@ class Action extends Component {
             PK: -1,
             Param1: '',
             Param2: '',
-            QuerySimpleInfo: null,
             SoftSystemCode: "GOS",
             Tag: null,
             Version: 1,
@@ -83,7 +78,8 @@ class Action extends Component {
         visible: false,
         ParentLevelString: 0,
         PK: 0,//PK
-        Refresh: false
+        Refresh: false,
+        treeData: []
     }
     //选择以后渲染
     Selected(keys) {
@@ -96,10 +92,13 @@ class Action extends Component {
             this.setState({
                 selectedObj: res,
                 ParentLevelString: res.LevelString
+            },()=>{
+                console.log(this.state.selectedObj)
             })
         })
     }
     //增删改查
+    //为引用实例   增加与编辑  删除是好的
     Add(key) {
         if (key === 'addRoot') {//parentLevelString 为0
             let clear = this.state.clearObj;
@@ -124,6 +123,7 @@ class Action extends Component {
         } else if (key === 'Edit') {
             let clear = this.state.selectedObj;
             clear.LastModifyTime = getTime()
+            clear.ParentLevelString = 0
             Alert(this.state.PK, () => {
                 this.setState({
                     visible: true,
@@ -133,21 +133,47 @@ class Action extends Component {
         } else if (key === 'Delete') {
             Alert(this.state.selectedKeys, () => {
                 console.log(this.state.selectedKeys)
+                let PK = this.state.selectedKeys[0]
+                getFetch(Del(PK).Root, (res) => {
+                    if (res === 'True') {
+                        notification.success({
+                            message: '提示',
+                            description: '删除成功'
+                        })
+                        this.RefreshChange()
+                    } else {
+                        notification.warning({
+                            message: '提示',
+                            description: res
+                        })
+                    }
+                })
             })
         } else if (key === 'Refresh') {
-            this.setState({
-                Refresh: true
-            })
+            this.RefreshChange()
         }
     }
     RefreshChange = () => {
-        this.setState({
-            Refresh: false
-        })
-        notification.success({
-            message:'刷新成功',
-            description:'树结构已刷新'
-        })
+        fetch(API.Trees, { method: "GET" })
+            .then(res => {
+                return res.json()
+            })
+            .then(res => {
+                this.setState({
+                    treeData: TreeMathFloat(res, 4),
+                })
+                notification.success({
+                    message: '刷新成功',
+                    description: '树结构已刷新'
+                })
+            })
+            .catch((resolve) => {
+                console.log(resolve)
+                notification.warning({
+                    message: '错误',
+                    description: '刷新错误'
+                })
+            })
     }
     //显示隐藏弹出页
     hideModal = () => {
@@ -158,12 +184,34 @@ class Action extends Component {
     }
     DialogSubmit = (e) => {
         console.log(e)
-        this.setState({
-            Refresh: true
+        postFetchForm(Save().Root, e, (res) => {
+            if (res.IsSuccess === 'True') {
+                this.RefreshChange()
+                notification.success({
+                    message: '提示',
+                    description: '可以执行同步',
+                    btn: <ButtonGroup>
+                        <Button onClick={this.asyncData(res.SqlList)} size='small'>同步</Button>
+                        <Button onClick={() => { notification.close() }} size='small'>取消</Button>
+                    </ButtonGroup>
+                })
+            } else {
+                notification.warning({
+                    message: '提示',
+                    description: res.ShortText
+                })
+            }
         })
     }
+    asyncData = (value) => {
+        let path = {
+            pathname: '/Home/AsyncData',
+            state: value
+        }
+        this.props.history.push(path)
+    }
     render() {
-        const { selectedObj, selectedKeys, visible, Refresh } = this.state;
+        const { selectedObj, selectedKeys, visible, treeData } = this.state;
         return (
             <div>
                 <Row>
@@ -178,7 +226,7 @@ class Action extends Component {
                         <Trees
                             Selected={this.Selected.bind(this)}
                             selectedKeys={selectedKeys}
-                            Refresh={Refresh}
+                            treeData={treeData}
                             RefreshChange={this.RefreshChange.bind(this)}
                         ></Trees>
                     </Col>
