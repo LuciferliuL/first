@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
-import { Searchs, ActionAPI } from '../../Math/APIconfig'
+import { Searchs, ActionAPI, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
 import { Collapse, notification } from 'antd'
@@ -200,6 +200,20 @@ class Bill extends Component {
                 });
             } else {
                 //TODO 删除
+                getTimeFetch(Del(this.state.TableValue.PK).BillDefine, (res) => {
+                    if (res === 'True') {
+                        notification.success({
+                            message: '提示',
+                            description: '删除成功'
+                        })
+                        this.GetData()
+                    } else {
+                        notification.warning({
+                            message: '提示',
+                            description: res
+                        })
+                    }
+                })
             }
         }
     }

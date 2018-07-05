@@ -212,7 +212,7 @@ class RegistrationForm extends React.Component {
     }
 }
 
-const SQLManageAction = Form.create({
+const TableUpdateAction = Form.create({
     mapPropsToFields(props) {
         // console.log(1)
         const { TableValue } = props
@@ -229,4 +229,4 @@ const SQLManageAction = Form.create({
     }
 })(RegistrationForm);
 
-export default SQLManageAction
+export default TableUpdateAction

@@ -21,7 +21,7 @@ class SimpleTabs extends React.Component {
             )
         })
         // console.log(panes)
-        if (QueryExtend[0].DQueryCaption === '') {
+        if (QueryExtend[0].DQueryCaption === '' || QueryExtend[0].DQueryCaption === undefined) {
             this.state = {
                 Addkey: true,
                 activeKey: '',

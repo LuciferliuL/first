@@ -30,9 +30,11 @@ const FunAdmin = [
 class SimpleSwitchEdit extends Component {
     constructor(props) {
         super(props)
-        this.Menu = [],
-            this.Servers = [],
-            this.Fun = []
+        this.state = {
+            Menu: [],
+            Servers: [],
+            Fun: []
+        }
     }
     callback = (key) => {
         console.log(key);
@@ -43,7 +45,7 @@ class SimpleSwitchEdit extends Component {
     }
     componentWillMount() {
         const { disableds, Settings } = this.props
-        console.log(Settings)//如果是修改  需要JSON转换 TODO
+        // console.log(Settings)//如果是修改  需要JSON转换 TODO
         for (let key in Settings) {
             if (Settings[key] === 'true') {
                 Settings[key] = true
@@ -51,9 +53,10 @@ class SimpleSwitchEdit extends Component {
                 Settings[key] = false
             }
         }
+        let Menu = [], Servers = [], Fun = []
         MenuAdmin.map((v, index) => {
             let Randoms = Math.random()
-            return this.Menu.push(
+            return Menu.push(
                 <FormItem label={v.Name} {...formItemLayout} key={`${(index + 1) * Randoms}Menu`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
@@ -72,7 +75,7 @@ class SimpleSwitchEdit extends Component {
         ServerAdmin.map((v, index) => {
             let Randoms = Math.random()
             // console.log(v)
-            return this.Servers.push(
+            return Servers.push(
                 <FormItem label={v.Name} {...formItemLayout} key={`${(index + 1) * Randoms}Ser`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
@@ -89,7 +92,7 @@ class SimpleSwitchEdit extends Component {
 
             let Randoms = Math.random()
             // console.log(v)
-            return this.Fun.push(
+            return Fun.push(
                 <FormItem label={v.Name} {...formItemLayout} key={`${(index + 1) * Randoms}Fun`}>
                     <Switch
                         defaultChecked={Settings[v.Code]}
@@ -101,8 +104,14 @@ class SimpleSwitchEdit extends Component {
                 </FormItem>
             )
         })
+        this.setState({
+            Menu: Menu,
+            Servers: Servers,
+            Fun: Fun
+        })
     }
     render() {
+        const { Menu, Servers, Fun } = this.state
         return (
             <div>
                 <Collapse
@@ -110,13 +119,13 @@ class SimpleSwitchEdit extends Component {
                     onChange={this.callback.bind(this)}
                     bordered={false}>
                     <Panel header="功能控制" key="1">
-                        {this.Fun}
+                        {Fun}
                     </Panel>
                     <Panel header="系统控制" key="2">
-                        {this.Servers}
+                        {Servers}
                     </Panel>
                     <Panel header="菜单控制" key="3">
-                        {this.Menu}
+                        {Menu}
                     </Panel>
                 </Collapse>
             </div>

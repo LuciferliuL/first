@@ -38,7 +38,7 @@ class RegistrationForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             this.setState({
-                loading:true
+                loading: true
             })
             if (!err) {
                 Object.assign(this.state.submitData, values)
@@ -48,20 +48,21 @@ class RegistrationForm extends React.Component {
                         this.setState({
                             disabledCopy: false,
                             disabled: true,
-                            loading:false
+                            loading: false
                         }, () => {
                             notification.success({
                                 message: '提示',
                                 description: '可以进行分公司复制或执行同步',
+                                key: 1,
                                 btn: <ButtonGroup>
-                                    <Button onClick={this.asyncData(res.SqlList)} size='small'>同步</Button>
-                                    <Button onClick={() => { notification.close() }} size='small'>取消</Button>
+                                    <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
+                                    <Button onClick={() => { notification.close(this.key) }} size='small'>取消</Button>
                                 </ButtonGroup>
                             })
                         })
                     } else {
                         this.setState({
-                            loading:false
+                            loading: false
                         })
                         notification.warning({
                             message: '警告',
@@ -89,9 +90,10 @@ class RegistrationForm extends React.Component {
                     notification.success({
                         message: '提示',
                         description: '分公司复制成功，可以执行同步',
+                        key: 1,
                         btn: <ButtonGroup>
-                            <Button onClick={this.asyncData(res.SqlList)} size='small'>同步</Button>
-                            <Button onClick={() => { notification.close() }} size='small'>取消</Button>
+                            <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
+                            <Button onClick={() => { notification.close(this.key) }} size='small'>取消</Button>
                         </ButtonGroup>
                     })
                 })
@@ -153,7 +155,7 @@ class RegistrationForm extends React.Component {
                                     label="单据类型标识"
                                 >
                                     {getFieldDecorator('BillTypeCode')(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -163,7 +165,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('BillTypeName', {
                                         rules: [{ required: true, message: 'Please input 单据类型名称!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -173,7 +175,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('BillCatalog', {
                                         rules: [{ required: true, message: 'Please input 业务分类!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -183,7 +185,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('Author', {
                                         rules: [{ required: true, message: 'Please input 作者!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -205,7 +207,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('BillScripe', {
                                         rules: [{ required: true, message: 'Please input 单据描述!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -215,7 +217,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('ClassName', {
                                         rules: [{ required: true, message: 'Please input 实体类!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -225,7 +227,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('ClassAssembly', {
                                         rules: [{ required: true, message: 'Please input 实体类程序集!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                             </Col>
@@ -237,7 +239,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('HpClassNameSpace', {
                                         rules: [{ required: true, message: 'Please input HP实体类主对象!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -247,7 +249,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('IncludeChild', {
                                         rules: [{ required: true, message: 'Please input HP实体类子对象!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -278,7 +280,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('ClassNameSpace', {
                                         rules: [{ required: true, message: 'Please input 全类名!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -288,7 +290,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('MasterTableName', {
                                         rules: [{ required: true, message: 'Please input 主表名!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -298,7 +300,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('SloveTableName', {
                                         rules: [{ required: true, message: 'Please input 子表名!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                             </Col>
@@ -310,7 +312,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('EditWinAssembly', {
                                         rules: [{ required: true, message: '实体类窗口程序集!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -320,7 +322,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('EditWinNameSpace', {
                                         rules: [{ required: true, message: '实体类窗口命名空间!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -330,7 +332,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('EditControlAssembly', {
                                         rules: [{ required: true, message: '实体类控件程序集!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -340,7 +342,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('EditControlNameSpace', {
                                         rules: [{ required: true, message: '实体类控件命名空间!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -351,7 +353,7 @@ class RegistrationForm extends React.Component {
 
                                         rules: [{ required: true, message: '单据再现窗口程序集!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -361,7 +363,7 @@ class RegistrationForm extends React.Component {
                                     {getFieldDecorator('DisplayBillFormNameSpace', {
                                         rules: [{ required: true, message: '单据再现窗口命名空间!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -382,7 +384,7 @@ class RegistrationForm extends React.Component {
                                     label="URL"
                                 >
                                     {getFieldDecorator('URL')(
-                                        <Input disabled={disabled} autoComplete="off"/>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                             </Col>

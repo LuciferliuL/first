@@ -31,7 +31,7 @@ class Tables extends Component {
             onChange: this.onSelectChange,
             type:'radio'
         };
-        const { Data, columns} = this.props
+        const { Data, columns, scroll} = this.props
         return (
             <div>
                 <Table

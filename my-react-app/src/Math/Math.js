@@ -310,3 +310,4 @@ function timeFn(dbegin, ebegin) {//di作为一个变量传进来
     return dayDiff + "天 " + hours + "小时 " + minutes + " 分钟" + seconds + " 秒"
 }
 export { timeFn }
+

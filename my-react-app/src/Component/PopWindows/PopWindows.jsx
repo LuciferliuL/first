@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
-import { Searchs, ActionAPI } from '../../Math/APIconfig'
+import { Searchs, ActionAPI, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
 import { Collapse, notification } from 'antd'
@@ -42,7 +42,7 @@ class PopWindows extends Component {
                 BranchID: "STD",
                 ConditionControlAssembly: '',
                 ConditionControlNameSpace: '',
-                CreateTime:getTime(),
+                CreateTime: getTime(),
                 DataSource: '',
                 DeleteFlag: 0,
                 DisplayAssembly: '',
@@ -53,7 +53,7 @@ class PopWindows extends Component {
                 FormAction: '',
                 FormName: '',
                 GuidString: null,
-                ImmediatelyQuery:false,
+                ImmediatelyQuery: false,
                 IsDisplayConditionControl: false,
                 IsUseCacheServer: false,
                 LastModifyTime: getTime(),
@@ -69,7 +69,7 @@ class PopWindows extends Component {
                 SQLScripeGUID: '',
                 SearchControlConfig: null,
                 SearchControlConfigGuid: null,
-                SearchFormAssembly:'',
+                SearchFormAssembly: '',
                 SearchFormHeight: '',
                 SearchFormNameSpace: '',
                 SearchFormShowPosition: "01",
@@ -86,7 +86,7 @@ class PopWindows extends Component {
                     LastModifyTime: getTime(),
                     LastUpdater: null,
                     LineID: -1,
-                    Module:'',
+                    Module: '',
                     Note: '',
                     OriginalGuidString: null,
                     PK: -1,
@@ -118,7 +118,7 @@ class PopWindows extends Component {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue:this.state.clearObj
+                TableValue: this.state.clearObj
             })
         })
     }
@@ -168,6 +168,8 @@ class PopWindows extends Component {
     AddAction = (name) => {
         if (name === 'Add') {
             this.clear = JSON.parse(JSON.stringify(this.state.clearObj))
+            this.clear.CreateTime = getTime()
+            this.clear.LastModifyTime = getTime()
             this.setState({
                 TableValue: this.clear,
                 ActiveKey: ['2'],
@@ -197,6 +199,20 @@ class PopWindows extends Component {
                 });
             } else {
                 //TODO 删除
+                getTimeFetch(Del(this.state.TableValue.PK).Pop, (res) => {
+                    if (res === 'True') {
+                        notification.success({
+                            message: '提示',
+                            description: '删除成功'
+                        })
+                        this.GetData()
+                    } else {
+                        notification.warning({
+                            message: '提示',
+                            description: res
+                        })
+                    }
+                })
             }
         }
     }

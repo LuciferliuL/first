@@ -63,7 +63,8 @@ const Del = (PK) => (
         Windows: APIconfig.Server + '/api/ActionInitial/DeleteActionInfo?pk=' + PK,
         Simple: APIconfig.Server + '/api/QueryExtend/DeleteQuerySimple?PK=' + PK,
         BillDefine: APIconfig.Server + '/api/BillDefine/DelBillDefine?PK=' + PK,
-        Pop: APIconfig.Server + '/api/SearchFlow/DeleteSearchFlow?PK=' + PK
+        Pop: APIconfig.Server + '/api/SearchFlow/DeleteSearchFlow?PK=' + PK,
+        SQL: APIconfig.Server + '/api/SQLScript/DeleteSqlScripe?PK=' + PK
     }
 )
 

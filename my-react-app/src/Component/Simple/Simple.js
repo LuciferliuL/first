@@ -218,8 +218,9 @@ class Simple extends Component {
             }
         }
     }
+
     handleOk = () => {
-        // console.log(this.state.TableValue)
+        console.log(this.state.TableValue)
         let clear = JSON.parse(JSON.stringify(this.state.clearObj))
         this.setState({
             visible: false,
@@ -249,15 +250,16 @@ class Simple extends Component {
                 notification.success({
                     message: '提示',
                     description: '可以执行同步',
+                    key: 1,
                     btn: <ButtonGroup>
-                        <Button onClick={this.asyncData(res.SqlList)} size='small'>同步</Button>
-                        <Button onClick={() => { notification.close() }} size='small'>取消</Button>
-                    </ButtonGroup>
+                        <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
+                        <Button onClick={() => { notification.close(this.key) }} size='small'>取消</Button>
+                    </ButtonGroup>,
                 })
             } else {
                 notification.warning({
                     message: '提示',
-                    description: res.ShortText
+                    description: res.ErrMessage
                 })
             }
         })
@@ -268,6 +270,7 @@ class Simple extends Component {
             state: value
         }
         this.props.history.push(path)
+        // console.log(value)
     }
     render() {
         const { Data, columns, ActiveKey, TableValue, visible, clearTable } = this.state

@@ -2,7 +2,7 @@ import React from 'react'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { Link, Route } from 'react-router-dom'
 import Action from '../Action/Action';
-import Windows from '../Windows/Windows'
+import Windows from '../Windows/Windows_'
 import Simple from '../Simple/Simple';
 import PVComponent from '../../Logrecord/PVComponent';
 import TimeComponent from '../../Logrecord/TimeComponent'
@@ -13,6 +13,7 @@ import AsyncData from '../../Builds/AsyncData';
 import PopWindows from '../PopWindows/PopWindows';
 import Test from '../../TestModule/Test';
 import SQLManage from '../SQLManage/SQLManage';
+import TableUpdate from '../../Builds/TableUpdate'
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -65,7 +66,7 @@ class Home extends React.Component {
                             title={<span><Icon type="team" /><span>发布与构建</span></span>}
                         >
                             <Menu.Item key="111"><Link to='/Home/AsyncData'>数据同步</Link></Menu.Item>
-                            <Menu.Item key="71">Team 2</Menu.Item>
+                            <Menu.Item key="71"><Link to='/Home/TableUpdate'>表结构更新管理</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub3"
@@ -104,6 +105,7 @@ class Home extends React.Component {
                             <Route path='/Home/PopWindows' component={PopWindows}></Route>
                             <Route path='/Home/Test' component={Test}></Route>
                             <Route path='/Home/SQLManage' component={SQLManage}></Route>
+                            <Route path='/Home/TableUpdate' component={TableUpdate}></Route>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', padding: 10 }}>

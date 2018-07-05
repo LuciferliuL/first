@@ -92,7 +92,7 @@ class Action extends Component {
             this.setState({
                 selectedObj: res,
                 ParentLevelString: res.LevelString
-            },()=>{
+            }, () => {
                 console.log(this.state.selectedObj)
             })
         })
@@ -190,9 +190,10 @@ class Action extends Component {
                 notification.success({
                     message: '提示',
                     description: '可以执行同步',
+                    key: 1,
                     btn: <ButtonGroup>
-                        <Button onClick={this.asyncData(res.SqlList)} size='small'>同步</Button>
-                        <Button onClick={() => { notification.close() }} size='small'>取消</Button>
+                        <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
+                        <Button onClick={() => { notification.close(this.key) }} size='small'>取消</Button>
                     </ButtonGroup>
                 })
             } else {

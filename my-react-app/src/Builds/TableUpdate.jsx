@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import Tables from '../Tables/Tables'
-import { Searchs, ActionAPI, Del } from '../../Math/APIconfig'
-import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
-import TablesBtn from '../Tables/TablesBtn'
-import { Collapse, notification } from 'antd'
-import SQLManageAction from './SQLManageAction'
+import Tables from '../Component/Tables/Tables'
+import { Searchs, ActionAPI, Del } from '../Math/APIconfig'
+import { getFetch, getTime, getTimeFetch } from '../Math/Math'
+import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col } from 'antd'
+import TableUpdateAction from './ComponentP/TableUpdateAction'
 const Panel = Collapse.Panel
+const { Option } = Select
+const InputGroup = Input.Group
+const FormItem = Form.Item
+const RangePicker = DatePicker.RangePicker;
 
-class SQLManage extends Component {
+class TimeRelatedForm extends Component {
     constructor(props) {
         super(props)
         this.clear = {}
@@ -175,12 +178,76 @@ class SQLManage extends Component {
 
     render() {
         const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
+        const { getFieldDecorator } = this.props.form;
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 8 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 16 },
+            },
+        };
         return (
             <div>
-                <TablesBtn
-                    GetData={this.GetData.bind(this)}
-                    AddAction={this.AddAction.bind(this)}
-                ></TablesBtn>
+                <Card>
+                    <Form layout='inline'>
+                        <FormItem
+                            label="状态"
+                        >
+                            {getFieldDecorator('State')(
+                                <Select>
+                                    <Option value="0">未发布</Option>
+                                    <Option value="1">已发布</Option>
+                                </Select>
+                            )}
+                        </FormItem>
+
+                        <FormItem
+                            label="类型"
+                        >
+                            {getFieldDecorator('SQLTYPE')(
+                                <Select>
+                                    <Option value="-1">全部类型</Option>
+                                    <Option value="0">新增表</Option>
+                                    <Option value="1">修改表</Option>
+                                    <Option value="2">创建视图</Option>
+                                    <Option value="3">过程函数脚本</Option>
+                                </Select>
+                            )}
+                        </FormItem>
+                        <FormItem
+                            label="禅道状态"
+                        >
+                            {getFieldDecorator('BugType')(
+                                <Select>
+                                    <Option value="0">需求</Option>
+                                    <Option value="1">BUG</Option>
+                                </Select>
+                            )}
+                        </FormItem>
+                        <FormItem
+                            label="BUGID"
+                        >
+                            {getFieldDecorator('BugIDList', {
+                                rules: [{ required: true, message: 'Please input BUGID!' }],
+                            })(
+                                <Input autoComplete="off"></Input>
+                            )}
+                        </FormItem>
+                        <FormItem
+
+                            label="RangePicker"
+                        >
+                            {getFieldDecorator('range-picker', {
+                                rules: [{ type: 'array', required: true, message: 'Please select time!' }],
+                            })(
+                                <RangePicker />
+                            )}
+                        </FormItem>
+                    </Form>
+                </Card>
                 <Collapse
                     bordered={false}
                     defaultActiveKey={['1']}
@@ -197,11 +264,11 @@ class SQLManage extends Component {
                         ></Tables>
                     </Panel>
                     <Panel key='2' showArrow={true} header='详细信息'>
-                        <SQLManageAction
+                        <TableUpdateAction
                             clear={this.clear}
                             TableValue={TableValue}
                             disabled={disabled}
-                        ></SQLManageAction>
+                        ></TableUpdateAction>
                     </Panel>
                 </Collapse>
             </div>
@@ -209,5 +276,6 @@ class SQLManage extends Component {
     }
 }
 
-export default SQLManage;
+const TableUpdate = Form.create()(TimeRelatedForm);
+export default TableUpdate;
 

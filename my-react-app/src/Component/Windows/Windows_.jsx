@@ -4,10 +4,10 @@ import { Searchs, ActionAPI, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
 import { Collapse, notification } from 'antd'
-import SQLManageAction from './SQLManageAction'
+import WindowsAction from './WindowsAction_'
 const Panel = Collapse.Panel
 
-class SQLManage extends Component {
+class Windows extends Component {
     constructor(props) {
         super(props)
         this.clear = {}
@@ -20,20 +20,17 @@ class SQLManage extends Component {
                 dataIndex: 'PK',
                 key: 'PK',
             }, {
-                title: 'BranchID',
-                dataIndex: 'BranchID',
-                // key: 'PK',
+                title: 'Action',
+                dataIndex: 'Action',
             }, {
-                title: 'ScriptType',
-                dataIndex: 'ScriptType',
-                // key: 'PK',
+                title: 'ActionType',
+                dataIndex: 'ActionType',
             }, {
                 title: 'Author',
                 dataIndex: 'Author',
-                // key: 'PK',
             }, {
-                title: 'SqlName',
-                dataIndex: 'SqlName'
+                title: 'Notes',
+                dataIndex: 'Notes',
             }],
             ActiveKey: ['1'],
             //表单数据
@@ -41,37 +38,40 @@ class SQLManage extends Component {
             clearTable: false,
             disabled: true,
             clearObj: {
+                Action: '',
+                ActionType: '',
                 Author: '',
                 BranchID: "STD",
-                CreateTime: getTime(),
+                CreateTime: '',
                 DeleteFlag: 0,
                 FK: -1,
                 GuidString: null,
-                LastModifyTime: getTime(),
+                Initial: '',
+                InitialAssemblyRef: '',
+                IsSingle: true,
+                LastModifyTime: '',
                 LastUpdater: null,
                 LineID: -1,
                 Module: '',
-                Note: '',
-                OriginalGuidString: null,
+                Note: "",
+                Notes: '',
+                OriginalGuidString: 0,
                 PK: -1,
-                QueryDataRightCode: null,
-                ScriptType: '',
+                ParamString: '',
+                Shortcuts: null,
                 SoftSystemCode: "GOS",
-                SqlName: '',
-                SqlScripe: '',
-                TableDisplayerGuid: null,
                 Tag: null,
-                Version: 2,
-                VersionNum: 2,
+                Text: '',
+                Version: 1,
                 WorkFlowGuid: "",
-                WorkFlowState: "",
+                WorkFlowState: ""
             }
         }
     }
 
     //初始加载数据
     componentDidMount() {
-        getFetch(Searchs().SQLManage, (res) => {
+        getFetch(Searchs().WindowsAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
@@ -81,7 +81,7 @@ class SQLManage extends Component {
     }
     //点击搜索加载数据
     GetData = (SearchValue) => {
-        getFetch(Searchs(SearchValue).SQLManage, (res) => {
+        getFetch(Searchs(SearchValue).WindowsAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
@@ -113,13 +113,10 @@ class SQLManage extends Component {
     }
     //点击表单获取得数据
     TableEmitData = (TableValue) => {
-        // console.log(TableValue)
-        getTimeFetch(ActionAPI(TableValue.PK).SQL, (res) => {
-            console.log(res)
-            this.setState({
-                TableValue: JSON.parse(JSON.stringify(res)),
-                disabled: true
-            })
+        console.log(TableValue)
+        this.setState({
+            TableValue: JSON.parse(JSON.stringify(TableValue)),
+            disabled: true
         })
     }
     AddAction = (name) => {
@@ -155,7 +152,7 @@ class SQLManage extends Component {
                 });
             } else {
                 //TODO 删除
-                getTimeFetch(Del(this.state.TableValue.PK).SQL, (res) => {
+                getTimeFetch(Del(this.state.TableValue.PK).Windows, (res) => {
                     if (res === 'True') {
                         notification.success({
                             message: '提示',
@@ -197,11 +194,11 @@ class SQLManage extends Component {
                         ></Tables>
                     </Panel>
                     <Panel key='2' showArrow={true} header='详细信息'>
-                        <SQLManageAction
+                        <WindowsAction
                             clear={this.clear}
                             TableValue={TableValue}
                             disabled={disabled}
-                        ></SQLManageAction>
+                        ></WindowsAction>
                     </Panel>
                 </Collapse>
             </div>
@@ -209,5 +206,5 @@ class SQLManage extends Component {
     }
 }
 
-export default SQLManage;
+export default Windows;
 

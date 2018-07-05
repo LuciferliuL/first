@@ -13,7 +13,7 @@ const FormList = [
     'Author', 'ConditionControlAssembly', 'ConditionControlNameSpace', 'DataSource', 'DisplayAssembly', 'DisplayNamespace',
     'DisplayToolbar', 'FormAction', 'FormName', 'ImmediatelyQuery', 'IsDisplayConditionControl', 'IsUseCacheServer',
     'Module', 'MultiSelect', 'OneRowAutoPopForm', 'SQLScripeGUID', 'SearchFormAssembly', 'SearchFormHeight', 'SearchFormNameSpace',
-    'SearchFormShowPosition', 'SearchFormWide', 'SqlCode', 'UseClientCache'
+    'SearchFormShowPosition', 'SearchFormWide', 'SqlCode', 'UseClientCache', 'DisplayFullScreen'
 ]
 const FormLisrSqlScript = ['Author', 'Module', 'Note', 'ScriptType',
     'SqlName', 'SqlScripe']
@@ -129,7 +129,7 @@ class RegistrationForm extends React.Component {
                                 message: '提示',
                                 description: '可以执行同步',
                                 btn: <ButtonGroup>
-                                    <Button onClick={this.asyncData(res.SqlList)} size='small'>同步</Button>
+                                    <Button onClick={() => this.asyncData(res.SqlList)} size='small'>同步</Button>
                                     <Button onClick={() => { notification.close() }} size='small'>取消</Button>
                                 </ButtonGroup>
                             })
@@ -140,7 +140,7 @@ class RegistrationForm extends React.Component {
                         })
                         notification.warning({
                             message: '警告',
-                            description: '保存失败'
+                            description: '保存失败' + res.ErrMessage
                         })
                     }
                 })
@@ -436,7 +436,7 @@ class RegistrationForm extends React.Component {
                                 </Col>
                                 <Col span={8}>
                                     <Row>
-                                        <Col span={12}>
+                                        <Col span={8}>
                                             <FormItem {...checkboxItem} label="显示工具栏"
                                             >
                                                 {getFieldDecorator('DisplayToolbar')(
@@ -444,10 +444,18 @@ class RegistrationForm extends React.Component {
                                                 )}
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col span={8}>
                                             <FormItem {...checkboxItem} label="条件控件"
                                             >
                                                 {getFieldDecorator('IsDisplayConditionControl')(
+                                                    <CheckBox disabled={disabled} />
+                                                )}
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={8}>
+                                            <FormItem {...checkboxItem} label="显示全屏"
+                                            >
+                                                {getFieldDecorator('DisplayFullScreen')(
                                                     <CheckBox disabled={disabled} />
                                                 )}
                                             </FormItem>
