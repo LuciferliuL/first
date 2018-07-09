@@ -1,5 +1,6 @@
 import 'isomorphic-fetch'
 import { notification } from 'antd'
+import $ from 'jquery'
 const NameBook = [
     { Port: "20291", Module: "OAuth" },
     { Port: "20301", Module: "Lookup" },
@@ -73,7 +74,8 @@ function postFetch(URL, postBody, Callback) {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify(postBody),
-        headers: myHeaders
+        headers: myHeaders,
+        credentials: 'include'
     });
     fetch(request)
         .then(response => response.json())
@@ -310,4 +312,19 @@ function timeFn(dbegin, ebegin) {//di作为一个变量传进来
     return dayDiff + "天 " + hours + "小时 " + minutes + " 分钟" + seconds + " 秒"
 }
 export { timeFn }
+
+
+function ErrPost(URL, body, Callback) {
+    $.ajax({
+        url: URL,
+        data: body,
+        datatype: 'JSON',
+        type: "POST",
+        success: function (res) {
+            Callback(res)
+        }
+    })
+}
+
+export { ErrPost }
 

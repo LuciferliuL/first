@@ -126,7 +126,7 @@ class RegistrationForm extends React.Component {
                             <Button type='danger' htmlType='button' disabled={disabled} onClick={this.handleReset}>重置</Button>
                         </ButtonGroup>}>
                         <Row gutter={2}>
-                            <Col span={12}>
+                            <Col span={8}>
 
                                 <FormItem
                                     {...formItemLayout}
@@ -140,7 +140,7 @@ class RegistrationForm extends React.Component {
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="Guid"
+                                    label="对应禅道编号"
                                 >
                                     {getFieldDecorator('GuidString')(
                                         <Input disabled={disabled} autoComplete="off" />
@@ -148,7 +148,7 @@ class RegistrationForm extends React.Component {
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="所属模块"
+                                    label="标题"
                                 >
                                     {getFieldDecorator('Module', {
                                         rules: [{ required: true, message: 'Please input 所属模块!' }],
@@ -160,7 +160,7 @@ class RegistrationForm extends React.Component {
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="SQL语句标识"
+                                    label="备注"
                                 >
                                     {getFieldDecorator('SqlName', {
                                         rules: [{ required: true, message: 'Please input SQL语句标识!' }],
@@ -170,7 +170,7 @@ class RegistrationForm extends React.Component {
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="脚本类型"
+                                    label="类型"
                                 >
                                     {getFieldDecorator('ScriptType', {
                                         rules: [{ required: true, message: 'Please input 脚本类型!' }],
@@ -180,7 +180,7 @@ class RegistrationForm extends React.Component {
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="描述"
+                                    label="禅道状态"
                                 >
                                     {getFieldDecorator('Note')(
                                         <Input disabled={disabled} autoComplete="off" />
@@ -188,10 +188,10 @@ class RegistrationForm extends React.Component {
                                 </FormItem>
 
                             </Col>
-                            <Col span={12}>
+                            <Col span={8}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label="SQL执行语句"
+                                    label="脚本"
                                 >
                                     {getFieldDecorator('SqlScripe', {
                                         rules: [{ required: true, message: 'Please input SQL执行语句!' }],
@@ -200,7 +200,23 @@ class RegistrationForm extends React.Component {
                                             autoComplete="off"
                                             style={{ resize: 'none' }}
                                             cols='15'
-                                            rows='20' />
+                                            rows='15' />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label='日志'
+                                >
+                                    {getFieldDecorator('SqlScripe', {
+                                        rules: [{ required: true, message: 'Please input SQL执行语句!' }],
+                                    })(
+                                        <TextArea disabled={disabled}
+                                            autoComplete="off"
+                                            style={{ resize: 'none' }}
+                                            cols='15'
+                                            rows='15' />
                                     )}
                                 </FormItem>
                             </Col>

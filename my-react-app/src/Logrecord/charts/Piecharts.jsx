@@ -46,7 +46,7 @@ class Piecharts extends Component {
         {
             title: {
                 text: '延迟统计',
-                subtext: '虚构数据',
+                subtext: '数据',
                 left: 'center'
             },
             label: {
@@ -59,10 +59,10 @@ class Piecharts extends Component {
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
             legend: {
-                orient: 'vertical',
-                top: 'middle',
                 // orient: 'vertical',
-                // x: 'left',
+                // top: 'middle',
+                orient: 'vertical',
+                x: 'left',
                 data: ['0s - 1s', '1s - 5s', '5s - 10s', '> 10s']
             },
             series: [
@@ -75,7 +75,7 @@ class Piecharts extends Component {
                     data: this.state.Data,
                     label: {
                         normal: {
-                            formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                            formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}',
                             backgroundColor: '#eee',
                             borderColor: '#aaa',
                             borderWidth: 1,
@@ -84,20 +84,20 @@ class Piecharts extends Component {
                             // shadowOffsetX: 2,
                             // shadowOffsetY: 2,
                             // shadowColor: '#999',
-                            // padding: [0, 7],
+                            padding: [0, 7],
                             rich: {
                                 a: {
                                     color: '#999',
                                     lineHeight: 20,
                                     align: 'center'
                                 },
-                                // abg: {
-                                //     backgroundColor: '#333',
-                                //     width: '100%',
-                                //     align: 'right',
-                                //     height: 22,
-                                //     borderRadius: [4, 4, 0, 0]
-                                // },
+                                abg: {
+                                    backgroundColor: '#333',
+                                    width: '100%',
+                                    align: 'right',
+                                    height: 22,
+                                    borderRadius: [4, 4, 0, 0]
+                                },
                                 hr: {
                                     borderColor: '#aaa',
                                     width: '100%',

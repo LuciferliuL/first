@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Tables from '../Component/Tables/Tables'
-import { Searchs, ActionAPI, Del } from '../Math/APIconfig'
-import { getFetch, getTime, getTimeFetch } from '../Math/Math'
-import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col } from 'antd'
+import { table } from './ComponentP/AsyncAPI'
+import { getTime, getTimeFetch, postFetch, postFetchForm } from '../Math/Math'
+import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col, Button } from 'antd'
 import TableUpdateAction from './ComponentP/TableUpdateAction'
 const Panel = Collapse.Panel
 const { Option } = Select
-const InputGroup = Input.Group
+const ButtonGroup = Button.Group
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker;
 
@@ -19,24 +19,30 @@ class TimeRelatedForm extends Component {
             Data: [],
             //表格列
             columns: [{
-                title: 'PK',
-                dataIndex: 'PK',
+                title: 'AUTHOR',
+                dataIndex: 'AUTHOR',
                 key: 'PK',
             }, {
-                title: 'BranchID',
-                dataIndex: 'BranchID',
-                // key: 'PK',
+                title: 'BUGID',
+                dataIndex: 'BUGID',
             }, {
-                title: 'ScriptType',
-                dataIndex: 'ScriptType',
-                // key: 'PK',
+                title: 'REMARK',
+                dataIndex: 'REMARK',
             }, {
-                title: 'Author',
-                dataIndex: 'Author',
-                // key: 'PK',
+                title: 'SQLSCRIPE',
+                dataIndex: 'SQLSCRIPE',
             }, {
-                title: 'SqlName',
-                dataIndex: 'SqlName'
+                title: 'TITLE',
+                dataIndex: 'TITLE'
+            }, {
+                title: 'NOTE',
+                dataIndex: 'NOTE'
+            }, {
+                title: 'SQLTYPE',
+                dataIndex: 'SQLTYPE'
+            }, {
+                title: 'BugTYPE',
+                dataIndex: 'BugTYPE'
             }],
             ActiveKey: ['1'],
             //表单数据
@@ -44,28 +50,32 @@ class TimeRelatedForm extends Component {
             clearTable: false,
             disabled: true,
             clearObj: {
-                Author: '',
-                BranchID: "STD",
-                CreateTime: getTime(),
-                DeleteFlag: 0,
+                AUTHOR: "",
+                BILLTYPECODE: "",
+                BUGID: "",
+                BugTYPE: 0,
+                CreateTime: "",
+                DELETEFLAG: 0,
+                DEVMESSAGE: null,
+                DEVSTATE: 2,
+                EXECUTEDATE: "",
+                EXECUTEDATEDEV: "",
+                EXECUTEMAN: "",
+                EXECUTEMANDEV: "",
                 FK: -1,
-                GuidString: null,
-                LastModifyTime: getTime(),
-                LastUpdater: null,
-                LineID: -1,
-                Module: '',
-                Note: '',
-                OriginalGuidString: null,
+                ISPUBLIC: 1,
+                LastModifyTime: "",
+                NOTE: "",
+                PATH: "",
                 PK: -1,
-                QueryDataRightCode: null,
-                ScriptType: '',
-                SoftSystemCode: "GOS",
-                SqlName: '',
-                SqlScripe: '',
-                TableDisplayerGuid: null,
+                QAMESSAGE: "",
+                REMARK: "",
+                SQLSCRIPE: "",
+                SQLTYPE: 1,
+                STATE: 1,
+                TITLE: "",
                 Tag: null,
-                Version: 2,
-                VersionNum: 2,
+                Version: 3,
                 WorkFlowGuid: "",
                 WorkFlowState: "",
             }
@@ -74,24 +84,9 @@ class TimeRelatedForm extends Component {
 
     //初始加载数据
     componentDidMount() {
-        getFetch(Searchs().SQLManage, (res) => {
-            // console.log(res)
-            this.setState({
-                Data: res,
-                TableValue: this.state.clearObj
-            })
-        })
+        //  
     }
-    //点击搜索加载数据
-    GetData = (SearchValue) => {
-        getFetch(Searchs(SearchValue).SQLManage, (res) => {
-            // console.log(res)
-            this.setState({
-                Data: res,
-                TableValue: this.state.clearObj
-            })
-        })
-    }
+
     RowSelected = (e) => {
         // console.log(e)
         return {
@@ -117,7 +112,7 @@ class TimeRelatedForm extends Component {
     //点击表单获取得数据
     TableEmitData = (TableValue) => {
         // console.log(TableValue)
-        getTimeFetch(ActionAPI(TableValue.PK).SQL, (res) => {
+        getTimeFetch(table(TableValue.PK).click, (res) => {
             console.log(res)
             this.setState({
                 TableValue: JSON.parse(JSON.stringify(res)),
@@ -158,7 +153,7 @@ class TimeRelatedForm extends Component {
                 });
             } else {
                 //TODO 删除
-                getTimeFetch(Del(this.state.TableValue.PK).SQL, (res) => {
+                getTimeFetch(table(this.state.TableValue.PK).del, (res) => {
                     if (res === 'True') {
                         notification.success({
                             message: '提示',
@@ -176,6 +171,33 @@ class TimeRelatedForm extends Component {
         }
     }
 
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                const rangeValue = values['rangepicker']
+                const BUGID = values['BugIDList'].split(',')
+
+                const value = {
+                    'State': values['State'],
+                    'SQLTYPE': values['SQLTYPE'],
+                    'BugType': values['BugType'],
+                    'BugIDList': BUGID,
+                    'Author': 'xxx',
+                    'StarTime': rangeValue[0].format('YYYY-MM-DD'),
+                    'EndTime': rangeValue[1].format('YYYY-MM-DD')
+                }
+                console.log('Received values of form: ', value);
+
+                postFetchForm(table().postCheck, value, (res) => {
+                    console.log(res)
+                    this.setState({
+                        Data: res
+                    })
+                })
+            }
+        });
+    }
     render() {
         const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
         const { getFieldDecorator } = this.props.form;
@@ -191,63 +213,88 @@ class TimeRelatedForm extends Component {
         };
         return (
             <div>
-                <Card>
-                    <Form layout='inline'>
-                        <FormItem
-                            label="状态"
-                        >
-                            {getFieldDecorator('State')(
-                                <Select>
-                                    <Option value="0">未发布</Option>
-                                    <Option value="1">已发布</Option>
-                                </Select>
-                            )}
-                        </FormItem>
 
-                        <FormItem
-                            label="类型"
-                        >
-                            {getFieldDecorator('SQLTYPE')(
-                                <Select>
-                                    <Option value="-1">全部类型</Option>
-                                    <Option value="0">新增表</Option>
-                                    <Option value="1">修改表</Option>
-                                    <Option value="2">创建视图</Option>
-                                    <Option value="3">过程函数脚本</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                        <FormItem
-                            label="禅道状态"
-                        >
-                            {getFieldDecorator('BugType')(
-                                <Select>
-                                    <Option value="0">需求</Option>
-                                    <Option value="1">BUG</Option>
-                                </Select>
-                            )}
-                        </FormItem>
-                        <FormItem
-                            label="BUGID"
-                        >
-                            {getFieldDecorator('BugIDList', {
-                                rules: [{ required: true, message: 'Please input BUGID!' }],
-                            })(
-                                <Input autoComplete="off"></Input>
-                            )}
-                        </FormItem>
-                        <FormItem
+                <Form onSubmit={this.handleSubmit}>
+                    <Card >
+                        <Row gutter={1}>
+                            <Col span={3}>
+                                <FormItem
+                                    label="状态"
+                                    {...formItemLayout}
+                                >
+                                    {getFieldDecorator('State')(
+                                        <Select>
+                                            <Option value="0">未发布</Option>
+                                            <Option value="1">已发布</Option>
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={3}>
+                                <FormItem
+                                    label="类型"
+                                    {...formItemLayout}
+                                >
+                                    {getFieldDecorator('SQLTYPE')(
+                                        <Select>
+                                            <Option value="-1">全部类型</Option>
+                                            <Option value="0">新增表</Option>
+                                            <Option value="1">修改表</Option>
+                                            <Option value="2">创建视图</Option>
+                                            <Option value="3">过程函数脚本</Option>
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={4}>
+                                <FormItem
+                                    label="禅道状态"
+                                    {...formItemLayout}
+                                >
+                                    {getFieldDecorator('BugType')(
+                                        <Select>
+                                            <Option value="0">需求</Option>
+                                            <Option value="1">BUG</Option>
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={8}>
+                                <FormItem
 
-                            label="RangePicker"
-                        >
-                            {getFieldDecorator('range-picker', {
-                                rules: [{ type: 'array', required: true, message: 'Please select time!' }],
-                            })(
-                                <RangePicker />
-                            )}
-                        </FormItem>
-                    </Form>
-                </Card>
+                                    label="RangePicker"
+                                    {...formItemLayout}
+                                >
+                                    {getFieldDecorator('rangepicker', {
+                                        rules: [{ type: 'array', required: true, message: 'Please select time!' }],
+                                    })(
+                                        <RangePicker onChange={this.DatePicker} />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={6}>
+                                <FormItem
+                                    label="BugIDList"
+                                    {...formItemLayout}
+                                >
+                                    {getFieldDecorator('BugIDList', {
+                                        rules: [{ required: true, message: 'Please select time!' }],
+                                    })(
+                                        <Input autoComplete="off" />
+                                    )}
+
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <ButtonGroup>
+                            <Button htmlType="submit" type='primary'>查询</Button>
+                            <Button htmlType='button' >新增</Button>
+                            <Button htmlType='button' >修改</Button>
+                            <Button htmlType='button' type='danger'>删除</Button>
+                        </ButtonGroup>
+                    </Card>
+                </Form>
+
                 <Collapse
                     bordered={false}
                     defaultActiveKey={['1']}

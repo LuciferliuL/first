@@ -24,9 +24,9 @@ class Home extends React.Component {
     componentWillMount() {
         let values = this.props.location.state
         // console.log(values)
-        // if (values === undefined) {
-        //   this.props.history.push('/')
-        // }
+        if (values === undefined) {
+          this.props.history.push('/')
+        }
     }
     onCollapse = (collapsed) => {
         console.log(collapsed);

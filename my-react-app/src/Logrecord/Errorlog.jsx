@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Card, Spin, notification, Input, Button, BackTop } from 'antd'
 import CascaderError from './Cascader/CascaderError'
 import DataPick from '../Math/DataPick'
-import { getTimeFetch, Time, postFetch } from '../Math/Math'
+import { getTimeFetch, Time, postFetch, ErrPost } from '../Math/Math'
 import './PV.css'
 import { ErrorLog } from '../Math/APIconfig';
 import TableServer from './TableServer/TableServer'
@@ -137,9 +137,9 @@ class Errorlog extends Component {
         // console.log(URLData)
         // console.log('params:', params);
         let FormData = { ...URLData, ...params }
-        // console.log(JSON.stringify(FormData))
+        console.log(JSON.stringify(FormData))
         this.setState({ loading: true });
-        postFetch(ErrorLog().GetError, FormData, (data) => {
+        ErrPost(ErrorLog().GetError, FormData, (data) => {
             // console.log(data)
             let paramdata = JSON.parse(data.Result)
             console.log(paramdata)
@@ -170,6 +170,7 @@ class Errorlog extends Component {
             }
 
         })
+        
     }
     //分页的回调
     handleTableChange = (pagination, filters, sorter) => {
