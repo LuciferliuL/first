@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
 import { Searchs, ActionAPI, Save, Del } from '../../Math/APIconfig'
-import { getFetch, getTime, postFetchForm } from '../../Math/Math'
+import { getFetch, getTime, postFetchForm, postFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
 import { Collapse, Modal, notification, Button } from 'antd'
 import SimpleAction from './SimpleAction'
@@ -244,7 +244,7 @@ class Simple extends Component {
     }
     isOK = (DataObj) => {
         console.log(DataObj)
-        postFetchForm(Save().Simple, DataObj, (res) => {
+        postFetch(Save().Simple, DataObj, (res) => {
             if (res.IsSuccess === 'True') {
                 this.GetData()
                 notification.success({

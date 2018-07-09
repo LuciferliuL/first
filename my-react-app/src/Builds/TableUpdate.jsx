@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Tables from '../Component/Tables/Tables'
 import { table } from './ComponentP/AsyncAPI'
-import { getTime, getTimeFetch, postFetch, postFetchForm } from '../Math/Math'
+import { getTime, getTimeFetch, postFetch } from '../Math/Math'
 import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col, Button } from 'antd'
 import TableUpdateAction from './ComponentP/TableUpdateAction'
 const Panel = Collapse.Panel
@@ -189,7 +189,7 @@ class TimeRelatedForm extends Component {
                 }
                 console.log('Received values of form: ', value);
 
-                postFetchForm(table().postCheck, value, (res) => {
+                postFetch(table().postCheck, value, (res) => {
                     console.log(res)
                     this.setState({
                         Data: res

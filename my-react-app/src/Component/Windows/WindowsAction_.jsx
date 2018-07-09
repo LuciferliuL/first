@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Input, Select, Row, Col, Button, notification, Spin, Card } from 'antd';
-import { postFetchForm } from '../../Math/Math'
+import {  postFetch } from '../../Math/Math'
 import { Save } from '../../Math/APIconfig'
 import CheckBox from '../checkbox/CheckBox';
 const FormItem = Form.Item;
@@ -53,7 +53,7 @@ class RegistrationForm extends React.Component {
                 let sub = JSON.parse(JSON.stringify(this.props.clear))
                 Object.assign(sub, values)
                 console.log('Received values of form: ', sub);
-                postFetchForm(Save().Windows, sub, (res) => {
+                postFetch(Save().Windows, sub, (res) => {
                     if (res.IsSuccess === 'True') {
                         this.setState({
                             disabledCopy: false,

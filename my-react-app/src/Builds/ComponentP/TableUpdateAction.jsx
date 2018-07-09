@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Input, Select, Row, Col, Button, notification, Spin, Card } from 'antd';
-import { postFetchForm } from '../../Math/Math'
+import { postFetchForm, postFetch } from '../../Math/Math'
 import { Save } from '../../Math/APIconfig'
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -52,7 +52,7 @@ class RegistrationForm extends React.Component {
                 let sub = JSON.parse(JSON.stringify(this.props.clear))
                 Object.assign(sub, values)
                 console.log('Received values of form: ', sub);
-                postFetchForm(Save().SQL, sub, (res) => {
+                postFetch(Save().SQL, sub, (res) => {
                     if (res.IsSuccess === 'True') {
                         this.setState({
                             disabledCopy: false,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Input, Select, Row, Col, Button, Card, Radio, Checkbox, notification, Spin } from 'antd';
-import { getTimeFetch, postFetchForm } from '../../Math/Math'
+import { getTimeFetch, postFetch } from '../../Math/Math'
 import { Copy, Save } from '../../Math/APIconfig'
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -43,7 +43,7 @@ class RegistrationForm extends React.Component {
             if (!err) {
                 Object.assign(this.state.submitData, values)
                 console.log('Received values of form: ', this.state.submitData);
-                postFetchForm(Save().BillAPI, this.state.submitData, (res) => {
+                postFetch(Save().BillAPI, this.state.submitData, (res) => {
                     if (res.IsSuccess === 'True') {
                         this.setState({
                             disabledCopy: false,

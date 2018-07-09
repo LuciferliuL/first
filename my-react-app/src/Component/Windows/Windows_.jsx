@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Tables from '../Tables/Tables'
-import { Searchs, ActionAPI, Del } from '../../Math/APIconfig'
+import { Searchs, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
 import { Collapse, notification } from 'antd'

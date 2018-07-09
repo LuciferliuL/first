@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Trees from './Trees'
 import { Row, Col, Card, Button, notification } from 'antd'
 import Forms from './Forms'
-import { getFetch, Alert, getTime, postFetchForm, postFetch } from '../../Math/Math'
+import { getFetch, Alert, getTime, postFetch } from '../../Math/Math'
 import { ActionAPI, Save, Del, API } from '../../Math/APIconfig'
 import { TreeMathFloat } from './TreesMath'
 import Dialog from './Dialog/Dialog'
@@ -184,7 +184,7 @@ class Action extends Component {
     }
     DialogSubmit = (e) => {
         console.log(e)
-        postFetchForm(Save().Root, e, (res) => {
+        postFetch(Save().Root, e, (res) => {
             if (res.IsSuccess === 'True') {
                 this.RefreshChange()
                 notification.success({

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form, Input, Select, Row, Col, Button, Radio, notification, Spin, Tabs } from 'antd';
-import { postFetchForm } from '../../Math/Math'
+import {  postFetch } from '../../Math/Math'
 import { Save } from '../../Math/APIconfig'
 import CheckBox from '../checkbox/CheckBox';
 const FormItem = Form.Item;
@@ -118,7 +118,7 @@ class RegistrationForm extends React.Component {
                 Object.assign(SqlScripe, values.SqlScripe)
                 sub.SqlScripe = SqlScripe
                 console.log('Received values of form: ', sub);
-                postFetchForm(Save().Pop, sub, (res) => {
+                postFetch(Save().Pop, sub, (res) => {
                     if (res.IsSuccess === 'True') {
                         this.setState({
                             disabledCopy: false,

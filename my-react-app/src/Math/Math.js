@@ -68,23 +68,15 @@ export { getTime }
  * @param {内容} postBody 
  */
 function postFetch(URL, postBody, Callback) {
-    let myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-    let request = new Request(URL, {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify(postBody),
-        headers: myHeaders,
-        credentials: 'include'
-    });
-    fetch(request)
-        .then(response => response.json())
-        .then(result => {
-            Callback(result)
-        })
-        .catch(res => {
-            console.log(res)
-        })
+    $.ajax({
+        url: URL,
+        data: postBody,
+        datatype: 'JSON',
+        type: "POST",
+        success: function (res) {
+            Callback(res)
+        }
+    })
 }
 
 export { postFetch }
@@ -327,4 +319,5 @@ function ErrPost(URL, body, Callback) {
 }
 
 export { ErrPost }
+
 
