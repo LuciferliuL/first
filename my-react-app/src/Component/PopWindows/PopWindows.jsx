@@ -216,7 +216,16 @@ class PopWindows extends Component {
             }
         }
     }
-
+    ActiveKey = () => {
+        this.clear = JSON.parse(JSON.stringify(this.state.clearObj))
+        // console.log(res)
+        this.GetData()
+        this.setState({
+            ActiveKey: ['1'],
+            disabled: true,
+            TableValue: this.clear,
+        })
+    }
     render() {
         const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
         return (
@@ -238,6 +247,7 @@ class PopWindows extends Component {
                             columns={columns}
                             TableEmitData={this.TableEmitData.bind(this)}
                             clearTable={clearTable}
+                            type={'radio'}
                         ></Tables>
                     </Panel>
                     <Panel key='2' showArrow={true} header='详细信息'>

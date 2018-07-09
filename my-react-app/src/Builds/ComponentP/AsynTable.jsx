@@ -16,7 +16,7 @@ class AsynTable extends Component {
                     columns={columns}
                     dataSource={Data}
                     rowKey='PK'
-                    size="middle"//表格大小
+                    size="small"//表格大小
                     expandedRowRender={expandedRowRender}//表格每条下面的表格
                     bordered
                     scroll={scroll}

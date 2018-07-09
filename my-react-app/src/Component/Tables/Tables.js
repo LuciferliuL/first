@@ -26,12 +26,14 @@ class Tables extends Component {
     }
     render() {
         const {selectedRowKeys } = this.state;
+        const { Data, columns, scroll, type} = this.props
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
-            type:'radio'
+            type:type,
+            // hideDefaultSelections:true
         };
-        const { Data, columns, scroll} = this.props
+        
         return (
             <div>
                 <Table

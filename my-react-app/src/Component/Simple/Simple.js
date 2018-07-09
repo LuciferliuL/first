@@ -253,7 +253,7 @@ class Simple extends Component {
                     key: 1,
                     btn: <ButtonGroup>
                         <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
-                        <Button onClick={() => { notification.close(this.key) }} size='small'>取消</Button>
+                        <Button onClick={this.ActiveKey.bind(this)} size='small'>取消</Button>
                     </ButtonGroup>,
                 })
             } else {
@@ -269,8 +269,20 @@ class Simple extends Component {
             pathname: '/Home/AsyncData',
             state: value
         }
+        notification.close('1')
         this.props.history.push(path)
         // console.log(value)
+    }
+    ActiveKey = () => {
+        this.clear = JSON.parse(JSON.stringify(this.state.clearObj))
+        // console.log(res)
+        notification.close('1')
+        this.GetData()
+        this.setState({
+            ActiveKey: ['1'],
+            disabled: true,
+            TableValue: this.clear,
+        })
     }
     render() {
         const { Data, columns, ActiveKey, TableValue, visible, clearTable } = this.state
@@ -289,6 +301,7 @@ class Simple extends Component {
                 >
                     <Panel header='表单' key="1" showArrow={true}>
                         <Tables
+                            type={'radio'}
                             Data={Data}
                             columns={columns}
                             TableEmitData={this.TableEmitData.bind(this)}

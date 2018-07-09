@@ -169,7 +169,16 @@ class Windows extends Component {
             }
         }
     }
-
+    ActiveKey = () => {
+        this.clear = JSON.parse(JSON.stringify(this.state.clearObj))
+        // console.log(res)
+        this.GetData()
+        this.setState({
+            ActiveKey: ['1'],
+            disabled: true,
+            TableValue: this.clear,
+        })
+    }
     render() {
         const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
         return (
@@ -187,6 +196,7 @@ class Windows extends Component {
                 >
                     <Panel header='表单' key="1" showArrow={true}>
                         <Tables
+                            type={'radio'}
                             Data={Data}
                             columns={columns}
                             TableEmitData={this.TableEmitData.bind(this)}

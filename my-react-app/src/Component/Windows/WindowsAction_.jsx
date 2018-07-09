@@ -65,7 +65,7 @@ class RegistrationForm extends React.Component {
                                 description: '可以执行同步',
                                 btn: <ButtonGroup>
                                     <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
-                                    <Button onClick={() => { notification.close() }} size='small'>取消</Button>
+                                    <Button onClick={this.ActiveTable.bind(this)} size='small'>取消</Button>
                                 </ButtonGroup>
                             })
                         })
@@ -82,6 +82,10 @@ class RegistrationForm extends React.Component {
             }
         });
     }
+    ActiveTable = () => {
+        this.props.ActiveKey()
+        notification.close('1')
+    }
     //刷新
     handleReset = () => {
         this.props.form.resetFields();
@@ -92,6 +96,7 @@ class RegistrationForm extends React.Component {
             pathname: '/Home/AsyncData',
             state: value
         }
+        notification.close('1')
         this.props.history.push(path)
     }
     ActionType = (value) => {

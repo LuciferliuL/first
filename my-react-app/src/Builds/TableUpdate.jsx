@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import Tables from '../Component/Tables/Tables'
-import { table } from './ComponentP/AsyncAPI'
+import { table, APIconfig } from './ComponentP/AsyncAPI'
+import moment from 'moment'
 import { getTime, getTimeFetch, postFetch } from '../Math/Math'
-import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col, Button } from 'antd'
+import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col, Button, Popover, Tag } from 'antd'
 import TableUpdateAction from './ComponentP/TableUpdateAction'
 const Panel = Collapse.Panel
 const { Option } = Select
 const ButtonGroup = Button.Group
 const FormItem = Form.Item
 const RangePicker = DatePicker.RangePicker;
-
+const dateFormat = 'YYYY/MM/DD';
 class TimeRelatedForm extends Component {
     constructor(props) {
         super(props)
@@ -19,7 +20,7 @@ class TimeRelatedForm extends Component {
             Data: [],
             //表格列
             columns: [{
-                title: 'AUTHOR',
+                title: '作者',
                 dataIndex: 'AUTHOR',
                 key: 'PK',
             }, {
@@ -28,21 +29,61 @@ class TimeRelatedForm extends Component {
             }, {
                 title: 'REMARK',
                 dataIndex: 'REMARK',
+                render: (text) => {
+                    return (
+                        <Popover content={text}>
+                            <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                        </Popover>
+                    )
+                }
             }, {
                 title: 'SQLSCRIPE',
                 dataIndex: 'SQLSCRIPE',
+                render: (text) => {
+                    return (
+                        <Popover content={text}>
+                            <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                        </Popover>
+                    )
+                }
             }, {
-                title: 'TITLE',
-                dataIndex: 'TITLE'
+                title: '标题',
+                dataIndex: 'TITLE',
+                render: (text) => {
+                    return (
+                        <Popover content={text}>
+                            <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                        </Popover>
+                    )
+                }
             }, {
                 title: 'NOTE',
-                dataIndex: 'NOTE'
+                dataIndex: 'NOTE',
+                render: (text) => {
+                    return (
+                        <Popover content={text}>
+                            <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                        </Popover>
+                    )
+                }
             }, {
-                title: 'SQLTYPE',
-                dataIndex: 'SQLTYPE'
+                title: 'SQL类型',
+                dataIndex: 'SQLTYPE',
+                render: (text) => {
+                    return (
+                        text === 0 ? <p>新增表</p> :
+                            text === 1 ? <p>修改表</p> :
+                                text === 2 ? <p>创建视图</p> : <p>过程函数脚本</p>
+                    )
+                }
             }, {
                 title: 'BugTYPE',
-                dataIndex: 'BugTYPE'
+                dataIndex: 'BugTYPE',
+                render: (text) => {
+                    return (
+                        text === 0 ? <p>需求</p> : <p>BUG</p>
+                    )
+                }
             }],
             ActiveKey: ['1'],
             //表单数据
@@ -71,7 +112,7 @@ class TimeRelatedForm extends Component {
                 QAMESSAGE: "",
                 REMARK: "",
                 SQLSCRIPE: "",
-                SQLTYPE: 1,
+                SQLTYPE: -1,
                 STATE: 1,
                 TITLE: "",
                 Tag: null,
@@ -81,10 +122,104 @@ class TimeRelatedForm extends Component {
             }
         }
     }
+    componentWillMount() {
 
+    }
     //初始加载数据
     componentDidMount() {
-        //  
+        let values = this.props.match.params.id
+        console.log(values)
+        // if (values === undefined) {
+        //   this.props.history.push('/')
+        // }
+        if (values === 'xxx') {
+            this.setState({
+                columns: [{
+                    title: '作者',
+                    dataIndex: 'AUTHOR',
+                    key: 'PK',
+                }, {
+                    title: 'BUGID',
+                    dataIndex: 'BUGID',
+                }, {
+                    title: 'REMARK',
+                    dataIndex: 'REMARK',
+                    render: (text) => {
+                        return (
+                            <Popover content={text}>
+                                <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                            </Popover>
+                        )
+                    }
+                }, {
+                    title: 'SQLSCRIPE',
+                    dataIndex: 'SQLSCRIPE',
+                    render: (text) => {
+                        return (
+                            <Popover content={text}>
+                                <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                            </Popover>
+                        )
+                    }
+                }, {
+                    title: '标题',
+                    dataIndex: 'TITLE',
+                    render: (text) => {
+                        return (
+                            <Popover content={text}>
+                                <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                            </Popover>
+                        )
+                    }
+                }, {
+                    title: 'NOTE',
+                    dataIndex: 'NOTE',
+                    render: (text) => {
+                        return (
+                            <Popover content={text}>
+                                <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                            </Popover>
+                        )
+                    }
+                }, {
+                    title: 'SQL类型',
+                    dataIndex: 'SQLTYPE',
+                    render: (text) => {
+                        return (
+                            text === 0 ? <p>新增表</p> :
+                                text === 1 ? <p>修改表</p> :
+                                    text === 2 ? <p>创建视图</p> : <p>过程函数脚本</p>
+                        )
+                    }
+                }, {
+                    title: 'BugTYPE',
+                    dataIndex: 'BugTYPE',
+                    render: (text) => {
+                        return (
+                            text === 0 ? <p>需求</p> : <p>BUG</p>
+                        )
+                    }
+                }, {
+                    title: '是否发布',
+                    dataIndex: 'ISPUBLIC',
+                    render: (text) => {
+                        return (
+                            text === 1 ? <p>发布</p> : <p>未发布</p>
+                        )
+                    }
+                }, {
+                    title: '下载',
+                    dataIndex: 'PATH',
+                    render: (text) => {
+                        // console.log(text)
+                        let API = JSON.stringify(APIconfig.Server).replace(/\"/g, '')
+                        return (
+                            <a href={API + '/' + text} download>下载</a>
+                        )
+                    }
+                }]
+            })
+        }
     }
 
     RowSelected = (e) => {
@@ -111,7 +246,7 @@ class TimeRelatedForm extends Component {
     }
     //点击表单获取得数据
     TableEmitData = (TableValue) => {
-        // console.log(TableValue)
+        console.log(TableValue)
         getTimeFetch(table(TableValue.PK).click, (res) => {
             console.log(res)
             this.setState({
@@ -175,9 +310,12 @@ class TimeRelatedForm extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                // console.log(values)
                 const rangeValue = values['rangepicker']
-                const BUGID = values['BugIDList'].split(',')
-
+                let BUGID = ' '
+                if (values['BugIDList']) {
+                    BUGID = values['BugIDList'].split(',')
+                }
                 const value = {
                     'State': values['State'],
                     'SQLTYPE': values['SQLTYPE'],
@@ -187,12 +325,55 @@ class TimeRelatedForm extends Component {
                     'StarTime': rangeValue[0].format('YYYY-MM-DD'),
                     'EndTime': rangeValue[1].format('YYYY-MM-DD')
                 }
-                console.log('Received values of form: ', value);
+                // console.log('Received values of form: ', value);
 
                 postFetch(table().postCheck, value, (res) => {
-                    console.log(res)
+                    // console.log(res)
+                    if (res.length === 0) {
+                        notification.warning({
+                            message: '提示',
+                            description: '没有数据，请重新选择查询条件'
+                        })
+                    }
                     this.setState({
                         Data: res
+                    })
+                })
+            }
+        });
+    }
+    disabledDate = (current) => {//禁止选择的时间
+        return current > moment().endOf('day');
+    }
+
+    ActiveKey = () => {
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                // console.log(values)
+                const rangeValue = values['rangepicker']
+                let BUGID = ' '
+                if (values['BugIDList']) {
+                    BUGID = values['BugIDList'].split(',')
+                }
+                const value = {
+                    'State': values['State'],
+                    'SQLTYPE': values['SQLTYPE'],
+                    'BugType': values['BugType'],
+                    'BugIDList': BUGID,
+                    'Author': 'xxx',
+                    'StarTime': rangeValue[0].format('YYYY-MM-DD'),
+                    'EndTime': rangeValue[1].format('YYYY-MM-DD')
+                }
+                // console.log('Received values of form: ', value);
+
+                postFetch(table().postCheck, value, (res) => {
+                    this.clear = JSON.parse(JSON.stringify(this.state.clearObj))
+                    // console.log(res)
+                    this.setState({
+                        Data: res,
+                        ActiveKey: ['1'],
+                        disabled: true,
+                        TableValue: this.clear,
                     })
                 })
             }
@@ -222,7 +403,9 @@ class TimeRelatedForm extends Component {
                                     label="状态"
                                     {...formItemLayout}
                                 >
-                                    {getFieldDecorator('State')(
+                                    {getFieldDecorator('State', {
+                                        initialValue: '0',
+                                    })(
                                         <Select>
                                             <Option value="0">未发布</Option>
                                             <Option value="1">已发布</Option>
@@ -235,7 +418,9 @@ class TimeRelatedForm extends Component {
                                     label="类型"
                                     {...formItemLayout}
                                 >
-                                    {getFieldDecorator('SQLTYPE')(
+                                    {getFieldDecorator('SQLTYPE', {
+                                        initialValue: '-1',
+                                    })(
                                         <Select>
                                             <Option value="-1">全部类型</Option>
                                             <Option value="0">新增表</Option>
@@ -251,7 +436,9 @@ class TimeRelatedForm extends Component {
                                     label="禅道状态"
                                     {...formItemLayout}
                                 >
-                                    {getFieldDecorator('BugType')(
+                                    {getFieldDecorator('BugType', {
+                                        initialValue: '0',
+                                    })(
                                         <Select>
                                             <Option value="0">需求</Option>
                                             <Option value="1">BUG</Option>
@@ -266,9 +453,14 @@ class TimeRelatedForm extends Component {
                                     {...formItemLayout}
                                 >
                                     {getFieldDecorator('rangepicker', {
-                                        rules: [{ type: 'array', required: true, message: 'Please select time!' }],
+                                        rules: [{ type: 'array', required: true, message: 'Please select time!' }], initialValue: [moment(getTime(), dateFormat), moment(getTime(), dateFormat)]
                                     })(
-                                        <RangePicker onChange={this.DatePicker} />
+                                        <RangePicker
+                                            format={dateFormat}
+                                            disabledDate={this.disabledDate}
+                                            onChange={this.DatePicker}
+
+                                        />
                                     )}
                                 </FormItem>
                             </Col>
@@ -277,9 +469,7 @@ class TimeRelatedForm extends Component {
                                     label="BugIDList"
                                     {...formItemLayout}
                                 >
-                                    {getFieldDecorator('BugIDList', {
-                                        rules: [{ required: true, message: 'Please select time!' }],
-                                    })(
+                                    {getFieldDecorator('BugIDList')(
                                         <Input autoComplete="off" />
                                     )}
 
@@ -288,9 +478,11 @@ class TimeRelatedForm extends Component {
                         </Row>
                         <ButtonGroup>
                             <Button htmlType="submit" type='primary'>查询</Button>
-                            <Button htmlType='button' >新增</Button>
-                            <Button htmlType='button' >修改</Button>
-                            <Button htmlType='button' type='danger'>删除</Button>
+                            <Button htmlType='button' onClick={this.AddAction.bind(this, 'Add')}>新增</Button>
+                            <Button htmlType='button' onClick={this.AddAction.bind(this, 'Edit')}>修改</Button>
+                            <Button htmlType='button' type='danger' onClick={this.AddAction.bind(this, 'Delete')}>删除</Button>
+                            <Button htmlType='button' type='primary' style={{ display: 'none' }}>发布</Button>
+                            <Button htmlType='button' type='primary' style={{ display: 'none' }}>下载</Button>
                         </ButtonGroup>
                     </Card>
                 </Form>
@@ -308,6 +500,7 @@ class TimeRelatedForm extends Component {
                             columns={columns}
                             TableEmitData={this.TableEmitData.bind(this)}
                             clearTable={clearTable}
+                            type={'checkbox'}
                         ></Tables>
                     </Panel>
                     <Panel key='2' showArrow={true} header='详细信息'>
@@ -315,6 +508,7 @@ class TimeRelatedForm extends Component {
                             clear={this.clear}
                             TableValue={TableValue}
                             disabled={disabled}
+                            ActiveKey={this.ActiveKey}
                         ></TableUpdateAction>
                     </Panel>
                 </Collapse>

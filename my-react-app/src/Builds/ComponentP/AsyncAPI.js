@@ -19,4 +19,4 @@ const table = (PK) => ({
     execute: APIconfig.Server + '/api/TableUpdate/ChangePublicState',//批量执行
     add: APIconfig.Server + '/api/TableUpdate/AddTableUpdateInfo'//新增
 })
-export { API, table }
+export { API, table, APIconfig }

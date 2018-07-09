@@ -172,7 +172,16 @@ class SQLManage extends Component {
             }
         }
     }
-
+    ActiveKey = () => {
+        this.clear = JSON.parse(JSON.stringify(this.state.clearObj))
+        // console.log(res)
+        this.GetData()
+        this.setState({
+            ActiveKey: ['1'],
+            disabled: true,
+            TableValue: this.clear,
+        })
+    }
     render() {
         const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
         return (
@@ -194,6 +203,7 @@ class SQLManage extends Component {
                             columns={columns}
                             TableEmitData={this.TableEmitData.bind(this)}
                             clearTable={clearTable}
+                            type={'radio'}
                         ></Tables>
                     </Panel>
                     <Panel key='2' showArrow={true} header='详细信息'>

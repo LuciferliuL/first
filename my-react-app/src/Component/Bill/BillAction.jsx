@@ -56,7 +56,7 @@ class RegistrationForm extends React.Component {
                                 key: 1,
                                 btn: <ButtonGroup>
                                     <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
-                                    <Button onClick={() => { notification.close(this.key) }} size='small'>取消</Button>
+                                    <Button onClick={() => { notification.close('1') }} size='small'>取消</Button>
                                 </ButtonGroup>
                             })
                         })
@@ -72,6 +72,10 @@ class RegistrationForm extends React.Component {
                 })
             }
         });
+    }
+    ActiveTable = () => {
+        this.props.ActiveKey()
+        notification.close('1')
     }
     //刷新
     handleReset = () => {
@@ -93,7 +97,7 @@ class RegistrationForm extends React.Component {
                         key: 1,
                         btn: <ButtonGroup>
                             <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
-                            <Button onClick={() => { notification.close(this.key) }} size='small'>取消</Button>
+                            <Button onClick={this.ActiveTable.bind(this)} size='small'>取消</Button>
                         </ButtonGroup>
                     })
                 })
@@ -115,6 +119,7 @@ class RegistrationForm extends React.Component {
             pathname: '/Home/AsyncData',
             state: value
         }
+        notification.close('1')
         this.props.history.push(path)
     }
     render() {

@@ -264,6 +264,7 @@ class AsyncData extends Component {
                                 Data={ORI}
                                 key={rankey}
                                 scroll={{ x: 1500, y: 450 }}>
+                            
                             </AsynTable>
                         </TabPane>)
 

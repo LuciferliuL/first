@@ -20,12 +20,18 @@ const SubMenu = Menu.SubMenu;
 class Home extends React.Component {
     state = {
         collapsed: false,
+        name: ''
     };
     componentWillMount() {
         let values = this.props.location.state
-        // console.log(values)
         if (values === undefined) {
-          this.props.history.push('/')
+            this.props.history.push('/')
+        } else {
+            values = JSON.stringify(values.userName).replace(/\"/g, '')
+            console.log(values)
+            this.setState({
+                name: values
+            })
         }
     }
     onCollapse = (collapsed) => {
@@ -66,7 +72,7 @@ class Home extends React.Component {
                             title={<span><Icon type="team" /><span>发布与构建</span></span>}
                         >
                             <Menu.Item key="111"><Link to='/Home/AsyncData'>数据同步</Link></Menu.Item>
-                            <Menu.Item key="71"><Link to='/Home/TableUpdate'>表结构更新管理</Link></Menu.Item>
+                            <Menu.Item key="71"><Link to={'/Home/TableUpdate/' + this.state.name}>表结构更新管理</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub3"
@@ -105,14 +111,14 @@ class Home extends React.Component {
                             <Route path='/Home/PopWindows' component={PopWindows}></Route>
                             <Route path='/Home/Test' component={Test}></Route>
                             <Route path='/Home/SQLManage' component={SQLManage}></Route>
-                            <Route path='/Home/TableUpdate' component={TableUpdate}></Route>
+                            <Route path='/Home/TableUpdate/:id' component={TableUpdate}></Route>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', padding: 10 }}>
                         DEV Design ©2018 Created by L UED
           </Footer>
                 </Layout>
-            </Layout>
+            </Layout >
         );
     }
 }

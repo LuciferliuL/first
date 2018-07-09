@@ -1,13 +1,12 @@
 import React from 'react'
 import { Form, Input, Select, Row, Col, Button, notification, Spin, Card } from 'antd';
-import { postFetchForm, postFetch } from '../../Math/Math'
-import { Save } from '../../Math/APIconfig'
+import { postFetch } from '../../Math/Math'
+import { table } from './AsyncAPI'
 const FormItem = Form.Item;
 const Option = Select.Option;
 const ButtonGroup = Button.Group
 const { TextArea } = Input
-const FormList = ['Author', 'GuidString', 'Module', 'Note', 'ScriptType', 'SqlName', 'SqlScripe']
-const OptionValue = ['财务模块', '采购模块', '价格模块', '结算模块', '库存模块', '其他模块', '销售模块', '资金模块', '系统设置模块']
+const FormList = ['AUTHOR', 'BUGID', 'REMARK', 'SQLSCRIPE', 'TITLE', "NOTE", 'SQLTYPE', 'BugTYPE']
 class RegistrationForm extends React.Component {
     constructor(props) {
         super(props)
@@ -45,14 +44,14 @@ class RegistrationForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             // console.log(values)
-            this.setState({
-                loading: true
-            })
+            // this.setState({
+            //     loading: true
+            // })
             if (!err) {
                 let sub = JSON.parse(JSON.stringify(this.props.clear))
                 Object.assign(sub, values)
                 console.log('Received values of form: ', sub);
-                postFetch(Save().SQL, sub, (res) => {
+                postFetch(table().add, sub, (res) => {
                     if (res.IsSuccess === 'True') {
                         this.setState({
                             disabledCopy: false,
@@ -64,7 +63,7 @@ class RegistrationForm extends React.Component {
                                 description: '可以执行同步',
                                 btn: <ButtonGroup>
                                     <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
-                                    <Button onClick={() => { notification.close() }} size='small'>取消</Button>
+                                    <Button onClick={this.ActiveTable.bind(this)} size='small'>取消</Button>
                                 </ButtonGroup>
                             })
                         })
@@ -81,6 +80,10 @@ class RegistrationForm extends React.Component {
             }
         });
     }
+    ActiveTable = () => {
+        this.props.ActiveKey()
+        notification.close('1')
+    }
     //刷新
     handleReset = () => {
         this.props.form.resetFields();
@@ -91,6 +94,7 @@ class RegistrationForm extends React.Component {
             pathname: '/Home/AsyncData',
             state: value
         }
+        notification.close('1')
         this.props.history.push(path)
     }
 
@@ -110,12 +114,7 @@ class RegistrationForm extends React.Component {
             },
         };
         // console.log(submitData)
-        const Options = []
-        OptionValue.forEach((element) => {
-            Options.push(
-                <Option key={element} value={element}>{element}</Option>
-            )
-        });
+
 
         return (
             <Form onSubmit={this.handleSubmit}>
@@ -132,7 +131,7 @@ class RegistrationForm extends React.Component {
                                     {...formItemLayout}
                                     label="作者"
                                 >
-                                    {getFieldDecorator('Author', {
+                                    {getFieldDecorator('AUTHOR', {
                                         rules: [{ required: true, message: 'Please input 作者!' }],
                                     })(
                                         <Input disabled={disabled} autoComplete="off" />
@@ -142,7 +141,7 @@ class RegistrationForm extends React.Component {
                                     {...formItemLayout}
                                     label="对应禅道编号"
                                 >
-                                    {getFieldDecorator('GuidString')(
+                                    {getFieldDecorator('BUGID')(
                                         <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
@@ -150,19 +149,17 @@ class RegistrationForm extends React.Component {
                                     {...formItemLayout}
                                     label="标题"
                                 >
-                                    {getFieldDecorator('Module', {
-                                        rules: [{ required: true, message: 'Please input 所属模块!' }],
+                                    {getFieldDecorator('TITLE', {
+                                        rules: [{ required: true, message: 'Please input 标题!' }],
                                     })(
-                                        <Select disabled={disabled}>
-                                            {Options}
-                                        </Select>
+                                        <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayout}
                                     label="备注"
                                 >
-                                    {getFieldDecorator('SqlName', {
+                                    {getFieldDecorator('REMARK', {
                                         rules: [{ required: true, message: 'Please input SQL语句标识!' }],
                                     })(
                                         <Input disabled={disabled} autoComplete="off" />
@@ -172,18 +169,27 @@ class RegistrationForm extends React.Component {
                                     {...formItemLayout}
                                     label="类型"
                                 >
-                                    {getFieldDecorator('ScriptType', {
+                                    {getFieldDecorator('SQLTYPE', {
                                         rules: [{ required: true, message: 'Please input 脚本类型!' }],
                                     })(
-                                        <Input disabled={disabled} autoComplete="off" />
+                                        <Select disabled={disabled}>
+                                            <Option value={-1}>全部类型</Option>
+                                            <Option value={0}>新增表</Option>
+                                            <Option value={1}>修改表</Option>
+                                            <Option value={2}>创建视图</Option>
+                                            <Option value={3}>过程函数脚本</Option>
+                                        </Select>
                                     )}
                                 </FormItem>
                                 <FormItem
                                     {...formItemLayout}
                                     label="禅道状态"
                                 >
-                                    {getFieldDecorator('Note')(
-                                        <Input disabled={disabled} autoComplete="off" />
+                                    {getFieldDecorator('BugTYPE')(
+                                        <Select disabled={disabled}>
+                                            <Option value={0}>需求</Option>
+                                            <Option value={1}>BUG</Option>
+                                        </Select>
                                     )}
                                 </FormItem>
 
@@ -193,8 +199,8 @@ class RegistrationForm extends React.Component {
                                     {...formItemLayout}
                                     label="脚本"
                                 >
-                                    {getFieldDecorator('SqlScripe', {
-                                        rules: [{ required: true, message: 'Please input SQL执行语句!' }],
+                                    {getFieldDecorator('SQLSCRIPE', {
+                                        rules: [{ required: true, message: 'Please input 脚本!' }],
                                     })(
                                         <TextArea disabled={disabled}
                                             autoComplete="off"
@@ -209,8 +215,8 @@ class RegistrationForm extends React.Component {
                                     {...formItemLayout}
                                     label='日志'
                                 >
-                                    {getFieldDecorator('SqlScripe', {
-                                        rules: [{ required: true, message: 'Please input SQL执行语句!' }],
+                                    {getFieldDecorator('NOTE', {
+                                        rules: [{ required: true, message: 'Please input 日志!' }],
                                     })(
                                         <TextArea disabled={disabled}
                                             autoComplete="off"

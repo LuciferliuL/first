@@ -193,7 +193,7 @@ class Action extends Component {
                     key: 1,
                     btn: <ButtonGroup>
                         <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
-                        <Button onClick={() => { notification.close(this.key) }} size='small'>取消</Button>
+                        <Button onClick={this.ActiveTable.bind(this)} size='small'>取消</Button>
                     </ButtonGroup>
                 })
             } else {
@@ -204,11 +204,16 @@ class Action extends Component {
             }
         })
     }
+    ActiveTable = () => {
+        this.RefreshChange()
+        notification.close('1')
+    }
     asyncData = (value) => {
         let path = {
             pathname: '/Home/AsyncData',
             state: value
         }
+        notification.close('1')
         this.props.history.push(path)
     }
     render() {

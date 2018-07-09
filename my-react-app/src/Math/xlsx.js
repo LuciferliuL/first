@@ -29,7 +29,7 @@ function downloadExl(json, type) {
         }
     };
     tmpDown = new Blob([s2ab(XLSX.write(tmpWB,
-        { bookType: (type == undefined ? 'xlsx' : type), bookSST: false, type: 'binary' }//这里的数据是用来定义导出的格式类型
+        { bookType: (type === undefined ? 'xlsx' : type), bookSST: false, type: 'binary' }//这里的数据是用来定义导出的格式类型
     ))], {
             type: ""
         }); //创建二进制对象写入转换好的字节流
@@ -44,13 +44,12 @@ function downloadExl(json, type) {
 function s2ab(s) { //字符串转字符流
     var buf = new ArrayBuffer(s.length);
     var view = new Uint8Array(buf);
-    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+    for (var i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
     return buf;
 }
 // 将指定的自然数转换为26进制表示。映射关系：[0-25] -> [A-Z]。
 function getCharCol(n) {
-    let temCol = '',
-        s = '',
+    let s = '',
         m = 0
     while (n > 0) {
         m = n % 26 + 1
