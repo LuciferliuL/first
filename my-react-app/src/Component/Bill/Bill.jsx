@@ -3,7 +3,7 @@ import Tables from '../Tables/Tables'
 import { Searchs, ActionAPI, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
-import { Collapse, notification } from 'antd'
+import { Collapse, notification, Spin } from 'antd'
 import BillAction from './BillAction'
 const Panel = Collapse.Panel
 
@@ -38,6 +38,9 @@ class Bill extends Component {
                 title: 'Author',
                 dataIndex: 'Author',
                 // key: 'PK',
+            }, {
+                title: 'CreateTime',
+                dataIndex: 'CreateTime'
             }],
             ActiveKey: ['1'],
             //表单数据
@@ -112,7 +115,8 @@ class Bill extends Component {
                 Version: 1,
                 WorkFlowGuid: "",
                 WorkFlowState: "",
-            }
+            },
+            loading:true
         }
     }
 
@@ -122,16 +126,21 @@ class Bill extends Component {
             // console.log(res)
             this.setState({
                 Data: res,
+                loading:false
             })
         })
     }
     //点击搜索加载数据
     GetData = (SearchValue) => {
+        this.setState({
+            loading:true
+        })
         getFetch(Searchs(SearchValue).BillAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue: {}
+                TableValue: {},
+                loading:false
             })
         })
     }
@@ -206,7 +215,7 @@ class Bill extends Component {
                             message: '提示',
                             description: '删除成功'
                         })
-                        this.GetData()
+                        this.ActiveKey()
                     } else {
                         notification.warning({
                             message: '提示',
@@ -228,37 +237,40 @@ class Bill extends Component {
         })
     }
     render() {
-        const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
+        const { Data, columns, ActiveKey, TableValue, clearTable, disabled, loading } = this.state
         return (
             <div>
-                <TablesBtn
-                    GetData={this.GetData.bind(this)}
-                    AddAction={this.AddAction.bind(this)}
-                ></TablesBtn>
-                <Collapse
-                    bordered={false}
-                    defaultActiveKey={['1']}
-                    onChange={this.callback.bind(this)}
-                    accordion
-                    activeKey={ActiveKey}
-                >
-                    <Panel header='表单' key="1" showArrow={true}>
-                        <Tables
-                            type={'radio'}
-                            Data={Data}
-                            columns={columns}
-                            TableEmitData={this.TableEmitData.bind(this)}
-                            clearTable={clearTable}
-                        ></Tables>
-                    </Panel>
-                    <Panel key='2' showArrow={true} header='详细信息'>
-                        <BillAction
-                            clear={this.clear}
-                            TableValue={TableValue}
-                            disabled={disabled}
-                        ></BillAction>
-                    </Panel>
-                </Collapse>
+                <Spin spinning={loading}>
+                    <TablesBtn
+                        GetData={this.GetData.bind(this)}
+                        AddAction={this.AddAction.bind(this)}
+                    ></TablesBtn>
+                    <Collapse
+                        bordered={false}
+                        defaultActiveKey={['1']}
+                        onChange={this.callback.bind(this)}
+                        accordion
+                        activeKey={ActiveKey}
+                    >
+                        <Panel header='表单' key="1" showArrow={true}>
+                            <Tables
+                                type={'radio'}
+                                Data={Data}
+                                columns={columns}
+                                TableEmitData={this.TableEmitData.bind(this)}
+                                clearTable={clearTable}
+                            ></Tables>
+                        </Panel>
+                        <Panel key='2' showArrow={true} header='详细信息'>
+                            <BillAction
+                                clear={this.clear}
+                                TableValue={TableValue}
+                                disabled={disabled}
+                                ActiveKey={this.ActiveKey}
+                            ></BillAction>
+                        </Panel>
+                    </Collapse>
+                </Spin>
             </div>
         );
     }

@@ -3,7 +3,7 @@ import Tables from '../Tables/Tables'
 import { Searchs, ActionAPI, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
-import { Collapse, notification } from 'antd'
+import { Collapse, notification, Spin } from 'antd'
 import PopWindowsAction from './PopWindowsAction'
 const Panel = Collapse.Panel
 
@@ -31,6 +31,9 @@ class PopWindows extends Component {
                 title: 'Author',
                 dataIndex: 'Author',
                 // key: 'PK',
+            }, {
+                title: 'CreateTime',
+                dataIndex: 'CreateTime'
             }],
             ActiveKey: ['1'],
             //表单数据
@@ -108,7 +111,8 @@ class PopWindows extends Component {
                 VersionNum: 1,
                 WorkFlowGuid: "",
                 WorkFlowState: "",
-            }
+            },
+            loading: true
         }
     }
 
@@ -118,17 +122,22 @@ class PopWindows extends Component {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue: this.state.clearObj
+                TableValue: this.state.clearObj,
+                loading: false
             })
         })
     }
     //点击搜索加载数据
     GetData = (SearchValue) => {
+        this.setState({
+            loading: true
+        })
         getFetch(Searchs(SearchValue).Pop, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue: this.state.clearObj
+                TableValue: this.state.clearObj,
+                loading: false
             })
         })
     }
@@ -205,7 +214,7 @@ class PopWindows extends Component {
                             message: '提示',
                             description: '删除成功'
                         })
-                        this.GetData()
+                        this.ActiveKey()
                     } else {
                         notification.warning({
                             message: '提示',
@@ -227,37 +236,40 @@ class PopWindows extends Component {
         })
     }
     render() {
-        const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
+        const { Data, columns, ActiveKey, TableValue, clearTable, disabled, loading } = this.state
         return (
             <div>
-                <TablesBtn
-                    GetData={this.GetData.bind(this)}
-                    AddAction={this.AddAction.bind(this)}
-                ></TablesBtn>
-                <Collapse
-                    bordered={false}
-                    defaultActiveKey={['1']}
-                    onChange={this.callback.bind(this)}
-                    accordion
-                    activeKey={ActiveKey}
-                >
-                    <Panel header='表单' key="1" showArrow={true}>
-                        <Tables
-                            Data={Data}
-                            columns={columns}
-                            TableEmitData={this.TableEmitData.bind(this)}
-                            clearTable={clearTable}
-                            type={'radio'}
-                        ></Tables>
-                    </Panel>
-                    <Panel key='2' showArrow={true} header='详细信息'>
-                        <PopWindowsAction
-                            clear={this.clear}
-                            TableValue={TableValue}
-                            disabled={disabled}
-                        ></PopWindowsAction>
-                    </Panel>
-                </Collapse>
+                <Spin spinning={loading}>
+                    <TablesBtn
+                        GetData={this.GetData.bind(this)}
+                        AddAction={this.AddAction.bind(this)}
+                    ></TablesBtn>
+                    <Collapse
+                        bordered={false}
+                        defaultActiveKey={['1']}
+                        onChange={this.callback.bind(this)}
+                        accordion
+                        activeKey={ActiveKey}
+                    >
+                        <Panel header='表单' key="1" showArrow={true}>
+                            <Tables
+                                Data={Data}
+                                columns={columns}
+                                TableEmitData={this.TableEmitData.bind(this)}
+                                clearTable={clearTable}
+                                type={'radio'}
+                            ></Tables>
+                        </Panel>
+                        <Panel key='2' showArrow={true} header='详细信息'>
+                            <PopWindowsAction
+                                clear={this.clear}
+                                TableValue={TableValue}
+                                disabled={disabled}
+                                ActiveKey={this.ActiveKey}
+                            ></PopWindowsAction>
+                        </Panel>
+                    </Collapse>
+                </Spin>
             </div>
         );
     }

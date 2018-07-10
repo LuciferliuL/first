@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tables from '../Component/Tables/Tables'
+import Tables from './ComponentP/TableUpdateT'
 import { table, APIconfig } from './ComponentP/AsyncAPI'
 import moment from 'moment'
 import { getTime, getTimeFetch, postFetch } from '../Math/Math'
@@ -14,6 +14,7 @@ const dateFormat = 'YYYY/MM/DD';
 class TimeRelatedForm extends Component {
     constructor(props) {
         super(props)
+        this.PKlist = []
         this.clear = {}
         this.state = {
             //表格数据
@@ -119,7 +120,8 @@ class TimeRelatedForm extends Component {
                 Version: 3,
                 WorkFlowGuid: "",
                 WorkFlowState: "",
-            }
+            },
+            show: false
         }
     }
     componentWillMount() {
@@ -217,7 +219,8 @@ class TimeRelatedForm extends Component {
                             <a href={API + '/' + text} download>下载</a>
                         )
                     }
-                }]
+                }],
+                show: true
             })
         }
     }
@@ -245,15 +248,40 @@ class TimeRelatedForm extends Component {
 
     }
     //点击表单获取得数据
-    TableEmitData = (TableValue) => {
-        console.log(TableValue)
-        getTimeFetch(table(TableValue.PK).click, (res) => {
+    TableEmitData = (PK) => {
+        console.log(PK)
+        getTimeFetch(table(PK).click, (res) => {
             console.log(res)
             this.setState({
                 TableValue: JSON.parse(JSON.stringify(res)),
                 disabled: true
             })
         })
+    }
+    //批量下载监听选中PK
+    downPK = (PKlist) => {
+        this.PKlist = PKlist
+    }
+    //批量发布
+    ext = () => {
+        console.log(this.PKlist)
+        postFetch(table().execute, this.PKlist, (res) => {
+            if (res.IsSuccess === 'True') {
+                notification.success({
+                    message: '提示',
+                    description: '批量发布成功'
+                })
+            } else {
+                notification.warning({
+                    message: '提示',
+                    description: res.ErrMessage
+                })
+            }
+        })
+    }
+    //批量下载
+    download = () => {
+        console.log('download')
     }
     AddAction = (name) => {
         if (name === 'Add') {
@@ -481,8 +509,8 @@ class TimeRelatedForm extends Component {
                             <Button htmlType='button' onClick={this.AddAction.bind(this, 'Add')}>新增</Button>
                             <Button htmlType='button' onClick={this.AddAction.bind(this, 'Edit')}>修改</Button>
                             <Button htmlType='button' type='danger' onClick={this.AddAction.bind(this, 'Delete')}>删除</Button>
-                            <Button htmlType='button' type='primary' style={{ display: 'none' }}>发布</Button>
-                            <Button htmlType='button' type='primary' style={{ display: 'none' }}>下载</Button>
+                            <Button htmlType='button' type='primary' style={{ display: this.state.show ? 'inline-block' : 'none' }} onClick={this.ext.bind(this)}>发布</Button>
+                            <Button htmlType='button' type='primary' style={{ display: this.state.show ? 'inline-block' : 'none' }} onClick={this.download.bind(this)}>批量下载</Button>
                         </ButtonGroup>
                     </Card>
                 </Form>
@@ -496,6 +524,7 @@ class TimeRelatedForm extends Component {
                 >
                     <Panel header='表单' key="1" showArrow={true}>
                         <Tables
+                            downPK={this.downPK.bind(this)}
                             Data={Data}
                             columns={columns}
                             TableEmitData={this.TableEmitData.bind(this)}

@@ -3,7 +3,7 @@ import Tables from '../Tables/Tables'
 import { Searchs, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
-import { Collapse, notification } from 'antd'
+import { Collapse, notification, Spin } from 'antd'
 import WindowsAction from './WindowsAction_'
 const Panel = Collapse.Panel
 
@@ -31,6 +31,9 @@ class Windows extends Component {
             }, {
                 title: 'Notes',
                 dataIndex: 'Notes',
+            }, {
+                title: 'CreateTime',
+                dataIndex: 'CreateTime'
             }],
             ActiveKey: ['1'],
             //表单数据
@@ -65,7 +68,8 @@ class Windows extends Component {
                 Version: 1,
                 WorkFlowGuid: "",
                 WorkFlowState: ""
-            }
+            },
+            loading: true
         }
     }
 
@@ -75,17 +79,22 @@ class Windows extends Component {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue: this.state.clearObj
+                TableValue: this.state.clearObj,
+                loading: false
             })
         })
     }
     //点击搜索加载数据
     GetData = (SearchValue) => {
+        this.setState({
+            loading: true
+        })
         getFetch(Searchs(SearchValue).WindowsAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue: this.state.clearObj
+                TableValue: this.state.clearObj,
+                loading: false
             })
         })
     }
@@ -158,7 +167,7 @@ class Windows extends Component {
                             message: '提示',
                             description: '删除成功'
                         })
-                        this.GetData()
+                        this.ActiveKey()
                     } else {
                         notification.warning({
                             message: '提示',
@@ -180,37 +189,40 @@ class Windows extends Component {
         })
     }
     render() {
-        const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
+        const { Data, columns, ActiveKey, TableValue, clearTable, disabled, loading } = this.state
         return (
             <div>
-                <TablesBtn
-                    GetData={this.GetData.bind(this)}
-                    AddAction={this.AddAction.bind(this)}
-                ></TablesBtn>
-                <Collapse
-                    bordered={false}
-                    defaultActiveKey={['1']}
-                    onChange={this.callback.bind(this)}
-                    accordion
-                    activeKey={ActiveKey}
-                >
-                    <Panel header='表单' key="1" showArrow={true}>
-                        <Tables
-                            type={'radio'}
-                            Data={Data}
-                            columns={columns}
-                            TableEmitData={this.TableEmitData.bind(this)}
-                            clearTable={clearTable}
-                        ></Tables>
-                    </Panel>
-                    <Panel key='2' showArrow={true} header='详细信息'>
-                        <WindowsAction
-                            clear={this.clear}
-                            TableValue={TableValue}
-                            disabled={disabled}
-                        ></WindowsAction>
-                    </Panel>
-                </Collapse>
+                <Spin spinning={loading}>
+                    <TablesBtn
+                        GetData={this.GetData.bind(this)}
+                        AddAction={this.AddAction.bind(this)}
+                    ></TablesBtn>
+                    <Collapse
+                        bordered={false}
+                        defaultActiveKey={['1']}
+                        onChange={this.callback.bind(this)}
+                        accordion
+                        activeKey={ActiveKey}
+                    >
+                        <Panel header='表单' key="1" showArrow={true}>
+                            <Tables
+                                type={'radio'}
+                                Data={Data}
+                                columns={columns}
+                                TableEmitData={this.TableEmitData.bind(this)}
+                                clearTable={clearTable}
+                            ></Tables>
+                        </Panel>
+                        <Panel key='2' showArrow={true} header='详细信息'>
+                            <WindowsAction
+                                clear={this.clear}
+                                TableValue={TableValue}
+                                disabled={disabled}
+                                ActiveKey={this.ActiveKey}
+                            ></WindowsAction>
+                        </Panel>
+                    </Collapse>
+                </Spin>
             </div>
         );
     }

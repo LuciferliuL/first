@@ -13,8 +13,10 @@ class Tables extends Component {
     }
     onSelectChange = (selectedRowKeys,selectedRowValue) => {
         // console.log(selectedRowValue);
+        // console.log(selectedRowKeys)
         this.setState({ selectedRowKeys });
-        this.props.TableEmitData(selectedRowValue[0])
+        this.props.TableEmitData(selectedRowKeys[selectedRowKeys.length - 1])
+        this.props.downPK(selectedRowKeys)
     }
     componentWillReceiveProps(next){
         // console.log(next)
@@ -26,11 +28,11 @@ class Tables extends Component {
     }
     render() {
         const {selectedRowKeys } = this.state;
-        const { Data, columns, scroll} = this.props
+        const { Data, columns, type} = this.props
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
-            type:'radio',
+            type:type,
             // hideDefaultSelections:true
         };
         

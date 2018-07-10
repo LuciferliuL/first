@@ -3,7 +3,7 @@ import Tables from '../Tables/Tables'
 import { Searchs, ActionAPI, Save, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, postFetchForm, postFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
-import { Collapse, Modal, notification, Button } from 'antd'
+import { Collapse, Modal, notification, Button, Spin } from 'antd'
 import SimpleAction from './SimpleAction'
 import SimpleEdit from './SimpleEdit'
 const Panel = Collapse.Panel
@@ -32,8 +32,8 @@ class Simple extends Component {
                 dataIndex: 'Author',
                 // key: 'PK',
             }, {
-                title: 'BranchID',
-                dataIndex: 'BranchID',
+                title: 'CreateTime',
+                dataIndex: 'CreateTime',
                 // key: 'PK',
             }],
             ActiveKey: ['1'],
@@ -125,6 +125,7 @@ class Simple extends Component {
             },
             TableValue: {},
             clearTable: false,
+            loading: true
         }
     }
     componentDidMount() {
@@ -132,16 +133,21 @@ class Simple extends Component {
         getFetch(Searchs().SimpleAPI, (res) => {
             this.setState({
                 Data: res,
-                TableValue: clear
+                TableValue: clear,
+                loading: false
             })
         })
     }
     GetData = (SearchValue) => {
+        this.setState({
+            loading: true
+        })
         getFetch(Searchs(SearchValue).SimpleAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue: {}
+                TableValue: {},
+                loading: false
             })
         })
     }
@@ -207,7 +213,7 @@ class Simple extends Component {
                             message: '提示',
                             description: '删除成功'
                         })
-                        this.GetData()
+                        this.ActiveKey()
                     } else {
                         notification.warning({
                             message: '提示',
@@ -285,51 +291,53 @@ class Simple extends Component {
         })
     }
     render() {
-        const { Data, columns, ActiveKey, TableValue, visible, clearTable } = this.state
+        const { Data, columns, ActiveKey, TableValue, visible, clearTable, loading } = this.state
         return (
             <div>
-                <TablesBtn
-                    GetData={this.GetData.bind(this)}
-                    AddAction={this.AddAction.bind(this)}
-                ></TablesBtn>
-                <Collapse
-                    bordered={false}
-                    defaultActiveKey={['1']}
-                    onChange={this.callback.bind(this)}
-                    accordion
-                    activeKey={ActiveKey}
-                >
-                    <Panel header='表单' key="1" showArrow={true}>
-                        <Tables
-                            type={'radio'}
-                            Data={Data}
-                            columns={columns}
-                            TableEmitData={this.TableEmitData.bind(this)}
-                            clearTable={clearTable}
-                        ></Tables>
-                    </Panel>
-                    <Panel header='基本信息' key='2' showArrow={true}>
-                        <SimpleAction
-                            key={Math.random()}
+                <Spin spinning={loading}>
+                    <TablesBtn
+                        GetData={this.GetData.bind(this)}
+                        AddAction={this.AddAction.bind(this)}
+                    ></TablesBtn>
+                    <Collapse
+                        bordered={false}
+                        defaultActiveKey={['1']}
+                        onChange={this.callback.bind(this)}
+                        accordion
+                        activeKey={ActiveKey}
+                    >
+                        <Panel header='表单' key="1" showArrow={true}>
+                            <Tables
+                                type={'radio'}
+                                Data={Data}
+                                columns={columns}
+                                TableEmitData={this.TableEmitData.bind(this)}
+                                clearTable={clearTable}
+                            ></Tables>
+                        </Panel>
+                        <Panel header='基本信息' key='2' showArrow={true}>
+                            <SimpleAction
+                                key={Math.random()}
+                                TableValue={TableValue}
+                            ></SimpleAction>
+                        </Panel>
+                    </Collapse>
+                    <Modal
+                        title="Basic Modal"
+                        visible={visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                        width={1440}
+                        key={Math.random()}
+                    >
+                        <SimpleEdit
+                            Collapse={this.Collapse}
                             TableValue={TableValue}
-                        ></SimpleAction>
-                    </Panel>
-                </Collapse>
-                <Modal
-                    title="Basic Modal"
-                    visible={visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    width={1440}
-                    key={Math.random()}
-                >
-                    <SimpleEdit
-                        Collapse={this.Collapse}
-                        TableValue={TableValue}
-                        isOK={this.isOK.bind(this)}
-                        handleChange={this.handleChange.bind(this)}
-                    ></SimpleEdit>
-                </Modal>
+                            isOK={this.isOK.bind(this)}
+                            handleChange={this.handleChange.bind(this)}
+                        ></SimpleEdit>
+                    </Modal>
+                </Spin>
             </div>
         );
     }

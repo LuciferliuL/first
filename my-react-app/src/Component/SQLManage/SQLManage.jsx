@@ -3,7 +3,7 @@ import Tables from '../Tables/Tables'
 import { Searchs, ActionAPI, Del } from '../../Math/APIconfig'
 import { getFetch, getTime, getTimeFetch } from '../../Math/Math'
 import TablesBtn from '../Tables/TablesBtn'
-import { Collapse, notification } from 'antd'
+import { Collapse, notification, Spin } from 'antd'
 import SQLManageAction from './SQLManageAction'
 const Panel = Collapse.Panel
 
@@ -20,12 +20,12 @@ class SQLManage extends Component {
                 dataIndex: 'PK',
                 key: 'PK',
             }, {
-                title: 'BranchID',
-                dataIndex: 'BranchID',
+                title: 'CreateTime',
+                dataIndex: 'CreateTime',
                 // key: 'PK',
             }, {
-                title: 'ScriptType',
-                dataIndex: 'ScriptType',
+                title: 'LastModifyTime',
+                dataIndex: 'LastModifyTime',
                 // key: 'PK',
             }, {
                 title: 'Author',
@@ -65,7 +65,8 @@ class SQLManage extends Component {
                 VersionNum: 2,
                 WorkFlowGuid: "",
                 WorkFlowState: "",
-            }
+            },
+            loading: true
         }
     }
 
@@ -75,17 +76,22 @@ class SQLManage extends Component {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue: this.state.clearObj
+                TableValue: this.state.clearObj,
+                loading: false
             })
         })
     }
     //点击搜索加载数据
     GetData = (SearchValue) => {
+        this.setState({
+            loading: true
+        })
         getFetch(Searchs(SearchValue).SQLManage, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
-                TableValue: this.state.clearObj
+                TableValue: this.state.clearObj,
+                loading: false
             })
         })
     }
@@ -161,7 +167,7 @@ class SQLManage extends Component {
                             message: '提示',
                             description: '删除成功'
                         })
-                        this.GetData()
+                        this.ActiveKey()
                     } else {
                         notification.warning({
                             message: '提示',
@@ -183,37 +189,40 @@ class SQLManage extends Component {
         })
     }
     render() {
-        const { Data, columns, ActiveKey, TableValue, clearTable, disabled } = this.state
+        const { Data, columns, ActiveKey, TableValue, clearTable, disabled, loading } = this.state
         return (
             <div>
-                <TablesBtn
-                    GetData={this.GetData.bind(this)}
-                    AddAction={this.AddAction.bind(this)}
-                ></TablesBtn>
-                <Collapse
-                    bordered={false}
-                    defaultActiveKey={['1']}
-                    onChange={this.callback.bind(this)}
-                    accordion
-                    activeKey={ActiveKey}
-                >
-                    <Panel header='表单' key="1" showArrow={true}>
-                        <Tables
-                            Data={Data}
-                            columns={columns}
-                            TableEmitData={this.TableEmitData.bind(this)}
-                            clearTable={clearTable}
-                            type={'radio'}
-                        ></Tables>
-                    </Panel>
-                    <Panel key='2' showArrow={true} header='详细信息'>
-                        <SQLManageAction
-                            clear={this.clear}
-                            TableValue={TableValue}
-                            disabled={disabled}
-                        ></SQLManageAction>
-                    </Panel>
-                </Collapse>
+                <Spin spinning={loading}>
+                    <TablesBtn
+                        GetData={this.GetData.bind(this)}
+                        AddAction={this.AddAction.bind(this)}
+                    ></TablesBtn>
+                    <Collapse
+                        bordered={false}
+                        defaultActiveKey={['1']}
+                        onChange={this.callback.bind(this)}
+                        accordion
+                        activeKey={ActiveKey}
+                    >
+                        <Panel header='表单' key="1" showArrow={true}>
+                            <Tables
+                                Data={Data}
+                                columns={columns}
+                                TableEmitData={this.TableEmitData.bind(this)}
+                                clearTable={clearTable}
+                                type={'radio'}
+                            ></Tables>
+                        </Panel>
+                        <Panel key='2' showArrow={true} header='详细信息'>
+                            <SQLManageAction
+                                clear={this.clear}
+                                TableValue={TableValue}
+                                disabled={disabled}
+                                ActiveKey={this.ActiveKey}
+                            ></SQLManageAction>
+                        </Panel>
+                    </Collapse>
+                </Spin>
             </div>
         );
     }
