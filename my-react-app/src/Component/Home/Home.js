@@ -19,9 +19,13 @@ const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class Home extends React.Component {
+    rootSubmenuKeys = ['配置', '发布与构建','日志查询' , '测试'];
     state = {
         collapsed: false,
-        name: ''
+        name: '',
+        openKeys: [''],
+        BreadcrumbSub:'',
+        BreadcrumbKey:''
     };
     componentWillMount() {
         let values = this.props.location.state
@@ -39,6 +43,28 @@ class Home extends React.Component {
         console.log(collapsed);
         this.setState({ collapsed });
     }
+    click = (item) => {
+        // console.log(item)
+        this.setState({
+            BreadcrumbKey:item.key
+        })
+    }
+    //打开条目的回调
+    onOpenChange = (openKeys) => {
+        console.log(openKeys)
+        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
+        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            console.log(1)//关闭
+          this.setState({ openKeys, BreadcrumbSub:openKeys[openKeys.length - 1] });
+        } else {
+            console.log(2)//打开
+          this.setState({
+            openKeys: latestOpenKey ? [latestOpenKey] : [],
+            BreadcrumbSub:openKeys[openKeys.length - 1],
+            BreadcrumbKey:''
+          });
+        }
+      }
     render() {
         return (
             <Layout style={{ minHeight: '100vh' }}>
@@ -48,7 +74,13 @@ class Home extends React.Component {
                     onCollapse={this.onCollapse}
                 >
                     <div className="logo" />
-                    <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                    <Menu 
+                    theme="dark" 
+                    mode="inline"
+                    openKeys={this.state.openKeys}
+                    onOpenChange={this.onOpenChange}
+                    onSelect={this.click}
+                    >
                         <Menu.Item key="1">
                             <Icon type="pie-chart" />
                             <span>Option 1</span>
@@ -58,38 +90,38 @@ class Home extends React.Component {
                             <span>Option 2</span>
                         </Menu.Item>
                         <SubMenu
-                            key="sub1"
-                            title={<span><Icon type="user" /><span>配置</span></span>}
+                            key="配置"
+                            title={<span><Icon type="setting" /><span>配置</span></span>}
                         >
-                            <Menu.Item key="3"><Link to='/Home/Action'>菜单管理</Link></Menu.Item>
-                            <Menu.Item key="4"><Link to='/Home/Windows'>窗体行为编辑</Link></Menu.Item>
-                            <Menu.Item key="5"><Link to='/Home/Simple'>简单通用查询</Link></Menu.Item>
-                            <Menu.Item key="6"><Link to='/Home/Bill'>单据定义</Link></Menu.Item>
-                            <Menu.Item key="61"><Link to='/Home/PopWindows'>弹出选择窗口管理</Link></Menu.Item>
-                            <Menu.Item key="SQL"><Link to='/Home/SQLManage'>SQL语句管理</Link></Menu.Item>
+                            <Menu.Item key="菜单管理"><Link to='/Home/Action'>菜单管理</Link></Menu.Item>
+                            <Menu.Item key="窗体行为编辑"><Link to='/Home/Windows'>窗体行为编辑</Link></Menu.Item>
+                            <Menu.Item key="简单通用查询"><Link to='/Home/Simple'>简单通用查询</Link></Menu.Item>
+                            <Menu.Item key="单据定义"><Link to='/Home/Bill'>单据定义</Link></Menu.Item>
+                            <Menu.Item key="弹出选择窗口管理"><Link to='/Home/PopWindows'>弹出选择窗口管理</Link></Menu.Item>
+                            <Menu.Item key="SQL语句管理"><Link to='/Home/SQLManage'>SQL语句管理</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
-                            key="sub2"
-                            title={<span><Icon type="team" /><span>发布与构建</span></span>}
+                            key="发布与构建"
+                            title={<span><Icon type="appstore" /><span>发布与构建</span></span>}
                         >
-                            <Menu.Item key="111"><Link to='/Home/AsyncData'>数据同步</Link></Menu.Item>
-                            <Menu.Item key="71"><Link to={'/Home/TableUpdate/' + this.state.name}>表结构更新管理</Link></Menu.Item>
-                            <Menu.Item key="AsyncDataManage"><Link to={'/Home/AsyncDataManage/' + this.state.name}>数据同步管理</Link></Menu.Item>
+                            <Menu.Item key="数据同步"><Link to='/Home/AsyncData'>数据同步</Link></Menu.Item>
+                            <Menu.Item key="表结构更新管理"><Link to={'/Home/TableUpdate/' + this.state.name}>表结构更新管理</Link></Menu.Item>
+                            <Menu.Item key="数据同步管理"><Link to={'/Home/AsyncDataManage/' + this.state.name}>数据同步管理</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
-                            key="sub3"
-                            title={<span><Icon type="team" /><span>日志查询</span></span>}
+                            key="日志查询"
+                            title={<span><Icon type="line-chart" /><span>日志查询</span></span>}
                         >
-                            <Menu.Item key="8"><Link to='/Home/PVComponent'>按条件分组</Link></Menu.Item>
-                            <Menu.Item key="9"><Link to='/Home/TimeComponent'>按时段分组</Link></Menu.Item>
-                            <Menu.Item key='10'><Link to='/Home/AcerageComponent'>平均耗时统计</Link></Menu.Item>
-                            <Menu.Item key="11"><Link to="/Home/Errorlog">错误日志</Link></Menu.Item>
+                            <Menu.Item key="按条件分组"><Link to='/Home/PVComponent'>按条件分组</Link></Menu.Item>
+                            <Menu.Item key="按时段分组"><Link to='/Home/TimeComponent'>按时段分组</Link></Menu.Item>
+                            <Menu.Item key='平均耗时统计'><Link to='/Home/AcerageComponent'>平均耗时统计</Link></Menu.Item>
+                            <Menu.Item key="错误日志"><Link to="/Home/Errorlog">错误日志</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
-                            key="sub4"
-                            title={<span><Icon type="team" /><span>测试</span></span>}
+                            key="测试"
+                            title={<span><Icon type="hourglass" /><span>测试</span></span>}
                         >
-                            <Menu.Item key="Test"><Link to='/Home/Test'>自动化测试</Link></Menu.Item>
+                            <Menu.Item key="自动化测试"><Link to='/Home/Test'>自动化测试</Link></Menu.Item>
                             <Menu.Item key="711">Team 2</Menu.Item>
                         </SubMenu>
                     </Menu>
@@ -97,8 +129,8 @@ class Home extends React.Component {
                 <Layout>
                     <Content style={{ margin: '0 10px' }}>
                         <Breadcrumb style={{ margin: '10px 0' }}>
-                            <Breadcrumb.Item>User</Breadcrumb.Item>
-                            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                            <Breadcrumb.Item>{this.state.BreadcrumbSub}</Breadcrumb.Item>
+                            <Breadcrumb.Item>{this.state.BreadcrumbKey}</Breadcrumb.Item>
                         </Breadcrumb>
                         <div style={{ padding: 5, background: '#fff', minHeight: 560 }}>
                             <Route path='/Home/Action' component={Action}></Route>
