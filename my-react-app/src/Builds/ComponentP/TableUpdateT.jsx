@@ -24,6 +24,7 @@ class Tables extends Component {
 
         this.setState({ selectedRowKeys });
         this.props.TableEmitData(selectedRowKeys[selectedRowKeys.length - 1])
+        this.props.EmitValue(selectedRowValue[selectedRowValue.length - 1])
         this.props.downPK(selectedRowKeys,pathArr)
     }
     componentWillReceiveProps(next) {

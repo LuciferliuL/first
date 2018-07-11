@@ -22,9 +22,12 @@ const table = (PK) => ({
 
 const AsyncManage = (PK) => ({
     doIt: APIconfig.Server + '/api/TableUpdate/ChangeExectState?PK=' + PK,//执行
-    download:APIconfig.Server + '/api/TableUpdate/ChangeDownState?PK=' + PK,//下载
+    // download:APIconfig.Server + '/api/TableUpdate/ChangeDownState?PK=' + PK,//下载
     Search:APIconfig.Server + '/api/TbReleaseSyncLog/GetTbReleaseSyncLogInfoList',//查询
     downloadlist:APIconfig.Server + '/api/TbReleaseSyncLog/CreateFileAndDown',//post 批量下载
     doItlist:APIconfig.Server + '/api/TbReleaseSyncLog/ChangePublicState',//post 批量归档
+    del:APIconfig.Server + '/api/TableUpdate/DeleteTableUpdateInfo?PK=' + PK,//删除
+    add:APIconfig.Server + '/api/TableUpdate/AddTableUpdateInfo',//新增
+    click:APIconfig.Server + '/api/TableUpdate/GetTableInfoForPK?PK=' + PK,//点击查询
 })
 export { API, table, APIconfig, AsyncManage }

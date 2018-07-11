@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Tables from './ComponentP/TableUpdateT'
-import { table, APIconfig } from './ComponentP/AsyncAPI'
+import { AsyncManage, APIconfig } from './ComponentP/AsyncAPI'
 import moment from 'moment'
-import { getTime, getTimeFetch, postFetch} from '../Math/Math'
+import { getTime, getTimeFetch, postFetch } from '../Math/Math'
 import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col, Button, Popover, Tag } from 'antd'
-import TableUpdateAction from './ComponentP/TableUpdateAction'
+import AsyncTableAction from './ComponentP/AsyncTableAction_'
 
 const Panel = Collapse.Panel
 const { Option } = Select
@@ -24,44 +24,20 @@ class TimeRelatedForm extends Component {
             //表格列
             columns: [{
                 title: '作者',
-                dataIndex: 'AUTHOR',
+                dataIndex: 'STAFFNAME',
                 key: 'PK',
             }, {
                 title: 'BUGID',
                 dataIndex: 'BUGID',
             }, {
-                title: 'REMARK',
-                dataIndex: 'REMARK',
-                render: (text) => {
-                    return (
-                        <Popover content={text}>
-                            <Tag color={'green'}>{text.slice(0, 10)}</Tag>
-                        </Popover>
-                    )
-                }
-            }, {
-                title: 'SQLSCRIPE',
-                dataIndex: 'SQLSCRIPE',
-                render: (text) => {
-                    return (
-                        <Popover content={text}>
-                            <Tag color={'green'}>{text.slice(0, 10)}</Tag>
-                        </Popover>
-                    )
-                }
-            }, {
-                title: '标题',
-                dataIndex: 'TITLE',
-                render: (text) => {
-                    return (
-                        <Popover content={text}>
-                            <Tag color={'green'}>{text.slice(0, 10)}</Tag>
-                        </Popover>
-                    )
-                }
+                title: 'CreateTime',
+                dataIndex: 'CreateTime'
             }, {
                 title: 'NOTE',
                 dataIndex: 'NOTE',
+            }, {
+                title: 'TABLENAME',
+                dataIndex: 'TABLENAME',
                 render: (text) => {
                     return (
                         <Popover content={text}>
@@ -70,8 +46,18 @@ class TimeRelatedForm extends Component {
                     )
                 }
             }, {
-                title: 'SQL类型',
-                dataIndex: 'SQLTYPE',
+                title: 'SCRIPT',
+                dataIndex: 'SCRIPT',
+                render: (text) => {
+                    return (
+                        <Popover content={text}>
+                            <Tag color={'green'}>{text.slice(0, 10)}</Tag>
+                        </Popover>
+                    )
+                }
+            }, {
+                title: 'SYNC',
+                dataIndex: 'SYNC',
                 render: (text) => {
                     return (
                         text === 0 ? <p>新增表</p> :
@@ -79,23 +65,7 @@ class TimeRelatedForm extends Component {
                                 text === 2 ? <p>创建视图</p> : <p>过程函数脚本</p>
                     )
                 }
-            }, {
-                title: 'BugTYPE',
-                dataIndex: 'BugTYPE',
-                render: (text) => {
-                    return (
-                        text === 0 ? <p>需求</p> : <p>BUG</p>
-                    )
-                }
-            }, {
-                title: '是否发布',
-                dataIndex: 'ISPUBLIC',
-                render: (text) => {
-                    return (
-                        text === 1 ? <p>发布</p> : <p>未发布</p>
-                    )
-                }
-            },],
+            }],
             ActiveKey: ['1'],
             //表单数据
             TableValue: {},
@@ -145,20 +115,7 @@ class TimeRelatedForm extends Component {
         //   this.props.history.push('/')
         // }
         if (values === 'xxx') {
-            let columns = this.state.columns
-            columns.push({
-                title: '下载',
-                dataIndex: 'PATH',
-                render: (text) => {
-                    // console.log(text)
-                    let API = JSON.stringify(APIconfig.Server).replace(/\"/g, '')
-                    return (
-                        <a href={API + '/' + text} download target='_Blank'>下载</a>
-                    )
-                }
-            })
             this.setState({
-                columns: columns,
                 show: true
             })
         }
@@ -184,34 +141,43 @@ class TimeRelatedForm extends Component {
                 ActiveKey: key === undefined ? ['2'] : ['1'],
             })
         }
-
     }
     //点击表单获取得数据
     TableEmitData = (PK) => {
         console.log(PK)
-        if (PK !== undefined) {
-            getTimeFetch(table(PK).click, (res) => {
-                console.log(res)
-                this.setState({
-                    TableValue: JSON.parse(JSON.stringify(res)),
-                    disabled: true
-                })
-            })
-        }
+        // if (PK !== undefined) {
+        //     getTimeFetch(AsyncManage(PK).click, (res) => {
+        //         console.log(res)
+        //         this.setState({
+        //             TableValue: JSON.parse(JSON.stringify(res)),
+        //             disabled: true
+        //         })
+        //     })
+        // }
+    }
+    //点击表单获取具体数据
+    EmitValue = (value) => {
+        console.log(value)
+        this.setState({
+            TableValue: JSON.parse(JSON.stringify(value)),
+            disabled: true
+        })
     }
     //批量下载监听选中PK
     downPK = (PKlist, path) => {
         this.PKlist = PKlist
         this.path = path
     }
-    //批量发布
+    //批量归档
     ext = () => {
         console.log(this.PKlist)
-        postFetch(table().execute, this.PKlist, (res) => {
+        let data = {}
+        data.PKlist = this.PKlist
+        postFetch(AsyncManage().doItlist, data, (res) => {
             if (res.IsSuccess === 'True') {
                 notification.success({
                     message: '提示',
-                    description: '批量发布成功'
+                    description: '批量归档成功'
                 })
             } else {
                 notification.warning({
@@ -223,16 +189,20 @@ class TimeRelatedForm extends Component {
     }
     //批量下载
     downloads = () => {
-        console.log(this.path)
-        notification.warn({
-            message:'提示',
-            description:'该功能有问题'
-        })
-        // let API = JSON.stringify(APIconfig.Server).replace(/\"/g, '')
-        // this.path.forEach(el => {
-        //     let URL = API + '/' + el
-        //     download(URL, '111', 'text/plain')
+        console.log(this.PKlist)
+        // notification.warn({
+        //     message: '提示',
+        //     description: '该功能有问题'
         // })
+        let data = {}
+        data.PKlist = this.PKlist
+        postFetch(AsyncManage().downloadlist, data, (res) => {
+            console.log(res)
+            // const a = document.createElement('a')
+            // a.setAttribute('download')
+            // a.setAttribute('href', APIconfig.Server + res)
+            // a.click()
+        })
     }
     AddAction = (name) => {
         if (name === 'Add') {
@@ -267,7 +237,7 @@ class TimeRelatedForm extends Component {
                 });
             } else {
                 //TODO 删除
-                getTimeFetch(table(this.state.TableValue.PK).del, (res) => {
+                getTimeFetch(AsyncManage(this.state.TableValue.PK).del, (res) => {
                     if (res === 'True') {
                         notification.success({
                             message: '提示',
@@ -284,29 +254,33 @@ class TimeRelatedForm extends Component {
             }
         }
     }
-
+    //提交查询的数据
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 // console.log(values)
                 const rangeValue = values['rangepicker']
-                let BUGID = ' '
+                let BUGID = ''
+                let arr = []
                 if (values['BugIDList']) {
                     BUGID = values['BugIDList'].split(',')
+                    BUGID.map((v) => {
+                        arr.push(values['BugType'] + v)
+                        return true
+                    })
                 }
                 const value = {
                     'State': values['State'],
-                    'SQLTYPE': values['SQLTYPE'],
-                    'BugType': values['BugType'],
+                    'SQLTYPE': '',
                     'BugIDList': BUGID,
                     'Author': 'xxx',
                     'StarTime': rangeValue[0].format('YYYY-MM-DD'),
                     'EndTime': rangeValue[1].format('YYYY-MM-DD')
                 }
-                // console.log('Received values of form: ', value);
-
-                postFetch(table().postCheck, value, (res) => {
+                console.log('Received values of form: ', value);
+                //查询
+                postFetch(AsyncManage().Search, value, (res) => {
                     // console.log(res)
                     if (res.length === 0) {
                         notification.warning({
@@ -324,28 +298,33 @@ class TimeRelatedForm extends Component {
     disabledDate = (current) => {//禁止选择的时间
         return current > moment().endOf('day');
     }
-
+    //点击取消以后的刷新
     ActiveKey = () => {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 // console.log(values)
                 const rangeValue = values['rangepicker']
-                let BUGID = ' '
+                let BUGID = ''
+                let arr = []
                 if (values['BugIDList']) {
                     BUGID = values['BugIDList'].split(',')
+                    BUGID.map((v) => {
+                        arr.push(values['BugType'] + v)
+                        return true
+                    })
                 }
                 const value = {
                     'State': values['State'],
-                    'SQLTYPE': values['SQLTYPE'],
-                    'BugType': values['BugType'],
+                    'SQLTYPE': '',
                     'BugIDList': BUGID,
                     'Author': 'xxx',
                     'StarTime': rangeValue[0].format('YYYY-MM-DD'),
                     'EndTime': rangeValue[1].format('YYYY-MM-DD')
                 }
+                console.log('Received values of form: ', value);
                 // console.log('Received values of form: ', value);
-
-                postFetch(table().postCheck, value, (res) => {
+                //再次查询一次
+                postFetch(AsyncManage().Search, value, (res) => {
                     this.clear = JSON.parse(JSON.stringify(this.state.clearObj))
                     // console.log(res)
                     this.setState({
@@ -373,7 +352,6 @@ class TimeRelatedForm extends Component {
         };
         return (
             <div>
-
                 <Form onSubmit={this.handleSubmit}>
                     <Card >
                         <Row gutter={1}>
@@ -386,49 +364,31 @@ class TimeRelatedForm extends Component {
                                         initialValue: '0',
                                     })(
                                         <Select>
-                                            <Option value="0">未发布</Option>
-                                            <Option value="1">已发布</Option>
-                                        </Select>
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={3}>
-                                <FormItem
-                                    label="类型"
-                                    {...formItemLayout}
-                                >
-                                    {getFieldDecorator('SQLTYPE', {
-                                        initialValue: '-1',
-                                    })(
-                                        <Select>
-                                            <Option value="-1">全部类型</Option>
-                                            <Option value="0">新增表</Option>
-                                            <Option value="1">修改表</Option>
-                                            <Option value="2">创建视图</Option>
-                                            <Option value="3">过程函数脚本</Option>
+                                            <Option value="0">未归档</Option>
+                                            <Option value="1">已归档</Option>
                                         </Select>
                                     )}
                                 </FormItem>
                             </Col>
                             <Col span={4}>
                                 <FormItem
-                                    label="禅道状态"
+                                    label="类型选择"
                                     {...formItemLayout}
                                 >
                                     {getFieldDecorator('BugType', {
-                                        initialValue: '0',
+                                        initialValue: '',
                                     })(
                                         <Select>
-                                            <Option value="0">需求</Option>
-                                            <Option value="1">BUG</Option>
+                                            <Option value="bug_">BUG</Option>
+                                            <Option value="xq_">需求</Option>
+                                            <Option value="">全部</Option>
                                         </Select>
                                     )}
                                 </FormItem>
                             </Col>
                             <Col span={8}>
                                 <FormItem
-
-                                    label="RangePicker"
+                                    label="日期"
                                     {...formItemLayout}
                                 >
                                     {getFieldDecorator('rangepicker', {
@@ -443,9 +403,9 @@ class TimeRelatedForm extends Component {
                                     )}
                                 </FormItem>
                             </Col>
-                            <Col span={6}>
+                            <Col span={4}>
                                 <FormItem
-                                    label="BugIDList"
+                                    label="BugID"
                                     {...formItemLayout}
                                 >
                                     {getFieldDecorator('BugIDList')(
@@ -454,18 +414,16 @@ class TimeRelatedForm extends Component {
 
                                 </FormItem>
                             </Col>
+                            <Col span={5}>
+                                <ButtonGroup style={{ marginLeft: '10%' }}>
+                                    <Button htmlType="submit" type='primary'>查询</Button>
+                                    <Button htmlType='button' type='primary' style={{ display: this.state.show ? 'inline-block' : 'none' }} onClick={this.ext.bind(this)}>归档</Button>
+                                    <Button htmlType='button' type='primary' style={{ display: this.state.show ? 'inline-block' : 'none' }} onClick={this.downloads.bind(this)}>批量下载</Button>
+                                </ButtonGroup>
+                            </Col>
                         </Row>
-                        <ButtonGroup>
-                            <Button htmlType="submit" type='primary'>查询</Button>
-                            {/* <Button htmlType='button' onClick={this.AddAction.bind(this, 'Add')}>新增</Button>
-                            <Button htmlType='button' onClick={this.AddAction.bind(this, 'Edit')}>修改</Button>
-                            <Button htmlType='button' type='danger' onClick={this.AddAction.bind(this, 'Delete')}>删除</Button> */}
-                            <Button htmlType='button' type='primary' style={{ display: this.state.show ? 'inline-block' : 'none' }} onClick={this.ext.bind(this)}>发布</Button>
-                            <Button htmlType='button' type='primary' style={{ display: this.state.show ? 'inline-block' : 'none' }} onClick={this.downloads.bind(this)}>批量下载</Button>
-                        </ButtonGroup>
                     </Card>
                 </Form>
-
                 <Collapse
                     bordered={false}
                     defaultActiveKey={['1']}
@@ -478,18 +436,19 @@ class TimeRelatedForm extends Component {
                             downPK={this.downPK.bind(this)}
                             Data={Data}
                             columns={columns}
+                            EmitValue={this.EmitValue.bind(this)}
                             TableEmitData={this.TableEmitData.bind(this)}
                             clearTable={clearTable}
                             type={'checkbox'}
                         ></Tables>
                     </Panel>
                     <Panel key='2' showArrow={true} header='详细信息'>
-                        <TableUpdateAction
+                        <AsyncTableAction
                             clear={this.clear}
                             TableValue={TableValue}
                             disabled={disabled}
                             ActiveKey={this.ActiveKey}
-                        ></TableUpdateAction>
+                        ></AsyncTableAction>
                     </Panel>
                 </Collapse>
             </div>
