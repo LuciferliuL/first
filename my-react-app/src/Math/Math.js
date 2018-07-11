@@ -320,4 +320,15 @@ function ErrPost(URL, body, Callback) {
 
 export { ErrPost }
 
+function ajaxGet(URL,Callback){
+    $.ajax({
+        url:URL,
+        type:'GET',
+        datatype:'text',
+        success:function(res){
+            Callback(res)
+        }
+    })
+}
+export {ajaxGet}
 

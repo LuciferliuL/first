@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table} from 'antd'
+import { Table } from 'antd'
 
 
 /**
@@ -11,31 +11,39 @@ class Tables extends Component {
     state = {
         selectedRowKeys: []
     }
-    onSelectChange = (selectedRowKeys,selectedRowValue) => {
+    onSelectChange = (selectedRowKeys, selectedRowValue) => {
         // console.log(selectedRowValue);
         // console.log(selectedRowKeys)
+        //获取选中的path
+        let pathArr = []
+        selectedRowValue.map((e) => {
+            pathArr.push(e.PATH)
+            return true
+        })
+
+
         this.setState({ selectedRowKeys });
         this.props.TableEmitData(selectedRowKeys[selectedRowKeys.length - 1])
-        this.props.downPK(selectedRowKeys)
+        this.props.downPK(selectedRowKeys,pathArr)
     }
-    componentWillReceiveProps(next){
+    componentWillReceiveProps(next) {
         // console.log(next)
-        if(next.clearTable){
+        if (next.clearTable) {
             this.setState({
-                selectedRowKeys:[]
+                selectedRowKeys: []
             })
         }
     }
     render() {
-        const {selectedRowKeys } = this.state;
-        const { Data, columns, type} = this.props
+        const { selectedRowKeys } = this.state;
+        const { Data, columns, type } = this.props
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
-            type:type,
+            type: type,
             // hideDefaultSelections:true
         };
-        
+
         return (
             <div>
                 <Table

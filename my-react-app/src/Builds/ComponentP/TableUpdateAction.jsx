@@ -246,7 +246,7 @@ const TableUpdateAction = Form.create({
             // }
         });
         // Field.TableValue = TableValue
-        console.log(Field)
+        // console.log(Field)
         return Field
     }
 })(RegistrationForm);

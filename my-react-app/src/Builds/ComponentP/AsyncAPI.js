@@ -19,4 +19,12 @@ const table = (PK) => ({
     execute: APIconfig.Server + '/api/TableUpdate/ChangePublicState',//批量执行
     add: APIconfig.Server + '/api/TableUpdate/AddTableUpdateInfo'//新增
 })
-export { API, table, APIconfig }
+
+const AsyncManage = (PK) => ({
+    doIt: APIconfig.Server + '/api/TableUpdate/ChangeExectState?PK=' + PK,//执行
+    download:APIconfig.Server + '/api/TableUpdate/ChangeDownState?PK=' + PK,//下载
+    Search:APIconfig.Server + '/api/TbReleaseSyncLog/GetTbReleaseSyncLogInfoList',//查询
+    downloadlist:APIconfig.Server + '/api/TbReleaseSyncLog/CreateFileAndDown',//post 批量下载
+    doItlist:APIconfig.Server + '/api/TbReleaseSyncLog/ChangePublicState',//post 批量归档
+})
+export { API, table, APIconfig, AsyncManage }

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import Tables from './ComponentP/TableUpdateT'
 import { table, APIconfig } from './ComponentP/AsyncAPI'
 import moment from 'moment'
-import { getTime, getTimeFetch, postFetch, getFetch, ajaxGet } from '../Math/Math'
+import { getTime, getTimeFetch, postFetch} from '../Math/Math'
 import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col, Button, Popover, Tag } from 'antd'
 import TableUpdateAction from './ComponentP/TableUpdateAction'
-import download from 'downloadjs'
+
 const Panel = Collapse.Panel
 const { Option } = Select
 const ButtonGroup = Button.Group
@@ -457,9 +457,9 @@ class TimeRelatedForm extends Component {
                         </Row>
                         <ButtonGroup>
                             <Button htmlType="submit" type='primary'>查询</Button>
-                            <Button htmlType='button' onClick={this.AddAction.bind(this, 'Add')}>新增</Button>
+                            {/* <Button htmlType='button' onClick={this.AddAction.bind(this, 'Add')}>新增</Button>
                             <Button htmlType='button' onClick={this.AddAction.bind(this, 'Edit')}>修改</Button>
-                            <Button htmlType='button' type='danger' onClick={this.AddAction.bind(this, 'Delete')}>删除</Button>
+                            <Button htmlType='button' type='danger' onClick={this.AddAction.bind(this, 'Delete')}>删除</Button> */}
                             <Button htmlType='button' type='primary' style={{ display: this.state.show ? 'inline-block' : 'none' }} onClick={this.ext.bind(this)}>发布</Button>
                             <Button htmlType='button' type='primary' style={{ display: this.state.show ? 'inline-block' : 'none' }} onClick={this.downloads.bind(this)}>批量下载</Button>
                         </ButtonGroup>
@@ -497,6 +497,6 @@ class TimeRelatedForm extends Component {
     }
 }
 
-const TableUpdate = Form.create()(TimeRelatedForm);
-export default TableUpdate;
+const AsyncDataManage = Form.create()(TimeRelatedForm);
+export default AsyncDataManage;
 

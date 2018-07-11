@@ -13,7 +13,8 @@ import AsyncData from '../../Builds/AsyncData';
 import PopWindows from '../PopWindows/PopWindows';
 import Test from '../../TestModule/Test';
 import SQLManage from '../SQLManage/SQLManage';
-import TableUpdate from '../../Builds/TableUpdate'
+import TableUpdate from '../../Builds/TableUpdate';
+import AsyncDataManage from '../../Builds/AsyncDataManage'
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -73,6 +74,7 @@ class Home extends React.Component {
                         >
                             <Menu.Item key="111"><Link to='/Home/AsyncData'>数据同步</Link></Menu.Item>
                             <Menu.Item key="71"><Link to={'/Home/TableUpdate/' + this.state.name}>表结构更新管理</Link></Menu.Item>
+                            <Menu.Item key="AsyncDataManage"><Link to={'/Home/AsyncDataManage/' + this.state.name}>数据同步管理</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub3"
@@ -112,6 +114,7 @@ class Home extends React.Component {
                             <Route path='/Home/Test' component={Test}></Route>
                             <Route path='/Home/SQLManage' component={SQLManage}></Route>
                             <Route path='/Home/TableUpdate/:id' component={TableUpdate}></Route>
+                            <Route path='/Home/AsyncDataManage/:id' component={AsyncDataManage}></Route>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', padding: 10 }}>
