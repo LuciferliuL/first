@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import Tables from './ComponentP/TableUpdateT'
 import { table, APIconfig } from './ComponentP/AsyncAPI'
 import moment from 'moment'
-import { getTime, getTimeFetch, postFetch, getFetch, ajaxGet } from '../Math/Math'
+import { getTime, getTimeFetch, postFetch } from '../Math/Math'
 import { Collapse, notification, Card, Select, Input, Form, DatePicker, Row, Col, Button, Popover, Tag } from 'antd'
 import TableUpdateAction from './ComponentP/TableUpdateAction'
-import download from 'downloadjs'
+
 const Panel = Collapse.Panel
 const { Option } = Select
 const ButtonGroup = Button.Group
@@ -197,7 +197,15 @@ class TimeRelatedForm extends Component {
                     disabled: true
                 })
             })
+        } else {
+            this.setState({
+                TableValue: JSON.parse(JSON.stringify(this.state.clearObj)),
+                disabled: true
+            })
         }
+    }
+    EmitValue = () => {
+
     }
     //批量下载监听选中PK
     downPK = (PKlist, path) => {
@@ -225,8 +233,8 @@ class TimeRelatedForm extends Component {
     downloads = () => {
         console.log(this.path)
         notification.warn({
-            message:'提示',
-            description:'该功能有问题'
+            message: '提示',
+            description: '该功能有问题'
         })
         // let API = JSON.stringify(APIconfig.Server).replace(/\"/g, '')
         // this.path.forEach(el => {
@@ -373,9 +381,8 @@ class TimeRelatedForm extends Component {
         };
         return (
             <div>
-
                 <Form onSubmit={this.handleSubmit}>
-                    <Card >
+                    <Card bodyStyle={{padding:'10px'}}>
                         <Row gutter={1}>
                             <Col span={3}>
                                 <FormItem
@@ -481,6 +488,7 @@ class TimeRelatedForm extends Component {
                             TableEmitData={this.TableEmitData.bind(this)}
                             clearTable={clearTable}
                             type={'checkbox'}
+                            EmitValue={this.EmitValue.bind(this)}
                         ></Tables>
                     </Panel>
                     <Panel key='2' showArrow={true} header='详细信息'>

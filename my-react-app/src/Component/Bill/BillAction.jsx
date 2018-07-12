@@ -29,8 +29,8 @@ class RegistrationForm extends React.Component {
             submitData: pre.clear,
             disabled: pre.disabled
         }, () => {
-            console.log(this.state.submitData)
-            console.log(this.state.disabled)
+            // console.log(this.state.submitData)
+            // console.log(this.state.disabled)
         })
     }
     //提交
@@ -53,10 +53,10 @@ class RegistrationForm extends React.Component {
                             notification.success({
                                 message: '提示',
                                 description: '可以进行分公司复制或执行同步',
-                                key: 1,
+                                key: '1',
                                 btn: <ButtonGroup>
                                     <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
-                                    <Button onClick={() => { notification.close('1') }} size='small'>取消</Button>
+                                    <Button onClick={this.ActiveTable.bind(this)} size='small'>取消</Button>
                                 </ButtonGroup>
                             })
                         })
@@ -159,7 +159,9 @@ class RegistrationForm extends React.Component {
                                     {...formItemLayout}
                                     label="单据类型标识"
                                 >
-                                    {getFieldDecorator('BillTypeCode')(
+                                    {getFieldDecorator('BillTypeCode', {
+                                        rules: [{ required: true, message: '类型标识必填且长度小于3' }]
+                                    })(
                                         <Input disabled={disabled} autoComplete="off" />
                                     )}
                                 </FormItem>
@@ -408,10 +410,11 @@ const BillAction = Form.create({
         // console.log(TableValue)
         let Field = {}
         FormList.forEach(element => {
-            if (TableValue[element]) {
+            if (TableValue[element] || TableValue[element] === 0) {
                 Field[element] = Form.createFormField({ value: TableValue[element] })
             }
         });
+        // console.log(Field)
         // Field.TableValue = TableValue
         return Field
     }

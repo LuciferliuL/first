@@ -353,7 +353,7 @@ class AsyncData extends Component {
                     <Spin spinning={loading}>
                         <Col span={24}>
                             <Card
-                                bodyStyle={{ padding: 10 }}
+                                bodyStyle={{padding:'10px'}}
                                 actions={[
                                     <ButtonGroup>
                                         <Button onClick={this.checked}>查询</Button>

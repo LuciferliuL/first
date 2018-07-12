@@ -72,34 +72,15 @@ class TimeRelatedForm extends Component {
             clearTable: false,
             disabled: true,
             clearObj: {
-                AUTHOR: "",
-                BILLTYPECODE: "",
                 BUGID: "",
-                BugTYPE: 0,
                 CreateTime: "",
-                DELETEFLAG: 0,
-                DEVMESSAGE: null,
-                DEVSTATE: 2,
-                EXECUTEDATE: "",
-                EXECUTEDATEDEV: "",
-                EXECUTEMAN: "",
-                EXECUTEMANDEV: "",
-                FK: -1,
-                ISPUBLIC: 1,
-                LastModifyTime: "",
-                NOTE: "",
-                PATH: "",
-                PK: -1,
-                QAMESSAGE: "",
-                REMARK: "",
-                SQLSCRIPE: "",
-                SQLTYPE: -1,
-                STATE: 1,
-                TITLE: "",
-                Tag: null,
-                Version: 3,
-                WorkFlowGuid: "",
-                WorkFlowState: "",
+                NOTE: '',
+                PK: '',
+                SCRIPT: '',
+                STAFFNAME: "",
+                SYNC: '',
+                TABLENAME: "",
+                VERSION: '',
             },
             show: false
         }
@@ -157,11 +138,18 @@ class TimeRelatedForm extends Component {
     }
     //点击表单获取具体数据
     EmitValue = (value) => {
-        console.log(value)
-        this.setState({
-            TableValue: JSON.parse(JSON.stringify(value)),
-            disabled: true
-        })
+        // console.log(value)
+        if (value !== undefined) {
+            this.setState({
+                TableValue: JSON.parse(JSON.stringify(value)),
+                disabled: true
+            })
+        } else {
+            this.setState({
+                TableValue: JSON.parse(JSON.stringify(this.state.clearObj)),
+                disabled: true
+            })
+        }
     }
     //批量下载监听选中PK
     downPK = (PKlist, path) => {
@@ -198,10 +186,11 @@ class TimeRelatedForm extends Component {
         data.PKlist = this.PKlist
         postFetch(AsyncManage().downloadlist, data, (res) => {
             console.log(res)
-            // const a = document.createElement('a')
-            // a.setAttribute('download')
-            // a.setAttribute('href', APIconfig.Server + res)
-            // a.click()
+            const a = document.createElement('a')
+            a.setAttribute('download', getTime())
+            a.setAttribute('href', APIconfig.Server + '/' + res)
+            a.setAttribute('target', '_Blank')
+            a.click()
         })
     }
     AddAction = (name) => {
@@ -353,7 +342,7 @@ class TimeRelatedForm extends Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
-                    <Card >
+                    <Card bodyStyle={{padding:'10px'}}>
                         <Row gutter={1}>
                             <Col span={3}>
                                 <FormItem

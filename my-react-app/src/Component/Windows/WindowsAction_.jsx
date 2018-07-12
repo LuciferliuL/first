@@ -63,6 +63,7 @@ class RegistrationForm extends React.Component {
                             notification.success({
                                 message: '提示',
                                 description: '可以执行同步',
+                                key:'1',
                                 btn: <ButtonGroup>
                                     <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
                                     <Button onClick={this.ActiveTable.bind(this)} size='small'>取消</Button>

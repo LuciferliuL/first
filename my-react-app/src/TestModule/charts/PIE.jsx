@@ -16,9 +16,6 @@ import 'echarts/lib/component/legend'
 class PIE extends Component {
     componentWillReceiveProps(pre) {
     }
-    componentWillUnmount() {
-        this.setState({})
-    }
     getOption = () => (
         {
             tooltip: {

@@ -41,7 +41,7 @@ class Windows extends Component {
             clearTable: false,
             disabled: true,
             clearObj: {
-                Action: '',
+                Action: this.props.match.params.id,
                 ActionType: '',
                 Author: '',
                 BranchID: "STD",
@@ -108,17 +108,19 @@ class Windows extends Component {
     }
     //激活得Collapse
     callback = (key) => {
-        if (key === 1) {
+        console.log(key)
+        if (key === '1') {
             this.setState({
                 ActiveKey: key === undefined ? ['2'] : ['1'],
-                disabled: true
+                disabled: true,
+                clearTable:false
             })
         } else {
             this.setState({
                 ActiveKey: key === undefined ? ['2'] : ['1'],
+                clearTable:true
             })
         }
-
     }
     //点击表单获取得数据
     TableEmitData = (TableValue) => {

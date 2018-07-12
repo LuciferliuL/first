@@ -57,9 +57,7 @@ class Barcharts extends Component {
             })
         }
     }
-    componentWillUnmount(){
-        this.setState({})
-    }
+   
     getOption = () => {
         return {
             color: ['#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',

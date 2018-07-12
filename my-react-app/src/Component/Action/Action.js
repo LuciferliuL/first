@@ -11,7 +11,7 @@ const ButtonGroup = Button.Group
 class Action extends Component {
     state = {
         clearObj: {
-            Action: '',
+            Action: this.props.match.params.id,
             Author: '',
             BranchID: "STD",
             Caption: '',
@@ -45,7 +45,7 @@ class Action extends Component {
         selectedKeys: [],
         selectedObj: {
             Action: '',
-            Author: '',
+            Author: this.props.match.params.id,
             BranchID: "STD",
             Caption: '',
             Catalog: "GOS",

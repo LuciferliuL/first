@@ -39,9 +39,6 @@ class Piecharts extends Component {
             Data: this.PieObj
         })
     }
-    componentWillUnmount() {
-        this.setState({})
-    }
     getOption = () => (
         {
             title: {

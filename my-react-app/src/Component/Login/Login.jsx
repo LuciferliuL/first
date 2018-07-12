@@ -42,7 +42,7 @@ class Logins extends Component {
                 <div className="App">
                     <header className="App-header">
                         <img src={logo} className="App-logo" alt="logo" />
-                        <h1 className="App-title">Welcome to React</h1>
+                        <h1 className="App-title">Welcome to JZTDEV</h1>
                     </header>
                     <Form onSubmit={this.handleSubmit} className="login-form" style={widthform}>
                         <FormItem>

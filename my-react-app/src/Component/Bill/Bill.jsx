@@ -49,7 +49,7 @@ class Bill extends Component {
             disabled: true,
             clearObj: {
                 // ActionName: "",
-                Author: "",
+                Author: this.props.match.params.id,
                 BillCatalog: "",
                 BillPrintCode: null,
                 BillScripe: "",
@@ -116,7 +116,7 @@ class Bill extends Component {
                 WorkFlowGuid: "",
                 WorkFlowState: "",
             },
-            loading:true
+            loading: true
         }
     }
 
@@ -126,21 +126,21 @@ class Bill extends Component {
             // console.log(res)
             this.setState({
                 Data: res,
-                loading:false
+                loading: false
             })
         })
     }
     //点击搜索加载数据
     GetData = (SearchValue) => {
         this.setState({
-            loading:true
+            loading: true
         })
         getFetch(Searchs(SearchValue).BillAPI, (res) => {
             // console.log(res)
             this.setState({
                 Data: res,
                 TableValue: {},
-                loading:false
+                loading: false
             })
         })
     }
@@ -154,17 +154,19 @@ class Bill extends Component {
     }
     //激活得Collapse
     callback = (key) => {
-        if (key === 1) {
+        console.log(key)
+        if (key === '1') {
             this.setState({
                 ActiveKey: key === undefined ? ['2'] : ['1'],
-                disabled: true
+                disabled: true,
+                clearTable:false
             })
         } else {
             this.setState({
                 ActiveKey: key === undefined ? ['2'] : ['1'],
+                clearTable:true
             })
         }
-
     }
     //点击表单获取得数据
     TableEmitData = (TableValue) => {
@@ -173,7 +175,7 @@ class Bill extends Component {
             // console.log(res)
             this.setState({
                 TableValue: JSON.parse(JSON.stringify(res)),
-                disabled: true
+                disabled: true,
             })
         })
     }
@@ -234,8 +236,10 @@ class Bill extends Component {
             ActiveKey: ['1'],
             disabled: true,
             TableValue: this.clear,
+            clearTable:false//清除表格的选中
         })
     }
+    
     render() {
         const { Data, columns, ActiveKey, TableValue, clearTable, disabled, loading } = this.state
         return (
