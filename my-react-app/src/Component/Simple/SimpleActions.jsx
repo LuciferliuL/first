@@ -9,7 +9,7 @@ const ButtonGroup = Button.Group
 const TabPane = Tabs.TabPane
 const { TextArea } = Input
 const Panel = Collapse.Panel;
-let i = 0
+let uuid = 0;
 const Widths = { width: 100 + '%' }
 const FormList = ['BillTypeCode', 'DQueryParamAssembly', 'DQueryMasterAssembly', 'DQuerySlaveAssembly', 'Author', 'DQueryCaption', 'DQueryParamFullName', 'Module',
     'DQueryMasterFullName', 'DQuerySlaveFullName', 'LayoutMode', 'QueryExtend', 'Settings']
@@ -66,7 +66,32 @@ class RegistrationForm extends React.Component {
                 CreateTime: getTime(),
                 DQueryCaption: '',
                 DQueryName: '',
-                DQuerySql: '',
+                DQuerySql: {
+                    Author: '',
+                    BranchID: "STD",
+                    CreateTime: '',
+                    DeleteFlag: 0,
+                    FK: -1,
+                    GuidString: null,
+                    LastModifyTime: getTime(),
+                    LastUpdater: null,
+                    LineID: -1,
+                    Module: null,
+                    Note: null,
+                    OriginalGuidString: null,
+                    PK: -1,
+                    QueryDataRightCode: null,
+                    ScriptType: null,
+                    SoftSystemCode: "GOS",
+                    SqlName: '',
+                    SqlScripe: '',
+                    TableDisplayerGuid: null,
+                    Tag: null,
+                    Version: 5,
+                    VersionNum: 4,
+                    WorkFlowGuid: "",
+                    WorkFlowState: "",
+                },
                 DataSource: 1,
                 DeleteFlag: 0,
                 FK: 0,
@@ -88,39 +113,12 @@ class RegistrationForm extends React.Component {
                 WorkFlowGuid: "",
                 WorkFlowState: "",
             },
-            DQuerySql: {
-                Author: '',
-                BranchID: "STD",
-                CreateTime: '',
-                DeleteFlag: 0,
-                FK: -1,
-                GuidString: null,
-                LastModifyTime: getTime(),
-                LastUpdater: null,
-                LineID: -1,
-                Module: null,
-                Note: null,
-                OriginalGuidString: null,
-                PK: -1,
-                QueryDataRightCode: null,
-                ScriptType: null,
-                SoftSystemCode: "GOS",
-                SqlName: '',
-                SqlScripe: '',
-                TableDisplayerGuid: null,
-                Tag: null,
-                Version: 5,
-                VersionNum: 4,
-                WorkFlowGuid: "",
-                WorkFlowState: "",
-            },
-            panel: [],
-            panel2: []
+            panel2: [],
         }
     }
     componentWillMount() {
+        uuid = 0
         const { TableValue, disabled } = this.props
-        i = TableValue.QueryExtend.length
         this.setState({
             submitData: TableValue,
             disabled: disabled,
@@ -134,6 +132,7 @@ class RegistrationForm extends React.Component {
         // console.log(pre)
         const TableValue = pre.TableValue
         const disabled = pre.disabled
+        uuid = 0
         this.setState({
             submitData: TableValue,
             disabled: disabled,
@@ -209,114 +208,28 @@ class RegistrationForm extends React.Component {
     handleBook = (value) => {
         console.log(value)
     }
+
     //添加Tab
     addTabs = () => {
-        const { getFieldDecorator, getFieldsValue, setFieldsValue } = this.props.form
-        const { panel2, counts } = this.state
-        const switchLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-        };
-        const formItemLayoutTab = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 4 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 20 },
-            },
-        };
-        const Qu = getFieldsValue(`QueryExtend[${counts}].DQueryCaption`)
-        const nextQu = Qu.concat('')
-        setFieldsValue({
-            Qu: nextQu
-        })
-        panel2.push(<TabPane key={i + 'QueryExtend'} tab='Tab'>
-            <FormItem
-                {...formItemLayoutTab}
-                label="页签名称"
-            >
-                {getFieldDecorator(`QueryExtend[${i}].DQueryCaption`, {
-                    rules: [{ required: true, message: 'Please input 页签名称!' }],
-                })(
-                    <Input autoComplete="off" />
-                )}
-            </FormItem>
-            <FormItem
-                {...formItemLayoutTab}
-                label="SQL名"
-            >
-                {getFieldDecorator(`QueryExtend[${i}].DQuerySql.SqlName`, {
-                    rules: [{ required: true, message: 'Please input SQL名!' }],
-                })(
-                    <Input autoComplete="off"
-                        addonAfter={
-                            <SimpleBtn handleBook={this.handleBook.bind(this)}></SimpleBtn>
-                        } />
-                )}
-            </FormItem>
-            <Col span={12}>
-                <FormItem label='是否分页' {...switchLayout}>
-                    {getFieldDecorator(`QueryExtend[${i}].IsPaging`, { valuePropName: 'checked' })(
-                        <Switch />
-                    )}
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem label='是否使用缓存服务器' {...switchLayout}>
-                    {getFieldDecorator(`QueryExtend[${i}].IsUseCacheServer`, { valuePropName: 'checked' })(
-                        <Switch />
-                    )}
-                </FormItem>
-            </Col>
-            <FormItem
-                {...formItemLayoutTab}
-                label="数据来源"
-            >
-                {getFieldDecorator(`QueryExtend[${i}].DataSource`, {
-                    rules: [{ required: true, message: 'Please input 数据来源!' }],
-                })(
-                    <Select
-                        style={Widths}>
-                        <Option value={0}>集中服务器</Option>
-                        <Option value={1}>分公司服务器</Option>
-                        <Option value={2}>SOLR</Option>
-                    </Select>
-                )}
-            </FormItem>
-            <FormItem
-                {...formItemLayoutTab}
-                label="SQL内容"
-            >
-                {getFieldDecorator(`QueryExtend[${i}].DQuerySql.SqlScripe`, {
-                    rules: [{ required: true, message: 'Please input SQL内容!' }],
-                })(
-                    <TextArea autoComplete="off" rows={10} cols={20}
-                        style={{ resize: 'none' }} />
-                )}
-            </FormItem>
-        </TabPane>)
-        this.setState({
-            panel2: panel2
-        }, () => {
-            i++
-        })
+        const { form } = this.props;
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys');
+        const nextKeys = keys.concat(uuid);
+        uuid++;
+        // can use data-binding to set
+        // important! notify form to detect changes
+        form.setFieldsValue({
+            keys: nextKeys,
+        });
     }
     //删除Tab
     delTabs = () => {
 
     }
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
         // console.log(this.props.form)
-        const { disabled, loading, counts, panel, panel2 } = this.state
+        const { disabled, loading, counts } = this.state
         // console.log(TableValue)
         const formItemLayout = {
             labelCol: {
@@ -398,8 +311,9 @@ class RegistrationForm extends React.Component {
                 </FormItem>
             )
         })
+        const panel = []
         for (let l = 0; l < counts; l++) {
-            console.log(counts)
+            // console.log(counts)
             panel.push(
                 <TabPane key={l + 'QueryExtend'} tab='Tab'>
                     <FormItem
@@ -409,7 +323,7 @@ class RegistrationForm extends React.Component {
                         {getFieldDecorator(`QueryExtend[${l}].DQueryCaption`, {
                             rules: [{ required: true, message: 'Please input 页签名称!' }],
                         })(
-                            <Input disabled={disabled} autoComplete="off" />
+                            <Input disabled={true} autoComplete="off" />
                         )}
                     </FormItem>
                     <FormItem
@@ -419,7 +333,7 @@ class RegistrationForm extends React.Component {
                         {getFieldDecorator(`QueryExtend[${l}].DQuerySql.SqlName`, {
                             rules: [{ required: true, message: 'Please input SQL名!' }],
                         })(
-                            <Input disabled={disabled} autoComplete="off"
+                            <Input disabled={true} autoComplete="off"
                                 addonAfter={
                                     <SimpleBtn handleBook={this.handleBook.bind(this)}></SimpleBtn>
                                 } />
@@ -427,15 +341,25 @@ class RegistrationForm extends React.Component {
                     </FormItem>
                     <Col span={12}>
                         <FormItem label='是否分页' {...switchLayout}>
-                            {getFieldDecorator(`QueryExtend[${l}].IsPaging`, { valuePropName: 'checked' })(
-                                <Switch disabled={disabled} />
+                            {getFieldDecorator(`QueryExtend[${l}].IsPaging`)(
+                                <Select
+                                    style={Widths}
+                                    disabled={true}>
+                                    <Option value={0}>是</Option>
+                                    <Option value={1}>否</Option>
+                                </Select>
                             )}
                         </FormItem>
                     </Col>
                     <Col span={12}>
                         <FormItem label='是否使用缓存服务器' {...switchLayout}>
-                            {getFieldDecorator(`QueryExtend[${l}].IsUseCacheServer`, { valuePropName: 'checked' })(
-                                <Switch disabled={disabled} />
+                            {getFieldDecorator(`QueryExtend[${l}].IsUseCacheServer`)(
+                                <Select
+                                    style={Widths}
+                                    disabled={true}>
+                                    <Option value={0}>是</Option>
+                                    <Option value={1}>否</Option>
+                                </Select>
                             )}
                         </FormItem>
                     </Col>
@@ -444,6 +368,90 @@ class RegistrationForm extends React.Component {
                         label="数据来源"
                     >
                         {getFieldDecorator(`QueryExtend[${l}].DataSource`, {
+                            rules: [{ required: true, message: 'Please input 数据来源!' }],
+                        })(
+                            <Select
+                                style={Widths}
+                                disabled={true}>
+                                <Option value={0}>集中服务器</Option>
+                                <Option value={1}>分公司服务器</Option>
+                                <Option value={2}>SOLR</Option>
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayoutTab}
+                        label="SQL内容"
+                    >
+                        {getFieldDecorator(`QueryExtend[${l}].DQuerySql.SqlScripe`, {
+                            rules: [{ required: true, message: 'Please input SQL内容!' }],
+                        })(
+                            <TextArea disabled={true} autoComplete="off" rows={10} cols={20}
+                                style={{ resize: 'none' }} />
+                        )}
+                    </FormItem>
+                </TabPane>
+            )
+        }
+        getFieldDecorator('keys', { initialValue: [] });
+        const keys = getFieldValue('keys');
+        console.log(keys)
+        const formItems = keys.map((k, index) => {
+            return (
+                <TabPane key={index + 'QueryExtends'} tab='Tab'>
+                    <FormItem
+                        {...formItemLayoutTab}
+                        label="页签名称"
+                    >
+                        {getFieldDecorator(`QueryExtends[${index}].DQueryCaption`, {
+                            rules: [{ required: true, message: 'Please input 页签名称!' }],
+                        })(
+                            <Input disabled={disabled} autoComplete="off" />
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayoutTab}
+                        label="SQL名"
+                    >
+                        {getFieldDecorator(`QueryExtends[${index}].DQuerySql.SqlName`, {
+                            rules: [{ required: true, message: 'Please input SQL名!' }],
+                        })(
+                            <Input disabled={disabled} autoComplete="off"
+                                addonAfter={
+                                    <SimpleBtn handleBook={this.handleBook.bind(this)}></SimpleBtn>
+                                } />
+                        )}
+                    </FormItem>
+                    <FormItem label='是否分页' {...formItemLayoutTab}>
+                        {getFieldDecorator(`QueryExtends[${index}].IsPaging`,{
+                            initialValue:0
+                        })(
+                            <Select
+                                style={Widths}
+                                disabled={disabled}>
+                                <Option value={0}>是</Option>
+                                <Option value={1}>否</Option>
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem label='是否使用缓存服务器' {...formItemLayoutTab}>
+                        {getFieldDecorator(`QueryExtends[${index}].IsUseCacheServer`,{
+                            initialValue:0
+                        })(
+                            <Select
+                                style={Widths}
+                                disabled={disabled}>
+                                <Option value={0}>是</Option>
+                                <Option value={1}>否</Option>
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem
+                        {...formItemLayoutTab}
+                        label="数据来源"
+                    >
+                        {getFieldDecorator(`QueryExtends[${index}].DataSource`, {
+                            initialValue:0,
                             rules: [{ required: true, message: 'Please input 数据来源!' }],
                         })(
                             <Select
@@ -459,7 +467,7 @@ class RegistrationForm extends React.Component {
                         {...formItemLayoutTab}
                         label="SQL内容"
                     >
-                        {getFieldDecorator(`QueryExtend[${l}].DQuerySql.SqlScripe`, {
+                        {getFieldDecorator(`QueryExtends[${index}].DQuerySql.SqlScripe`, {
                             rules: [{ required: true, message: 'Please input SQL内容!' }],
                         })(
                             <TextArea disabled={disabled} autoComplete="off" rows={10} cols={20}
@@ -467,8 +475,8 @@ class RegistrationForm extends React.Component {
                         )}
                     </FormItem>
                 </TabPane>
-            )
-        }
+            );
+        });
         return (
             <Form onSubmit={this.handleSubmit}>
                 <Spin spinning={loading}>
@@ -611,8 +619,8 @@ class RegistrationForm extends React.Component {
                                                 <Button onClick={this.delTabs.bind(this)}>删除</Button>
                                             </div>
                                         }>
-                                        {/* {panel} */}
-                                        {panel2}
+                                        {panel}
+                                        {formItems}
                                     </Tabs>
                                 </Col>
                             </Col>
