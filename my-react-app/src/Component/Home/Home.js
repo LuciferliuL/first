@@ -15,6 +15,7 @@ import Test from '../../TestModule/Test';
 import SQLManage from '../SQLManage/SQLManage';
 import TableUpdate from '../../Builds/TableUpdate';
 import AsyncDataManage from '../../Builds/AsyncDataManage'
+import Simple_ from '../Simple/Simple_'
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -92,6 +93,7 @@ class Home extends React.Component {
                             <Menu.Item key="单据定义"><Link to={'/Home/Bill/' + this.state.name}>单据定义</Link></Menu.Item>
                             <Menu.Item key="弹出选择窗口管理"><Link to={'/Home/PopWindows/' + this.state.name}>弹出选择窗口管理</Link></Menu.Item>
                             <Menu.Item key="SQL语句管理"><Link to={'/Home/SQLManage/' + this.state.name}>SQL语句管理</Link></Menu.Item>
+                            <Menu.Item key="简单通用查询1"><Link to={'/Home/Simple_/' + this.state.name}>简单通用查询1</Link></Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="发布与构建"
@@ -148,6 +150,7 @@ class Home extends React.Component {
                             <Route path='/Home/SQLManage/:id' component={SQLManage}></Route>
                             <Route path='/Home/TableUpdate/:id' component={TableUpdate}></Route>
                             <Route path='/Home/AsyncDataManage/:id' component={AsyncDataManage}></Route>
+                            <Route path='/Home/Simple_/:id' component={Simple_}></Route>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', padding: 10 }}>

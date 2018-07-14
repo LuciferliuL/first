@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Icon, Input } from 'antd'
+import { Modal,  Icon, Input } from 'antd'
 import { Searchs } from '../../Math/APIconfig'
 import { getFetch, getTime } from '../../Math/Math'
 import Tables from '../Tables/Tables'
@@ -100,7 +100,7 @@ class SimpleBtn extends Component {
         const { TableData, columns } = this.state
         return (
             <div>
-                <Button onClick={this.showModal} type="primary"><Icon type="book"></Icon></Button>
+                <Icon onClick={this.showModal} type="book" style={{cursor:'pointer'}}></Icon>
                 <Modal
                     title="表格"
                     visible={this.state.visible}
