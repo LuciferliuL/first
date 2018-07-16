@@ -54,6 +54,8 @@ const FunAdmin = [
 class RegistrationForm extends React.Component {
     constructor(props) {
         super(props)
+        this.BookOpen = []//记录有没有打开book为一个数组
+        this.BookData = []//记录添加进来得book 
         this.state = {
             submitData: {},
             disabledCopy: true,
@@ -66,32 +68,7 @@ class RegistrationForm extends React.Component {
                 CreateTime: getTime(),
                 DQueryCaption: '',
                 DQueryName: '',
-                DQuerySql: {
-                    Author: '',
-                    BranchID: "STD",
-                    CreateTime: '',
-                    DeleteFlag: 0,
-                    FK: -1,
-                    GuidString: null,
-                    LastModifyTime: getTime(),
-                    LastUpdater: null,
-                    LineID: -1,
-                    Module: null,
-                    Note: null,
-                    OriginalGuidString: null,
-                    PK: -1,
-                    QueryDataRightCode: null,
-                    ScriptType: null,
-                    SoftSystemCode: "GOS",
-                    SqlName: '',
-                    SqlScripe: '',
-                    TableDisplayerGuid: null,
-                    Tag: null,
-                    Version: 5,
-                    VersionNum: 4,
-                    WorkFlowGuid: "",
-                    WorkFlowState: "",
-                },
+                DQuerySql: {},
                 DataSource: 1,
                 DeleteFlag: 0,
                 FK: 0,
@@ -113,7 +90,34 @@ class RegistrationForm extends React.Component {
                 WorkFlowGuid: "",
                 WorkFlowState: "",
             },
+            DQuerySql: {
+                Author: this.props.clear.Author,
+                BranchID: "STD",
+                CreateTime: getTime(),
+                DeleteFlag: 0,
+                FK: -1,
+                GuidString: null,
+                LastModifyTime: getTime(),
+                LastUpdater: null,
+                LineID: -1,
+                Module: null,
+                Note: null,
+                OriginalGuidString: null,
+                PK: -1,
+                QueryDataRightCode: null,
+                ScriptType: null,
+                SoftSystemCode: "GOS",
+                SqlName: '',
+                SqlScripe: '',
+                TableDisplayerGuid: null,
+                Tag: null,
+                Version: 5,
+                VersionNum: 4,
+                WorkFlowGuid: "",
+                WorkFlowState: "",
+            },
             panel2: [],
+            keys: 0,//Tab得选中
         }
     }
     componentWillMount() {
@@ -146,41 +150,81 @@ class RegistrationForm extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            // console.log(values)
+            console.log(values)
             // this.setState({
             //     loading: true
             // })
             if (!err) {
                 let sub = JSON.parse(JSON.stringify(this.props.clear))
-                Object.assign(sub, values)
+                let QueryExtendOri = sub.QueryExtend//源数据  新建得则没有为空数组
+                let QueryExtendNew = values.QueryExtends //新数据  创建得直接加在Ori后面
+                const { DQuerySql, QueryExtend } = this.state
+                let DQuerySqlState = JSON.parse(JSON.stringify(DQuerySql))
+                let QueryExtendState = JSON.parse(JSON.stringify(QueryExtend))
+                if (this.BookOpen.length > 0) {
+                    // console.log(this.BookData)
+                    //使用过book
+                    let num = []
+                    this.BookOpen.forEach(e => {
+                        //获取到那几个位置得使用book修改过
+                        num.push(Number(e.substring(0, 1)))
+                    })
+                    // console.log(num)
+                    QueryExtendNew.forEach((e, index) => {
+                        let DQuerySqlNew = {}
+                        let flag = false
+                        num.forEach(key => {
+                            if (key === index) {
+                                flag = true
+                            }
+                        });
+                        // console.log(flag)
+                        flag ? DQuerySqlNew = this.BookData[index] : DQuerySqlNew = Object.assign(DQuerySqlState, e.DQuerySql)
+                        Object.assign(QueryExtendState, e)
+                        // console.log(DQuerySqlNew)
+                        QueryExtendState.DQuerySql = DQuerySqlNew
+                        QueryExtendOri.push(QueryExtendState)
+                    })
+                } else {
+                    QueryExtendNew.forEach(e => {
+                        let DQuerySqlNew = Object.assign(DQuerySqlState, e.DQuerySql)
+                        Object.assign(QueryExtendState, e)
+                        QueryExtendState.DQuerySql = DQuerySqlNew
+                        QueryExtendOri.push(QueryExtendState)
+                    })
+                }
+                let setting = JSON.stringify(values.Settings)
+                Object.assign(sub, values.Data)
+                sub.QueryExtend = QueryExtendOri
+                sub.Settings = setting
                 console.log('Received values of form: ', sub);
-                // postFetch(Save().SQL, sub, (res) => {
-                //     if (res.IsSuccess === 'True') {
-                //         this.setState({
-                //             disabledCopy: false,
-                //             disabled: true,
-                //             loading: false
-                //         }, () => {
-                //             notification.success({
-                //                 message: '提示',
-                //                 description: '可以执行同步',
-                //                 key: '1',
-                //                 btn: <ButtonGroup>
-                //                     <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
-                //                     <Button onClick={this.ActiveTable.bind(this)} size='small'>取消</Button>
-                //                 </ButtonGroup>
-                //             })
-                //         })
-                //     } else {
-                //         this.setState({
-                //             loading: false
-                //         })
-                //         notification.warning({
-                //             message: '警告',
-                //             description: '保存失败' + res.ErrMessage
-                //         })
-                //     }
-                // })
+                postFetch(Save().Simple, sub, (res) => {
+                    if (res.IsSuccess === 'True') {
+                        this.setState({
+                            disabledCopy: false,
+                            disabled: true,
+                            loading: false
+                        }, () => {
+                            notification.success({
+                                message: '提示',
+                                description: '可以执行同步',
+                                key: '1',
+                                btn: <ButtonGroup>
+                                    <Button onClick={() => { this.asyncData(res.SqlList) }} size='small'>同步</Button>
+                                    <Button onClick={this.ActiveTable.bind(this)} size='small'>取消</Button>
+                                </ButtonGroup>
+                            })
+                        })
+                    } else {
+                        this.setState({
+                            loading: false
+                        })
+                        notification.warning({
+                            message: '警告',
+                            description: '保存失败' + res.ErrMessage
+                        })
+                    }
+                })
             }
         });
     }
@@ -206,7 +250,40 @@ class RegistrationForm extends React.Component {
     }
     //点击打开表格查询
     handleBook = (value) => {
+        const { setFieldsValue } = this.props.form
         console.log(value)
+        const keys = this.state.keys
+        console.log(keys)
+        let num = keys.substring(0, 1)
+        let obj = {}
+        let arr = ['SqlName', 'SqlScripe']
+        arr.forEach(element => {
+            obj[`QueryExtends[${num}].DQuerySql.${element}`] = value[element]
+        });
+        console.log(obj)
+        setFieldsValue(obj)
+        //大于0 表示添加过 就要判断 
+        let flage = -1
+        if (this.BookOpen.length > 0) {
+            this.BookOpen.forEach((e, i) => {
+                if (e === keys) {
+                    flage = i//创建过再次编辑  就记录位置  修改
+                }
+            })
+            if (flage !== -1) {
+                //有记录 就替换
+                this.BookOpen[flage] = keys
+                this.BookData[flage] = value
+            } else {
+                //没有记录 就增加
+                this.BookOpen.push(keys)
+                this.BookData.push(value)
+            }
+        } else {
+            //没有创建 就增加
+            this.BookOpen.push(keys)
+            this.BookData.push(value)
+        }
     }
 
     //添加Tab
@@ -223,8 +300,26 @@ class RegistrationForm extends React.Component {
         });
     }
     //删除Tab
-    delTabs = () => {
+    delTabs = (k) => {
+        const { form } = this.props;
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys');
+        // We need at least one passenger
+        if (keys.length === 1) {
+            return;
+        }
 
+        // can use data-binding to set
+        form.setFieldsValue({
+            keys: keys.filter(key => key !== k),
+        });
+    }
+    //监听TAB
+    TabsChange = (key) => {
+        console.log(key)
+        this.setState({
+            keys: key
+        })
     }
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -395,7 +490,7 @@ class RegistrationForm extends React.Component {
         }
         getFieldDecorator('keys', { initialValue: [] });
         const keys = getFieldValue('keys');
-        console.log(keys)
+        // console.log(keys)
         const formItems = keys.map((k, index) => {
             return (
                 <TabPane key={index + 'QueryExtends'} tab='Tab'>
@@ -423,8 +518,8 @@ class RegistrationForm extends React.Component {
                         )}
                     </FormItem>
                     <FormItem label='是否分页' {...formItemLayoutTab}>
-                        {getFieldDecorator(`QueryExtends[${index}].IsPaging`,{
-                            initialValue:0
+                        {getFieldDecorator(`QueryExtends[${index}].IsPaging`, {
+                            initialValue: 0
                         })(
                             <Select
                                 style={Widths}
@@ -435,8 +530,8 @@ class RegistrationForm extends React.Component {
                         )}
                     </FormItem>
                     <FormItem label='是否使用缓存服务器' {...formItemLayoutTab}>
-                        {getFieldDecorator(`QueryExtends[${index}].IsUseCacheServer`,{
-                            initialValue:0
+                        {getFieldDecorator(`QueryExtends[${index}].IsUseCacheServer`, {
+                            initialValue: 0
                         })(
                             <Select
                                 style={Widths}
@@ -451,7 +546,7 @@ class RegistrationForm extends React.Component {
                         label="数据来源"
                     >
                         {getFieldDecorator(`QueryExtends[${index}].DataSource`, {
-                            initialValue:0,
+                            initialValue: 0,
                             rules: [{ required: true, message: 'Please input 数据来源!' }],
                         })(
                             <Select
@@ -492,7 +587,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="查询表示"
                                     >
-                                        {getFieldDecorator('BillTypeCode', {
+                                        {getFieldDecorator('Data.BillTypeCode', {
                                             rules: [{ required: true, message: 'Please input 查询表示!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -502,7 +597,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="条件控制程序集"
                                     >
-                                        {getFieldDecorator('DQueryParamAssembly', {
+                                        {getFieldDecorator('Data.DQueryParamAssembly', {
                                             rules: [{ required: true, message: 'Please input 条件控制程序集!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -512,7 +607,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="主控件程序集"
                                     >
-                                        {getFieldDecorator('DQueryMasterAssembly', {
+                                        {getFieldDecorator('Data.DQueryMasterAssembly', {
                                             rules: [{ required: true, message: 'Please input 主控件程序集!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -522,7 +617,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="从控件程序集"
                                     >
-                                        {getFieldDecorator('DQuerySlaveAssembly', {
+                                        {getFieldDecorator('Data.DQuerySlaveAssembly', {
                                             rules: [{ required: true, message: 'Please input 从控件程序集!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -532,7 +627,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="所属模块"
                                     >
-                                        {getFieldDecorator('Module', {
+                                        {getFieldDecorator('Data.Module', {
                                             rules: [{ required: true, message: 'Please input 所属模块!' }],
                                         })(
                                             <Select disabled={disabled}>
@@ -544,7 +639,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="作者"
                                     >
-                                        {getFieldDecorator('Author', {
+                                        {getFieldDecorator('Data.Author', {
                                             rules: [{ required: true, message: 'Please input 作者!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -556,7 +651,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="窗口名称"
                                     >
-                                        {getFieldDecorator('DQueryCaption', {
+                                        {getFieldDecorator('Data.DQueryCaption', {
                                             rules: [{ required: true, message: 'Please input 窗口名称!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -566,7 +661,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="条件控制命名"
                                     >
-                                        {getFieldDecorator('DQueryParamFullName', {
+                                        {getFieldDecorator('Data.DQueryParamFullName', {
                                             rules: [{ required: true, message: 'Please input 条件控制命名!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -576,7 +671,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="主控件命名"
                                     >
-                                        {getFieldDecorator('DQueryMasterFullName', {
+                                        {getFieldDecorator('Data.DQueryMasterFullName', {
                                             rules: [{ required: true, message: 'Please input 主控件命名!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -586,7 +681,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="从控件命名"
                                     >
-                                        {getFieldDecorator('DQuerySlaveFullName', {
+                                        {getFieldDecorator('Data.DQuerySlaveFullName', {
                                             rules: [{ required: true, message: 'Please input 从控件命名!' }],
                                         })(
                                             <Input disabled={disabled} autoComplete="off" />
@@ -596,7 +691,7 @@ class RegistrationForm extends React.Component {
                                         {...formItemLayout}
                                         label="窗口布局"
                                     >
-                                        {getFieldDecorator('LayoutMode', {
+                                        {getFieldDecorator('Data.LayoutMode', {
                                             rules: [{ required: true, message: 'Please input 窗口布局!' }],
                                         })(
                                             <Select disabled={disabled}>
@@ -613,6 +708,7 @@ class RegistrationForm extends React.Component {
                                 </Col>
                                 <Col span={24}>
                                     <Tabs defaultActiveKey='0QueryExtend'
+                                        onChange={this.TabsChange.bind(this)}
                                         tabBarExtraContent={
                                             <div>
                                                 <Button onClick={this.addTabs.bind(this)}>添加</Button>
@@ -682,7 +778,7 @@ const simpleActions = Form.create({
                     });
                     break;
                 default:
-                    Field[element] = Form.createFormField({ value: TableValue[element] })
+                    Field[`Data.${element}`] = Form.createFormField({ value: TableValue[element] })
                     break;
             }
         });

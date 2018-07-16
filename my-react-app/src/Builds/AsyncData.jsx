@@ -165,6 +165,7 @@ class AsyncData extends Component {
         }
     }
     componentWillMount() {
+        let values = this.props.location.state
         getTimeFetch(API().getlist, (res) => {
             // console.log(res)
             let Serres = JSON.parse(JSON.stringify(res))
@@ -178,7 +179,8 @@ class AsyncData extends Component {
             this.setState({
                 data: res,
                 Ser: Serres,
-                Obj: Objres
+                Obj: Objres,
+                Textarea:values
             })
         })
     }

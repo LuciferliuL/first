@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal,  Icon, Input } from 'antd'
+import { Modal, Icon, Input, Spin } from 'antd'
 import { Searchs } from '../../Math/APIconfig'
 import { getFetch, getTime } from '../../Math/Math'
 import Tables from '../Tables/Tables'
@@ -7,7 +7,7 @@ const InputSearch = Input.Search
 class SimpleBtn extends Component {
     constructor(props) {
         super(props)
-        this.DquerySqlReset =  {
+        this.DquerySqlReset = {
             Author: '',
             BranchID: "STD",
             CreateTime: getTime(),
@@ -36,6 +36,7 @@ class SimpleBtn extends Component {
         this.state = {
             visible: false,
             TableData: [],
+            loading:false,
             columns: [{
                 title: 'PK',
                 dataIndex: 'PK',
@@ -90,17 +91,21 @@ class SimpleBtn extends Component {
         this.props.handleBook(TableValue)
     }
     handleTable = (value) => {
+        this.setState({
+            loading:true
+        })
         getFetch(Searchs(value).SimpleTableAPI, (res) => {
             this.setState({
-                TableData: res
+                TableData: res,
+                loading:false
             })
         })
     }
     render() {
-        const { TableData, columns } = this.state
+        const { TableData, columns, loading } = this.state
         return (
             <div>
-                <Icon onClick={this.showModal} type="book" style={{cursor:'pointer'}}></Icon>
+                <Icon onClick={this.showModal} type="book" style={{ cursor: 'pointer' }}></Icon>
                 <Modal
                     title="表格"
                     visible={this.state.visible}
@@ -108,17 +113,19 @@ class SimpleBtn extends Component {
                     onCancel={this.handleCancel}
                     width={800}
                 >
-                    <InputSearch
-                        placeholder="input search text"
-                        onSearch={this.handleTable.bind(this)}
-                        enterButton
-                        style={{ width: 200 }}
-                    />
-                    <Tables
-                        Data={TableData}
-                        columns={columns}
-                        TableEmitData={this.TableEmitData.bind(this)}
-                    ></Tables>
+                    <Spin spinning={loading}>
+                        <InputSearch
+                            placeholder="input search text"
+                            onSearch={this.handleTable.bind(this)}
+                            enterButton
+                            style={{ width: 200 }}
+                        />
+                        <Tables
+                            Data={TableData}
+                            columns={columns}
+                            TableEmitData={this.TableEmitData.bind(this)}
+                        ></Tables>
+                    </Spin>
                 </Modal>
             </div>
         );

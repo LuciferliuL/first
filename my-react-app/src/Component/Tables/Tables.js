@@ -17,7 +17,7 @@ class Tables extends Component {
         this.props.TableEmitData(selectedRowValue[0])
     }
     componentWillReceiveProps(next){
-        console.log(next.clearTable)
+        // console.log(next.clearTable)
         if(next.clearTable){
             this.setState({
                 selectedRowKeys:[]

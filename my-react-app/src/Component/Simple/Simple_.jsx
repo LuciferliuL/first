@@ -42,7 +42,7 @@ class Simple_ extends Component {
             clearTable: false,
             disabled: true,
             clearObj: {
-                Author: '',
+                Author: this.props.match.params.id,
                 BillTypeCode: '',
                 BranchID: "STD",
                 CreateTime: '',
