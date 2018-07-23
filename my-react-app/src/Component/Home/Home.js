@@ -89,11 +89,11 @@ class Home extends React.Component {
                         >
                             <Menu.Item key="菜单管理"><Link to={'/Home/Action/' + this.state.name}>菜单管理</Link></Menu.Item>
                             <Menu.Item key="窗体行为编辑"><Link to={'/Home/Windows/' + this.state.name}>窗体行为编辑</Link></Menu.Item>
-                            <Menu.Item key="简单通用查询"><Link to={'/Home/Simple/' + this.state.name}>简单通用查询</Link></Menu.Item>
+                            <Menu.Item key="简单通用查询"><Link to={'/Home/Simple_/' + this.state.name}>简单通用查询</Link></Menu.Item>
                             <Menu.Item key="单据定义"><Link to={'/Home/Bill/' + this.state.name}>单据定义</Link></Menu.Item>
                             <Menu.Item key="弹出选择窗口管理"><Link to={'/Home/PopWindows/' + this.state.name}>弹出选择窗口管理</Link></Menu.Item>
                             <Menu.Item key="SQL语句管理"><Link to={'/Home/SQLManage/' + this.state.name}>SQL语句管理</Link></Menu.Item>
-                            <Menu.Item key="简单通用查询1"><Link to={'/Home/Simple_/' + this.state.name}>简单通用查询1</Link></Menu.Item>
+                            
                         </SubMenu>
                         <SubMenu
                             key="发布与构建"
@@ -138,7 +138,7 @@ class Home extends React.Component {
                         <div style={{ padding: 5, background: '#fff', minHeight: 560 }}>
                             <Route path='/Home/Action/:id' component={Action}></Route>
                             <Route path='/Home/Windows/:id' component={Windows}></Route>
-                            <Route path='/Home/Simple/:id' component={Simple}></Route>
+                            {/* <Route path='/Home/Simple/:id' component={Simple}></Route> */}
                             <Route path='/Home/PVComponent' component={PVComponent}></Route>
                             <Route path='/Home/TimeComponent' component={TimeComponent}></Route>
                             <Route path="/Home/Errorlog" component={Errorlog}></Route>
