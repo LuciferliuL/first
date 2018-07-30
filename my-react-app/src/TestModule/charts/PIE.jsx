@@ -14,7 +14,29 @@ import 'echarts/lib/component/legend'
  */
 
 class PIE extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            data: [],
+            dataname: [],
+        }
+    }
+    componentDidMount() {
+        console.log(this.props.Data)
+        let { Data } = this.props
+        if (typeof Data !== 'undefined') {
+            let name = []
+            Data.forEach(element => {
+                name.push(element.name)
+            });
+            this.setState({
+                data: Data,
+                dataname: name
+            })
+        }
+    }
     componentWillReceiveProps(pre) {
+        console.log(pre)
     }
     getOption = () => (
         {
@@ -25,11 +47,11 @@ class PIE extends Component {
             legend: {
                 orient: 'vertical',
                 x: 'right',
-                data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                data: this.state.dataname
             },
             series: [
                 {
-                    name: '访问来源',
+                    name: '数据结构',
                     type: 'pie',
                     radius: ['50%', '70%'],
                     avoidLabelOverlap: false,
@@ -107,13 +129,8 @@ class PIE extends Component {
                             show: false
                         }
                     },
-                    data: [
-                        { value: 335, name: '直接访问' },
-                        { value: 310, name: '邮件营销' },
-                        { value: 234, name: '联盟广告' },
-                        { value: 135, name: '视频广告' },
-                        { value: 1548, name: '搜索引擎' }
-                    ]
+                    data: this.state.data
+
                 }
             ]
         }
@@ -139,10 +156,6 @@ class PIE extends Component {
                     notMerge={true}
                     lazyUpdate={true}
                     style={{ height: '250px', width: '100%' }}//样式
-                    // theme={theme}
-                    // onChartReady={this.onChartReadyCallback}
-                    // onEvents={this.EventsDict}//方法
-                    // ref={(e) => { this.echarts_react = e; }}
                     opts={{ renderer: "svg" }}//use svg to render the chart
                 ></EchartsReactCore>
             </div>

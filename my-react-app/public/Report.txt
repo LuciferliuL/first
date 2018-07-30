@@ -1,0 +1,1317 @@
+[
+    {
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:01:32",
+        "TestSuiteName": "PurStockin",
+        "TestCaseName": "PurStockin",
+        "TestCaseDescription": "010204采购入库单记账",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:01:32",
+        "TestSuiteName": "PurStockin-1",
+        "TestCaseName": "PurStockin-1",
+        "TestCaseDescription": "010203采购入库标价单记账",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:01:33",
+        "TestSuiteName": "RepariPriceXJ",
+        "TestCaseName": "RepariPrice",
+        "TestCaseDescription": "0103采购退补价开票单--手敲商品",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:01:33",
+        "TestSuiteName": "RepariPriceXJ",
+        "TestCaseName": "RepariPrice1",
+        "TestCaseDescription": "0103采购退补价开票单--提取原入库单",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:01:50",
+        "TestSuiteName": "RepariPriceXJ",
+        "TestCaseName": "SaleHookBill",
+        "TestCaseDescription": "0103采购退补价开票单--提取销售勾兑结算单",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:01:51",
+        "TestSuiteName": "RepariPriceXJ",
+        "TestCaseName": "SalePremium_salestockout",
+        "TestCaseDescription": "010301采购退补价开票单 - 提取二级公司退补价单",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:01:53",
+        "TestSuiteName": "RepariPriceXJ",
+        "TestCaseName": "RepariPrice_tqDBJJ",
+        "TestCaseDescription": "010301采购退补价开票单 - 提取调拨加价单据",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:01:53",
+        "TestSuiteName": "PurStockOutXJ",
+        "TestCaseName": "PurStockout",
+        "TestCaseDescription": "0104采购退出流程 - 手动敲商品",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:05:55",
+        "TestSuiteName": "SaleStockout",
+        "TestCaseName": "SaleStockout_tzd",
+        "TestCaseDescription": "020203销售出库单 - 提取通知单单据",
+        "TestCaseStatus": "Fail",
+        "FailedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleOrderBill",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "BAA027003D_PREASSIGNEDQTY",
+                        "Expected": 7375,
+                        "Actual": 7374
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "AAA010136D_PREASSIGNEDQTY",
+                        "Expected": 14074,
+                        "Actual": 14073
+                    },
+                    {
+                        "TableName": "TB_GOS_ACCOUNT_O_CUSTOMER",
+                        "Filed": "ACCOUNTRECEIVABLE",
+                        "Expected": 29031748.65,
+                        "Actual": 29031783.65
+                    }
+                ]
+            }
+        ],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleStockOut",
+                "StepStatus": "Passed",
+                "Details": "FDGXHR08165646"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:07:29",
+        "TestSuiteName": "SaleStockout",
+        "TestCaseName": "SaleStockout_B2B",
+        "TestCaseDescription": "020203销售出库单 - 提取B2B生成的销售开票单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleOrderBill",
+                "StepStatus": "Passed",
+                "Details": "FDGXSG09082710"
+            },
+            {
+                "TestStepName": "DBValidation_SaleStockOut",
+                "StepStatus": "Passed",
+                "Details": "FDGXHR08165647"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:07:57",
+        "TestSuiteName": "Finance_Supplierpay_RHM",
+        "TestCaseName": "SupplierPAY_ds_df",
+        "TestCaseDescription": "030605代付单 - 提取代收单单据",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_Supplierreive",
+                "StepStatus": "Passed",
+                "Details": "代付登记单:FDGCDF00013363提取代收单:FDGCDS00018149"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:08:24",
+        "TestSuiteName": "Finance_Supplierpay_RHM",
+        "TestCaseName": "SupplierPAY_wd_ds",
+        "TestCaseDescription": "030604代收单 - 提取未达代收单单据",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_Supplierreive",
+                "StepStatus": "Passed",
+                "Details": "代收单:FDGCDS00018150提取未达代收单:FDGCWD00000755"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:08:38",
+        "TestSuiteName": "Finance_Supplierpay_RHM",
+        "TestCaseName": "SupplierPAY_wd_df",
+        "TestCaseDescription": "030605代付单 - 提取未达代收单单据",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_Supplierreive",
+                "StepStatus": "Passed",
+                "Details": "代付登记单:FDGCDF00013364提取未达代收单:FDGCWD00000756"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:12:37",
+        "TestSuiteName": "SaleStockin",
+        "TestCaseName": "SaleStockin",
+        "TestCaseDescription": "020301销售退回通知单 - 提取原销售出库单",
+        "TestCaseStatus": "Fail",
+        "FailedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleStockin",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "tb_gos_sale_stockindet_batch",
+                        "Filed": "BATCHQUANTITY",
+                        "Expected": "3",
+                        "Actual": 1
+                    },
+                    {
+                        "TableName": "tb_gos_sale_stockoutdet_batch",
+                        "Filed": "BATCHRETURNQTY",
+                        "Expected": "3",
+                        "Actual": 1
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "BAA027003D_STPREASSIGNEDQTY",
+                        "Expected": "7373",
+                        "Actual": 7376
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "AAA010136D_STPREASSIGNEDQTY",
+                        "Expected": "14072",
+                        "Actual": 14075
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodbatchaccs",
+                        "Filed": "BAA027003D_PC_STOCKOUTQUANTITY",
+                        "Expected": "-3",
+                        "Actual": -2
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodbatchaccs",
+                        "Filed": "BAA027003D_PC_STOCKOUTAMT",
+                        "Expected": "-46.74",
+                        "Actual": -31.16
+                    }
+                ]
+            }
+        ],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleReturn",
+                "StepStatus": "Passed",
+                "Details": "FDGXTK00409981"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:14:47",
+        "TestSuiteName": "SaleStockin",
+        "TestCaseName": "SaleStockin3",
+        "TestCaseDescription": "020301销售退回通知单 - 提取供应商采购退出单",
+        "TestCaseStatus": "Fail",
+        "FailedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleStockin",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "BAA027003D_STPREASSIGNEDQTY",
+                        "Expected": "7376",
+                        "Actual": 7379
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "AAA010136D_STPREASSIGNEDQTY",
+                        "Expected": "14075",
+                        "Actual": 14078
+                    }
+                ]
+            }
+        ],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleReturn",
+                "StepStatus": "Passed",
+                "Details": "FDGXTK00409982"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:15:26",
+        "TestSuiteName": "SaleStockin",
+        "TestCaseName": "SaleStockin1",
+        "TestCaseDescription": "020301销售退回通知单 - 提取审核未通过的通知单",
+        "TestCaseStatus": "Cancelled",
+        "FailedDetails": [],
+        "PassedDetails": []
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:17:08",
+        "TestSuiteName": "Consignment",
+        "TestCaseName": "Consignment",
+        "TestCaseDescription": "寄售业务(1.寄售开票单手敲品种 2.寄售出库 3.寄售确认)",
+        "TestCaseStatus": "Fail",
+        "FailedDetails": [
+            {
+                "TestStepName": "DBValidation_Consignmentout",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "tb_gos_sale_consignmentoutsum",
+                        "Filed": "COUNT(*)",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "tb_gos_sale_consignmentcost",
+                        "Filed": "BAA027003D_INVENTORYQUANTITY",
+                        "Expected": "-41",
+                        "Actual": -44
+                    },
+                    {
+                        "TableName": "tb_gos_sale_consignmentcost",
+                        "Filed": "AAA010136D_INVENTORYQUANTITY",
+                        "Expected": "-42",
+                        "Actual": -45
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_OUTBOUNDQTY",
+                        "Expected": "3",
+                        "Actual": -3
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_OUT_WHSEBALQTY",
+                        "Expected": "49664",
+                        "Actual": 49667
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_OUT_STOREBALQTY",
+                        "Expected": "49664",
+                        "Actual": 49667
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_OUTBOUNDQTY",
+                        "Expected": "3",
+                        "Actual": -3
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_OUT_WHSEBALQTY",
+                        "Expected": "98557",
+                        "Actual": 98560
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_OUT_STOREBALQTY",
+                        "Expected": "98557",
+                        "Actual": 98560
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_INBOUNDQTY",
+                        "Expected": "3",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_IN_WHSEBALQTY",
+                        "Expected": "-41",
+                        "Actual": -44
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_IN_STOREBALQTY",
+                        "Expected": "-41",
+                        "Actual": -44
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_INBOUNDQTY",
+                        "Expected": "3",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_IN_WHSEBALQTY",
+                        "Expected": "-42",
+                        "Actual": -45
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_IN_STOREBALQTY",
+                        "Expected": "-42",
+                        "Actual": -45
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_lotinven",
+                        "Filed": "BAA027003D_OUTLOTINVBALQTY",
+                        "Expected": "53051",
+                        "Actual": 53054
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_lotinven",
+                        "Filed": "AAA010136D_OUTLOTINVBALQTY",
+                        "Expected": "105540",
+                        "Actual": 105543
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_lotinven",
+                        "Filed": "BAA027003D_INLOTINVBALQTY",
+                        "Expected": "-41",
+                        "Actual": -44
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_lotinven",
+                        "Filed": "AAA010136D_INLOTINVBALQTY",
+                        "Expected": "-42",
+                        "Actual": -45
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_whseinven",
+                        "Filed": "BAA027003D_OUTWHSEINVENQTY",
+                        "Expected": "49664",
+                        "Actual": 49667
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_whseinven",
+                        "Filed": "AAA010136D_OUTWHSEINVENQTY",
+                        "Expected": "98557",
+                        "Actual": 98560
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_whseinven",
+                        "Filed": "AAA010136D_INWHSEINVENQTY",
+                        "Expected": "-42",
+                        "Actual": -45
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_whseinven",
+                        "Filed": "AAA010136D_INWHSEINVENQTY",
+                        "Expected": "-42",
+                        "Actual": -45
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "BAA027003D_OUTSTINVBALQTY",
+                        "Expected": "49664",
+                        "Actual": 49667
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "BAA027003D_OUTSTPREASSIGNEDQTY",
+                        "Expected": "7379",
+                        "Actual": 7382
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "AAA010136D_OUTSTINVBALQTY",
+                        "Expected": "98557",
+                        "Actual": 98560
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "AAA010136D_OUTSTPREASSIGNEDQTY",
+                        "Expected": "14078",
+                        "Actual": 14081
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "AAA010136D_INSTINVBALQTY",
+                        "Expected": "-42",
+                        "Actual": -45
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_storeinven",
+                        "Filed": "AAA010136D_INSTINVBALQTY",
+                        "Expected": "-42",
+                        "Actual": -45
+                    },
+                    {
+                        "TableName": "tb_gos_consigninvoicesum",
+                        "Filed": "BILLSTATE",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "tb_gos_consigninvoicesum",
+                        "Filed": "ISACCOUNT",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "tb_gos_sale_consignmentoutdet",
+                        "Filed": "COUNT(*)",
+                        "Expected": "2",
+                        "Actual": 0
+                    }
+                ]
+            },
+            {
+                "TestStepName": "DBValidation_ConsignConfirm",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "tb_gos_account_o_braninven",
+                        "Filed": "BAA027003D_BRANINVBALAMT",
+                        "Expected": "807367.21",
+                        "Actual": 801821.12
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_braninven",
+                        "Filed": "BAA027003D_COSTPRICE",
+                        "Expected": "16.02523",
+                        "Actual": 16.02521
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_braninven",
+                        "Filed": "BBAA027003D_COSTACCOUNTING",
+                        "Expected": "9.04554",
+                        "Actual": 9.04628
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_braninven",
+                        "Filed": "AAA010136D_BRANINVBALAMT",
+                        "Expected": "1205398.74",
+                        "Actual": 1200964.94
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_braninven",
+                        "Filed": "AAA010136D_COSTPRICE",
+                        "Expected": "12.13994",
+                        "Actual": 12.13991
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_braninven",
+                        "Filed": "AAA010136D_COSTACCOUNTING",
+                        "Expected": "10.73754",
+                        "Actual": 10.73746
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_COSTPRICE",
+                        "Expected": "16.02523",
+                        "Actual": 16.02521
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_INVBALAMT",
+                        "Expected": "807367.21",
+                        "Actual": 801821.12
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_COSTACCOUNTING",
+                        "Expected": "9.04554",
+                        "Actual": 9.04628
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_COSTPRICE",
+                        "Expected": "12.13994",
+                        "Actual": 12.13991
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_INVBALAMT",
+                        "Expected": "1205398.74",
+                        "Actual": 1200964.94
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_COSTACCOUNTING",
+                        "Expected": "10.73754",
+                        "Actual": 10.73746
+                    }
+                ]
+            }
+        ],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_Consigninvoice",
+                "StepStatus": "Passed",
+                "Details": "FDGKJS00000517"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:17:55",
+        "TestSuiteName": "Consignment",
+        "TestCaseName": "ConsignReturn",
+        "TestCaseDescription": "寄售退回业务（1.寄售退货通知单 2.寄售退货入库单）",
+        "TestCaseStatus": "Fail",
+        "FailedDetails": [
+            {
+                "TestStepName": "DBValidation_ConsignReturnIn",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_IN_INVBALQTY",
+                        "Expected": "50038",
+                        "Actual": 50035
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "BAA027003D_IN_INVBALAMT",
+                        "Expected": "801869.2",
+                        "Actual": 801821.12
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_IN_INVBALQTY",
+                        "Expected": "98930",
+                        "Actual": 98927
+                    },
+                    {
+                        "TableName": "tb_gos_account_o_prodaccs",
+                        "Filed": "AAA010136D_IN_INVBALAMT",
+                        "Expected": "1201001.36",
+                        "Actual": 1200964.94
+                    }
+                ]
+            }
+        ],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_ConsignReturn",
+                "StepStatus": "Passed",
+                "Details": "FDGTJS00000094"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:18:06",
+        "TestSuiteName": "Consignment",
+        "TestCaseName": "ConsignChange",
+        "TestCaseDescription": "021812寄售换货单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_ConsignChange",
+                "StepStatus": "Passed",
+                "Details": "FDGCJS00000024"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:19:05",
+        "TestSuiteName": "Consignment",
+        "TestCaseName": "ConsigninvoiceSave1",
+        "TestCaseDescription": "021801寄售开票单 - 提取销退调账单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_Consigninvoice1",
+                "StepStatus": "Passed",
+                "Details": "FDGKJS00000519"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:19:25",
+        "TestSuiteName": "Consignment",
+        "TestCaseName": "ConsigninvoiceSave2",
+        "TestCaseDescription": "021801寄售开票单 - 提取销售订单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_Consigninvoice2",
+                "StepStatus": "Passed",
+                "Details": "FDGKJS00000520"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:19:30",
+        "TestSuiteName": "Consignment",
+        "TestCaseName": "ConsignReturnSave1",
+        "TestCaseDescription": "021804寄售退货通知单 - 提取平台退货单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_ConsignReturnSave1",
+                "StepStatus": "Passed",
+                "Details": "FDGTJS00000095"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:21:23",
+        "TestSuiteName": "DirectTransfer",
+        "TestCaseName": "Directtransfer",
+        "TestCaseDescription": "直调业务（1.直调订单手敲商品 2.直调开票单 - 提取直调订单 3.直调单 - 提取直调开票单）",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_DirectOrder",
+                "StepStatus": "Passed",
+                "Details": "FDGXZD00064706"
+            },
+            {
+                "TestStepName": "DBValidation_DirectOrderLot",
+                "StepStatus": "Passed",
+                "Details": "FDGXZK00062572"
+            },
+            {
+                "TestStepName": "DBValidation_DirectSave",
+                "StepStatus": "Passed",
+                "Details": "FDGXZR00118983"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:22:45",
+        "TestSuiteName": "DirectTransfer",
+        "TestCaseName": "DirectTransferReturn",
+        "TestCaseDescription": "直调退回业务（1.直调退回开票单 2.直调退回单）",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_DirectReturnSave",
+                "StepStatus": "Passed",
+                "Details": "FDGXZH00000045"
+            },
+            {
+                "TestStepName": "DBValidation_DirectReturnInSave",
+                "StepStatus": "Passed",
+                "Details": "FDGXZJ00000065"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:23:19",
+        "TestSuiteName": "DirectTransfer",
+        "TestCaseName": "DirectTransferOrder",
+        "TestCaseDescription": "020501直调订单 - 提取二级公司出库单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_DirectTransferOrderSave",
+                "StepStatus": "Passed",
+                "Details": "FC5XZD00028205"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:24:24",
+        "TestSuiteName": "SalePremium",
+        "TestCaseName": "SalePremium_salestockout",
+        "TestCaseDescription": "020401销售退补价开票单 - 提取已出库的销售开票单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SalePremiumbillSave",
+                "StepStatus": "Passed",
+                "Details": "FDGXBK03906024"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:25:01",
+        "TestSuiteName": "SalePremium",
+        "TestCaseName": "SalePremium_SupplierReceive",
+        "TestCaseDescription": "020401销售退补价开票单 - 提取代收款登记单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SalePremiumbillSave",
+                "StepStatus": "Passed",
+                "Details": "FDGXBK03906025"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:25:17",
+        "TestSuiteName": "SalePremium",
+        "TestCaseName": "SalePremium_supplierpay",
+        "TestCaseDescription": "020401销售退补价开票单 - 提取代付款登记单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SalePremiumbillSave",
+                "StepStatus": "Passed",
+                "Details": "FDGXBK03906026"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:26:23",
+        "TestSuiteName": "SalePremium",
+        "TestCaseName": "SalePremium_downauxiliary",
+        "TestCaseDescription": "020401销售退补价开票单 - 提取下游折扣退补价单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SalePremiumbillSave",
+                "StepStatus": "Passed",
+                "Details": "FDGXBK03906027"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:30:44",
+        "TestSuiteName": "PurStockOut",
+        "TestCaseName": "PurStockout1",
+        "TestCaseDescription": "采购退出出库单 - 提取不良品",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_PurStockOutNote",
+                "StepStatus": "Passed",
+                "Details": [
+                    "FDGJHK00242061"
+                ]
+            },
+            {
+                "TestStepName": "DBValidation_PurStockOutBill",
+                "StepStatus": "Passed",
+                "Details": "FDGJHT00203411"
+            },
+            {
+                "TestStepName": "DBValidation_PurchaseExitStockOut",
+                "StepStatus": "Passed",
+                "Details": "FDGJHC01387279"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:31:07",
+        "TestSuiteName": "PurStockOut",
+        "TestCaseName": "PurStockout2",
+        "TestCaseDescription": "采购退出出库单 - 提取驳回明细",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_PurStockOutBill",
+                "StepStatus": "Passed",
+                "Details": "FDGJHT00203412"
+            },
+            {
+                "TestStepName": "DBValidation_PurchaseExitStockOut",
+                "StepStatus": "Passed",
+                "Details": "FDGJHC01387280"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:32:28",
+        "TestSuiteName": "CnMedicineLoss",
+        "TestCaseName": "CnMedicineLoss",
+        "TestCaseDescription": "中药损耗处理记账单 - 提取中药损耗处理申请单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_CnMedicineLossRequire",
+                "StepStatus": "Passed",
+                "Details": "FDGSZK00000031"
+            },
+            {
+                "TestStepName": "DBValidation_CnMedicineLossAccount",
+                "StepStatus": "Passed",
+                "Details": "FDGSZR00000029"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:32:42",
+        "TestSuiteName": "LossIncome",
+        "TestCaseName": "LossIncome",
+        "TestCaseDescription": "商品损溢单 - 提取商品损溢开票单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_LossIncomeOrder",
+                "StepStatus": "Passed",
+                "Details": "FDGSPK00003186"
+            },
+            {
+                "TestStepName": "DBValidation_LossIncome",
+                "StepStatus": "Passed",
+                "Details": "FDGSPR00301941"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:33:40",
+        "TestSuiteName": "GoodsCheckInAndOut",
+        "TestCaseName": "GoodsCheckInAndOut1",
+        "TestCaseDescription": "三级公司登记品种质量信息，集团下发给二三级公司分别核查反馈直至完结",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_FC5checkin",
+                "StepStatus": "Passed",
+                "Details": [
+                    "FC5QRU00000129"
+                ]
+            },
+            {
+                "TestStepName": "DBValidation_FC5checkout",
+                "StepStatus": "Passed",
+                "Details": [
+                    "FC5QRD00000227"
+                ]
+            },
+            {
+                "TestStepName": "DBValidation_FDGcheckout",
+                "StepStatus": "Passed",
+                "Details": [
+                    "FDGQRD00002368"
+                ]
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:33:46",
+        "TestSuiteName": "GoodsCheckInAndOut",
+        "TestCaseName": "GoodsCheckInAndOut2",
+        "TestCaseDescription": "二级公司登记品种质量信息，集团下发给二三级公司分别核查反馈直至完结",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_FDGcheckin",
+                "StepStatus": "Passed",
+                "Details": [
+                    "FDGQRU00000659"
+                ]
+            },
+            {
+                "TestStepName": "DBValidation_FC5checkout",
+                "StepStatus": "Passed",
+                "Details": [
+                    "FC5QRD00000228"
+                ]
+            },
+            {
+                "TestStepName": "DBValidation_FDGcheckout",
+                "StepStatus": "Passed",
+                "Details": [
+                    "FDGQRD00002369"
+                ]
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:34:33",
+        "TestSuiteName": "SaleHookBill",
+        "TestCaseName": "SaleHookBill",
+        "TestCaseDescription": "030202销售勾兑结算单提取销售出库单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleHookBill",
+                "StepStatus": "Passed",
+                "Details": "FDGXJG06859630"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:34:45",
+        "TestSuiteName": "SaleHookBill",
+        "TestCaseName": "SaleHookBill2",
+        "TestCaseDescription": "030202销售勾兑结算单提取装车回款单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleHookBill",
+                "StepStatus": "Passed",
+                "Details": "FDGXJG06859631"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:35:11",
+        "TestSuiteName": "SaleHookBill",
+        "TestCaseName": "SaleHookBill3",
+        "TestCaseDescription": "030202销售勾兑结算单提取银行交易信息",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleHookBill",
+                "StepStatus": "Passed",
+                "Details": "FDGXJG06859632"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:36:01",
+        "TestSuiteName": "SaleHookBill",
+        "TestCaseName": "SaleHookBill4",
+        "TestCaseDescription": "030202销售勾兑结算单提取销售退回入库单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleHookBill",
+                "StepStatus": "Passed",
+                "Details": "FDGXJG06859633"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:36:17",
+        "TestSuiteName": "SaleHookBill",
+        "TestCaseName": "SaleHookBill5",
+        "TestCaseDescription": "030202销售勾兑结算单提取销售退补价单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleHookBill",
+                "StepStatus": "Passed",
+                "Details": "FDGXJG06859634"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:36:27",
+        "TestSuiteName": "SaleHookBill",
+        "TestCaseName": "SaleHookBill6",
+        "TestCaseDescription": "030202销售勾兑结算单提取在途货款登记",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleHookBill",
+                "StepStatus": "Passed",
+                "Details": "FDGXJG06859635"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:37:02",
+        "TestSuiteName": "SaleClearing",
+        "TestCaseName": "SaleClearing",
+        "TestCaseDescription": "030201销售开票结算单提取销售开票单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleClearing",
+                "StepStatus": "Passed",
+                "Details": "FDGXJK04338407"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:38:47",
+        "TestSuiteName": "SaleClearing",
+        "TestCaseName": "SaleClearing3",
+        "TestCaseDescription": "030201销售开票结算单提取无货冲红单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleClearing",
+                "StepStatus": "Passed",
+                "Details": "FDGXJK04338411"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:39:27",
+        "TestSuiteName": "SaleClearing",
+        "TestCaseName": "SaleClearing4",
+        "TestCaseDescription": "030201销售开票结算单提取销售退回通知单",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_SaleClearing",
+                "StepStatus": "Passed",
+                "Details": "FDGXJK04338413"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:42:59",
+        "TestSuiteName": "FinanceSaleBillNew",
+        "TestCaseName": "merge1split1",
+        "TestCaseDescription": "销售开发票新合并规则1拆分规则1和3",
+        "TestCaseStatus": "Fail",
+        "FailedDetails": [
+            {
+                "TestStepName": "DBVailidation_WriteBackBill1",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTdet",
+                        "Filed": "IS_INVOICE",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTdet",
+                        "Filed": "IS_FINISHINVOICE",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTdet",
+                        "Filed": "INVOICEDQTY",
+                        "Expected": "100",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTdet",
+                        "Filed": "INVOICEDAMOUNT",
+                        "Expected": "1500",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTsum",
+                        "Filed": "IS_INVOICE",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTsum",
+                        "Filed": "INVOICEDAMOUNT",
+                        "Expected": "1500",
+                        "Actual": 0
+                    }
+                ]
+            },
+            {
+                "TestStepName": "DBVailidation_FinanceSaleBill2",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "TB_GOS_FINANCE_SALEBILLNEWDET",
+                        "Filed": "AMOUNT",
+                        "Expected": "2000",
+                        "Actual": -2
+                    }
+                ]
+            },
+            {
+                "TestStepName": "DBVailidation_WriteBackBill2",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTdet",
+                        "Filed": "IS_INVOICE",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTdet",
+                        "Filed": "IS_FINISHINVOICE",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTdet",
+                        "Filed": "INVOICEDQTY",
+                        "Expected": "100",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTdet",
+                        "Filed": "INVOICEDAMOUNT",
+                        "Expected": "2000",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTsum",
+                        "Filed": "IS_INVOICE",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTsum",
+                        "Filed": "IS_FINISHINVOICE",
+                        "Expected": "1",
+                        "Actual": 0
+                    },
+                    {
+                        "TableName": "TB_GOS_SALE_SALESTOCKOUTsum",
+                        "Filed": "INVOICEDAMOUNT",
+                        "Expected": "3500",
+                        "Actual": 0
+                    }
+                ]
+            }
+        ],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBVaildationFinanceSaleBill1",
+                "StepStatus": "Passed",
+                "Details": "销售开发票新单1:FDGXSN00000055"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:45:17",
+        "TestSuiteName": "FinanceSaleBillNew",
+        "TestCaseName": "merge4split1",
+        "TestCaseDescription": "销售开发票新合并规则4拆分规则1和3",
+        "TestCaseStatus": "Pass",
+        "FailedDetails": [],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBVaildationFinanceSaleBill1",
+                "StepStatus": "Passed",
+                "Details": "销售开发票新单1:FDGXSN00000057"
+            },
+            {
+                "TestStepName": "DBVailidation_WriteBackBill1",
+                "StepStatus": "Passed",
+                "Details": "回写销售开发票新单1:FDGXSN00000057"
+            },
+            {
+                "TestStepName": "DBVailidation_FinanceSaleBill2",
+                "StepStatus": "Passed",
+                "Details": "销售开发票新单2:FDGXSN00000058"
+            },
+            {
+                "TestStepName": "DBVailidation_WriteBackBill2",
+                "StepStatus": "Passed",
+                "Details": "回写销售开发票新单2:FDGXSN00000058"
+            }
+        ]
+    },
+{
+        "ExecutionDate": "2018-07-18",
+        "ExecutionTime": "2018-07-18 05:47:09",
+        "TestSuiteName": "firstprod",
+        "TestCaseName": "firstprodmain",
+        "TestCaseDescription": "首营商品流程",
+        "TestCaseStatus": "Fail",
+        "FailedDetails": [
+            {
+                "TestStepName": "DBValidation_prod_first",
+                "StepStatus": "Failed",
+                "Details": [
+                    {
+                        "TableName": "t_md_prod_first",
+                        "Filed": "COUNT(*)",
+                        "Expected": "1",
+                        "Actual": 0
+                    }
+                ]
+            }
+        ],
+        "PassedDetails": [
+            {
+                "TestStepName": "DBValidation_FIRSTRUNDRUG",
+                "StepStatus": "Passed",
+                "Details": {
+                    "BillID": "FDGZSP00039129"
+                }
+            },
+            {
+                "TestStepName": "DBValidation_prodcheck",
+                "StepStatus": "Passed",
+                "Details": "FDGZSP00039129"
+            },
+            {
+                "TestStepName": "DBValidation_prodissue",
+                "StepStatus": "Passed",
+                "Details": "FDGZSP00039129"
+            }
+        ]
+    }
+]
