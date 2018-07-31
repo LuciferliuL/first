@@ -124,7 +124,6 @@ class Test extends Component {
                 </div>
             )
         }
-
     }
 }
 
