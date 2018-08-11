@@ -1,0 +1,66 @@
+{
+    "ExecutionDate": "2018-08-01",
+    "ExecutionTime": "2018-06-26 05:47:02",
+    "TestSuiteName": "PurStockin",
+    "TestCaseName": "PurStockin",
+    "TCFlow": "采购入库流程",
+    "TestCaseDescription": "采购入库单记账",
+    "TestCaseStatus": "Pass",
+    "FailedDetails": null,
+    "PassedDetails": null
+}@
+{
+    "ExecutionDate": "2018-08-01",
+    "ExecutionTime": "2018-06-26 05:47:02",
+    "TestSuiteName": "PurStockin",
+    "TestCaseName": "PurStockin",
+    "TCFlow": "采购入库流程",
+    "TestCaseDescription": "采购标价单记账",
+    "TestCaseStatus": "Cancelled",
+    "FailedDetails": null,
+    "PassedDetails": null
+}@
+{
+    "ExecutionDate": "2018-08-01",
+    "ExecutionTime": "2018-06-26 05:47:02",
+    "TestSuiteName": "PurStockin",
+    "TestCaseName": "PurStockin",
+    "TCFlow": "采购入库流程",
+    "TestCaseDescription": "采购入库单记账-测试",
+    "TestCaseStatus": "Failed",
+    "FailedDetails": null,
+    "PassedDetails": null
+}@
+{
+    "ExecutionDate": "2018-08-01",
+    "ExecutionTime": "2018-06-26 05:47:02",
+    "TestSuiteName": "PurStockin",
+    "TestCaseName": "PurStockin",
+    "TCFlow": "销售出库流程",
+    "TestCaseDescription": "提取出库通知单",
+    "TestCaseStatus": "Cancelled",
+    "FailedDetails": null,
+    "PassedDetails": null
+}@
+{
+    "ExecutionDate": "2018-08-01",
+    "ExecutionTime": "2018-06-26 05:47:02",
+    "TestSuiteName": "PurStockin",
+    "TestCaseName": "PurStockin",
+    "TCFlow": "销售出库流程",
+    "TestCaseDescription": "已分批号销售开票单",
+    "TestCaseStatus": "Pass",
+    "FailedDetails": null,
+    "PassedDetails": null
+}@
+{
+    "ExecutionDate": "2018-08-01",
+    "ExecutionTime": "2018-06-26 05:47:02",
+    "TestSuiteName": "PurStockin",
+    "TestCaseName": "PurStockin",
+    "TCFlow": "销售出库流程",
+    "TestCaseDescription": "已分老批号销售开票单",
+    "TestCaseStatus": "Failed",
+    "FailedDetails": null,
+    "PassedDetails": null
+}@

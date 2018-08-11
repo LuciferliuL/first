@@ -320,16 +320,48 @@ function ErrPost(URL, body, Callback) {
 
 export { ErrPost }
 
-function ajaxGet(URL,Callback){
+function ajaxGet(URL, Callback) {
     $.ajax({
-        url:URL,
-        type:'GET',
-        datatype:'text',
-        success:function(res){
+        url: URL,
+        type: 'GET',
+        datatype: 'text',
+        success: function (res) {
             Callback(res)
         }
     })
 }
-export {ajaxGet}
+export { ajaxGet }
 
- 
+/**
+ * 
+ * @param {数据源} resData 
+ * @param {确定是否需要分类} TC 
+ */
+function testCase(resData, TC, Callback) {
+    let A = 0, B = 0, C = 0, LeftArr = {}
+    resData.forEach(element => {
+        switch (element.TestCaseStatus) {
+            case "Cancelled":
+                A++
+                break;
+            case "Pass":
+                B++
+                break;
+            case "Fail":
+                C++
+                break;
+            default:
+                break;
+        }
+        if (TC) {
+            if (LeftArr[element.TCFlow]) {
+                LeftArr[element.TCFlow].push(element)
+            } else {
+                LeftArr[element.TCFlow] = [element]
+            }
+        }
+    });
+    let arr = [{ value: A, name: "Cancelled" }, { value: B, name: "Pass" }, { value: C, name: "Fail" }]
+    Callback(arr, LeftArr)
+}
+export { testCase }

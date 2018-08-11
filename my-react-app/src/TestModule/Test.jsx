@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Tag, Spin } from 'antd'
-import { getFetch, timeFn,ajaxGet} from '../Math/Math'
+import { getFetch, timeFn, ajaxGet, testCase } from '../Math/Math'
 import PIE from './charts/PIE'
 import Tables from '../Component/Tables/Tables'
 const CardGrid = Card.Grid
@@ -14,7 +14,6 @@ class Test extends Component {
             loading: true,
             Pie1: [],
             Pie2: [],
-            dataArr:[],
             columns: [{
                 title: 'TestCaseDescription',
                 dataIndex: 'TestCaseDescription',
@@ -41,52 +40,74 @@ class Test extends Component {
             }, {
                 title: 'CreateTime',
                 dataIndex: 'CreateTime'
-            }]
+            }],
+
+            Tsets:[]
         }
     }
 
-     
+
 
 
 
     componentDidMount() {
-        ajaxGet('../Report111.txt', (res) => {
-            
+        ajaxGet('../TC.txt', (res) => {
+
             // console.log(res)
             let da = res.split('@').join(',')
-            da = da.slice(0,da.length - 1)
-            da = "[" + da + "]"
+            da = da.slice(0, da.length - 1)
+            da = "[" + da + "{}]"
             // console.log(da)
             let resData = JSON.parse(da)
-            console.log(resData)
-
-            let A = 0,B = 0,C = 0
-            resData.forEach(element => {
-                switch (element.TestCaseStatus) {
-                    case "Cancelled":
-                        A++
-                        break;
-                    case "Pass":
-                        B++
-                        break;
-                    case "Fail":
+            resData.pop()
+            // console.log(resData)
+            let Tsets = []
+            let arr = [], A = 0, B = 0, C = 0
+            testCase(resData, true, (res, ctx) => {
+                arr = res
+                console.log(ctx)
+                Tsets = ctx
+                for (var k in ctx) {
+                    let con = 0
+                    ctx[k].forEach(element => {
+                        console.log(element)
+                        if (element.TestCaseStatus === "Failed") {
+                            con = 3
+                        } else if (element.TestCaseStatus === 'Pass') {
+                            if (con < 3) {
+                                con = 2
+                            }
+                        } else {
+                            if (con < 2) {
+                                con = 0
+                            }
+                        }
+                    });
+                    console.log(con)
+                    if (con === 3) {
                         C++
-                        break;
-                    default:
-                        break;
+                    } else if (con === 2) {
+                        B++
+                    } else {
+                        A++
+                    }
                 }
-            });
 
-            let arr = [{value:A,name:"Cancelled"},{value:B,name:"Pass"},{value:C,name:"Fail"}]
+            })
+            let caseArr = [{ value: A, name: "Cancelled" }, { value: B, name: "Pass" }, { value: C, name: "Fail" }]
+            console.log(caseArr)
+
             this.setState({
                 data: resData,
                 loading: false,
-                dataArr:arr
+                Pie2: arr,
+                Pie1: caseArr,
+                Tsets:Tsets
             })
         })
     }
     render() {
-        const { data, loading, dataArr, columns } = this.state
+        const { data, loading, Pie2, columns, Pie1, Tsets } = this.state
         if (data.length < 1) {
             return (<Spin spinning={loading}></Spin>)
         } else {
@@ -95,10 +116,6 @@ class Test extends Component {
             const totaltime = timeFn(starttime, endtime)
             const gridStyle = {
                 width: '50%',
-                textAlign: 'center'
-            }
-            const gridStyle100 = {
-                width: '100%',
                 textAlign: 'center'
             }
             return (
@@ -112,14 +129,18 @@ class Test extends Component {
                         <Tag color='#87d068'>{totaltime}</Tag>
                     </div>}>
                         <CardGrid style={gridStyle}>
-                            <PIE></PIE>
+                            <span>Total Tsets:{Object.keys(Tsets).length}</span>
                         </CardGrid>
                         <CardGrid style={gridStyle}>
-                            <PIE Data={dataArr}></PIE>
+                            <span>Total Steps:{data.length}</span>
                         </CardGrid>
-                        <CardGrid style={gridStyle100}>
-                            <Tables data={data} columns={columns}></Tables>
+                        <CardGrid style={gridStyle}>
+                            <PIE Data={Pie1}></PIE>
                         </CardGrid>
+                        <CardGrid style={gridStyle}>
+                            <PIE Data={Pie2}></PIE>
+                        </CardGrid>
+
                     </Card>
                 </div>
             )
