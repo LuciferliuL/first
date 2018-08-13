@@ -3,7 +3,6 @@ import { Layout, Menu, Breadcrumb, Icon, Tag, Button, Row, Col } from 'antd';
 import { Link, Route } from 'react-router-dom'
 import Action from '../Action/Action';
 import Windows from '../Windows/Windows_'
-import Simple from '../Simple/Simple';
 import PVComponent from '../../Logrecord/PVComponent';
 import TimeComponent from '../../Logrecord/TimeComponent'
 import Errorlog from '../../Logrecord/Errorlog'
@@ -16,12 +15,13 @@ import SQLManage from '../SQLManage/SQLManage';
 import TableUpdate from '../../Builds/TableUpdate';
 import AsyncDataManage from '../../Builds/AsyncDataManage'
 import Simple_ from '../Simple/Simple_'
+import TableBuildBase from '../../TableBuild/base/TableBuildBase'
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 
 class Home extends React.Component {
-    rootSubmenuKeys = ['配置', '发布与构建', '日志查询', '测试'];
+    rootSubmenuKeys = ['配置', '发布与构建', '日志查询', '测试', '表单构建'];
     state = {
         collapsed: false,
         name: '',
@@ -119,6 +119,13 @@ class Home extends React.Component {
                             <Menu.Item key="自动化测试"><Link to='/Home/Test'>自动化测试</Link></Menu.Item>
                             <Menu.Item key="711">Team 2</Menu.Item>
                         </SubMenu>
+                        <SubMenu
+                            key="表单构建"
+                            title={<span><Icon type="hourglass" /><span>表单构建</span></span>}
+                        >
+                            <Menu.Item key="构建表单"><Link to='/Home/TableBuildBase'>构建表单</Link></Menu.Item>
+                            <Menu.Item key="构建表单222">Team 2</Menu.Item>
+                        </SubMenu>
                     </Menu>
                 </Sider>
                 <Layout>
@@ -138,7 +145,6 @@ class Home extends React.Component {
                         <div style={{ padding: 5, background: '#fff', minHeight: 560 }}>
                             <Route path='/Home/Action/:id' component={Action}></Route>
                             <Route path='/Home/Windows/:id' component={Windows}></Route>
-                            {/* <Route path='/Home/Simple/:id' component={Simple}></Route> */}
                             <Route path='/Home/PVComponent' component={PVComponent}></Route>
                             <Route path='/Home/TimeComponent' component={TimeComponent}></Route>
                             <Route path="/Home/Errorlog" component={Errorlog}></Route>
@@ -151,6 +157,7 @@ class Home extends React.Component {
                             <Route path='/Home/TableUpdate/:id' component={TableUpdate}></Route>
                             <Route path='/Home/AsyncDataManage/:id' component={AsyncDataManage}></Route>
                             <Route path='/Home/Simple_/:id' component={Simple_}></Route>
+                            <Route path='/Home/TableBuildBase' component={TableBuildBase}></Route>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', padding: 10 }}>
