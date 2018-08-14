@@ -6,8 +6,8 @@ import Windows from '../Windows/Windows_'
 import PVComponent from '../../Logrecord/PVComponent';
 import TimeComponent from '../../Logrecord/TimeComponent'
 import Errorlog from '../../Logrecord/Errorlog'
-import AcerageComponent from "../../Logrecord/AverageComponent.jsx";
-import Bill from '../../Component/Bill/Bill'
+import AcerageComponent from "../../Logrecord/AverageComponent";
+import Bill from '../Bill/Bill'
 import AsyncData from '../../Builds/AsyncData';
 import PopWindows from '../PopWindows/PopWindows';
 import Test from '../../TestModule/Test';
@@ -16,6 +16,7 @@ import TableUpdate from '../../Builds/TableUpdate';
 import AsyncDataManage from '../../Builds/AsyncDataManage'
 import Simple_ from '../Simple/Simple_'
 import TableBuildBase from '../../TableBuild/base/TableBuildBase'
+import AddRemove from '../../TableBuild/tests'
 const { Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -30,16 +31,16 @@ class Home extends React.Component {
         BreadcrumbKey: ''
     };
     componentWillMount() {
-        let values = this.props.location.state
-        if (values === undefined) {
-            this.props.history.push('/')
-        } else {
-            values = JSON.stringify(values.userName).replace(/\"/g, '')
-            // console.log(values)
-            this.setState({
-                name: values
-            })
-        }
+        // let values = this.props.location.state
+        // if (values === undefined) {
+        //     this.props.history.push('/')
+        // } else {
+        //     values = JSON.stringify(values.userName).replace(/\"/g, '')
+        //     // console.log(values)
+        //     this.setState({
+        //         name: values
+        //     })
+        // }
     }
     onCollapse = (collapsed) => {
         console.log(collapsed);
@@ -124,7 +125,7 @@ class Home extends React.Component {
                             title={<span><Icon type="hourglass" /><span>表单构建</span></span>}
                         >
                             <Menu.Item key="构建表单"><Link to='/Home/TableBuildBase'>构建表单</Link></Menu.Item>
-                            <Menu.Item key="构建表单222">Team 2</Menu.Item>
+                            <Menu.Item key="构建表单222"><Link to='/Home/tests'>构建表单111</Link></Menu.Item>
                         </SubMenu>
                     </Menu>
                 </Sider>
@@ -158,6 +159,7 @@ class Home extends React.Component {
                             <Route path='/Home/AsyncDataManage/:id' component={AsyncDataManage}></Route>
                             <Route path='/Home/Simple_/:id' component={Simple_}></Route>
                             <Route path='/Home/TableBuildBase' component={TableBuildBase}></Route>
+                            <Route path='/Home//Home/tests' component={AddRemove}></Route>
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', padding: 10 }}>

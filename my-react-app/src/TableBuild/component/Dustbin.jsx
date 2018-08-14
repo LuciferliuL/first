@@ -1,37 +1,60 @@
 import React, { Component } from 'react';
-import { DropTarget } from 'react-dnd';
+import { Input, Checkbox, Switch, Form, Icon } from 'antd'
+const FormItem = Form.Item;
 
-/**
- * drop(props, monitor, component) 组件放下时触发的事件，可选。
-hover(props, monitor, component) 组件在DropTarget上方时响应的事件，可选。
-canDrop(props, monitor) 组件可以被放置时触发的事件，可选。
- */
-const targetSpec = {
-    drop(props, monitor, component) {
-        // ..
-    },
-    hover(props, monitor, component) {
-        // ..
-    },
-    canDrop(props, monitor) {
-        // ..
-    }
-}
-const box = {
-    width:'100px',
-    height:'100px'
-}
+
 class Dustbin extends Component {
-    render() {
-        const { connectDropTarget } = this.props
-        return connectDropTarget(
-            <div style={box}>
+    onChange = () => {
+        console.log(111);
 
-            </div>
-        );
+    }
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        const { item } = this.props
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 8 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 16 },
+            },
+        };
+        switch (item.itemkey) {
+            case 'INPUT':
+                return (
+                    <FormItem
+                        {...formItemLayout}
+                        label={item.label}
+                    >
+                        {getFieldDecorator(item.type, {
+                            rules: [{
+                                required: item.required, message: item.message,
+                            }],
+                        })(
+                            <Input type={item.type}/>
+                        )}
+                    </FormItem>
+                )
+            case 'SWITCH':
+                return (
+                    <Switch></Switch>
+                )
+            case 'CHECKEDBOX':
+                return (
+                    <Checkbox onChange={this.onChange}></Checkbox>
+                )
+            case 'CHECKEDBOXGROUP':
+                return (
+                    <Input></Input>
+                )
+            default:
+                return (
+                    <div>123123</div>
+                )
+        }
     }
 }
 
-export default DropTarget('input', targetSpec, (connect) => ({
-    connectDropTarget: connect.dropTarget()
-}))(Dustbin);
+export default Dustbin = Form.create()(Dustbin);
