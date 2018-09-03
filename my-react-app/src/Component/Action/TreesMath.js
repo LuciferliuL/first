@@ -150,6 +150,7 @@ function obj(id, label, children, OriginalGuidString, PK) {
     this.PK = PK;
 }
 
+//有更简单的方式
 
 
 
