@@ -30,7 +30,7 @@ const Card = ({ item, provided, onchanges }) => {
                     cursor: 'pointer'
                 }}
                 onClick={() => onchanges(item)}
-            >O
+            >
             </div>
             <div style={{ padding: 5, textAlign: 'center', color: '#595959' }}>
                 <Dustbin item={item.content}></Dustbin>
