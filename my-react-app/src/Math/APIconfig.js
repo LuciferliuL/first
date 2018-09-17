@@ -2,7 +2,7 @@ const APIconfig = {
     Server: 'http://10.3.2.22:50002',
     XX: 'http://10.2.128.94:9016',
     // liujun: 'http://10.2.129.182:9013'
-    liujun:'http://10.3.2.22:50002'
+    liujun:'http://10.3.4.233:50005'
 }
 
 const API = {
