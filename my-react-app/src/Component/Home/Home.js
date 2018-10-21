@@ -84,7 +84,7 @@ class Home extends React.Component {
                         onOpenChange={this.onOpenChange}
                         onSelect={this.click}
                     >
-                        {/* <SubMenu
+                        <SubMenu
                             key="配置"
                             title={<span><Icon type="setting" /><span>配置</span></span>}
                         >
@@ -107,12 +107,12 @@ class Home extends React.Component {
                         <SubMenu
                             key="日志查询"
                             title={<span><Icon type="line-chart" /><span>日志查询</span></span>}
-                        > */}
+                        >
                             <Menu.Item key="按条件分组"><Link to='/Home/PVComponent'>按条件分组</Link></Menu.Item>
                             <Menu.Item key="按时段分组"><Link to='/Home/TimeComponent'>按时段分组</Link></Menu.Item>
                             <Menu.Item key='平均耗时统计'><Link to='/Home/AcerageComponent'>平均耗时统计</Link></Menu.Item>
                             <Menu.Item key="错误日志"><Link to="/Home/Errorlog">错误日志</Link></Menu.Item>
-                        {/* </SubMenu>
+                        </SubMenu>
                         <SubMenu
                             key="测试"
                             title={<span><Icon type="hourglass" /><span>测试</span></span>}
@@ -126,7 +126,7 @@ class Home extends React.Component {
                         >
                             <Menu.Item key="构建表单"><Link to='/Home/TableBuildBase'>构建表单</Link></Menu.Item>
                             <Menu.Item key="构建表单222"><Link to='/Home/tests'>构建表单111</Link></Menu.Item>
-                        </SubMenu> */}
+                        </SubMenu>
                     </Menu>
                 </Sider>
                 <Layout>
